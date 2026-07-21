@@ -512,6 +512,23 @@ body{
 .triage-card.consult .triage-call{
   color:#08723f;
 }
+.privacy-close{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:58px;
+  margin-top:14px;
+  border:3px solid #fff;
+  border-radius:15px;
+  background:rgba(0,0,0,.22);
+  color:#fff;
+  font-size:clamp(20px,5vw,27px);
+  font-weight:950;
+  cursor:pointer;
+}
+.privacy-close:active{transform:translateY(1px)}
+
 .triage-operator-guide{
   margin:-6px 0 22px;
   padding:18px;
@@ -687,6 +704,8 @@ body{
     <button id="stopBtn" class="stop" type="button">
       ■ 音声・メトロノームを停止する
     </button>
+
+    <button class="privacy-close" type="button" onclick="closePrivatePage()" aria-label="心肺蘇生画面を閉じます">閉じる</button>
 
     <footer class="notice">
       <div class="icon">📣</div>
@@ -1362,6 +1381,7 @@ function triageCardHtml(triage){
       <p class="triage-number">119番</p>
       <p class="triage-message">救急車を呼んでください</p>
       <a class="triage-call" href="tel:119">☎ 119番に電話する</a>
+      <button class="privacy-close" type="button" onclick="closePrivatePage()" aria-label="この画面を閉じます">閉じる</button>
       <div class="triage-reasons">
         ${triage.reasons.map(reason =>
           `<div>${escapeHtml(reason)}</div>`
@@ -1381,7 +1401,29 @@ function triageCardHtml(triage){
     <p class="triage-number">＃7119番</p>
     <p class="triage-message">救急相談を利用してください</p>
     <a class="triage-call" href="tel:%237119">☎ ＃7119番に電話する</a>
+    <button class="privacy-close" type="button" onclick="closePrivatePage()" aria-label="この画面を閉じます">閉じる</button>
   </section>`;
+}
+
+
+function closePrivatePage(){
+  stopAll(false);
+
+  // 個人情報をすぐ画面から消してから、ブラウザのタブを閉じます。
+  document.body.innerHTML = '';
+  document.documentElement.style.background = '#fff';
+
+  try{
+    window.open('', '_self');
+    window.close();
+  }catch(error){}
+
+  // ブラウザの制限で閉じられない場合も、個人情報は残しません。
+  setTimeout(() => {
+    try{
+      location.replace('about:blank');
+    }catch(error){}
+  }, 120);
 }
 
 function showFinalSummary(){
