@@ -1,0 +1,1382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>Symptoms and Emergency Guidance</title>
+<style>
+:root{
+  --red:#d90000;
+  --red-dark:#c90000;
+  --green:#07862f;
+  --soft-green:#eef7e8;
+  --text:#111;
+  --line:#dedede;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;color:var(--text)}
+body{
+  background:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+.screen{display:none;min-height:100vh}
+.screen.active{display:block}
+
+/* Initial assessment */
+#screen-start{background:#fff}
+.start-main{
+  width:min(100%,720px);
+  margin:0 auto;
+  padding:20px 18px 36px;
+}
+.start-header{
+  margin-bottom:22px;
+  padding:16px;
+  border-radius:14px;
+  background:#d32f2f;
+  color:#fff;
+  text-align:center;
+  font-size:clamp(27px,7vw,34px);
+  font-weight:800;
+  line-height:1.3;
+}
+.lead{
+  margin:0 0 14px;
+  font-size:clamp(18px,4.8vw,22px);
+  font-weight:700;
+}
+.choice{
+  display:flex;
+  align-items:flex-start;
+  gap:13px;
+  width:100%;
+  padding:17px 2px;
+  border-bottom:2px solid #d32f2f;
+  cursor:pointer;
+}
+.choice:first-of-type{border-top:2px solid #d32f2f}
+.choice input{
+  flex:0 0 auto;
+  width:27px;
+  height:27px;
+  margin:2px 0 0;
+  accent-color:#d32f2f;
+}
+.label-text{
+  font-size:clamp(18px,4.8vw,22px);
+  font-weight:700;
+  line-height:1.5;
+}
+.subtext{
+  display:block;
+  margin-top:4px;
+  color:#555;
+  font-size:clamp(15px,4vw,18px);
+  font-weight:500;
+}
+
+/* CPR guidance */
+#screen-emergency{background:var(--soft-green)}
+.emergency-main{
+  width:min(100%,720px);
+  margin:auto;
+  padding:max(18px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom));
+}
+.hero{
+  display:grid;
+  grid-template-columns:74px 1fr 74px;
+  gap:12px;
+  align-items:center;
+  background:linear-gradient(#ea1111,#c90000);
+  color:#fff;
+  border-radius:28px;
+  padding:22px 18px;
+  margin-bottom:28px;
+}
+.hero h1{
+  margin:0;
+  text-align:center;
+  font-size:clamp(30px,7vw,51px);
+  line-height:1.2;
+  font-weight:900;
+}
+.warning{width:70px;height:64px}
+.warning svg{width:100%;height:100%;display:block}
+.steps{display:grid;gap:20px}
+.step{
+  background:#fff;
+  border:4px solid var(--red);
+  border-radius:22px;
+  padding:20px 24px;
+  display:grid;
+  grid-template-columns:64px 1fr;
+  gap:18px;
+  align-items:center;
+  box-shadow:0 4px 12px rgba(0,0,0,.05);
+}
+.num{
+  width:58px;height:58px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--red);color:#fff;
+  font-size:34px;font-weight:900;
+}
+.step p{
+  margin:0;
+  font-size:clamp(20px,4.9vw,32px);
+  line-height:1.4;
+  font-weight:800;
+}
+.red{color:var(--red)}
+.call{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  min-height:100px;
+  margin:24px 0;
+  border-radius:24px;
+  background:linear-gradient(#07943a,#067c2f);
+  color:#fff;
+  text-decoration:none;
+  text-align:center;
+  font-size:clamp(27px,6.5vw,45px);
+  font-weight:900;
+  box-shadow:0 6px 14px rgba(0,0,0,.12);
+}
+.call:active{transform:translateY(1px)}
+.cpr{
+  width:100%;
+  border:0;
+  border-radius:26px;
+  background:linear-gradient(#e51515,#c90000);
+  color:#fff;
+  padding:26px 20px 22px;
+  text-align:center;
+  box-shadow:0 6px 14px rgba(0,0,0,.12);
+}
+.cpr h2{
+  margin:0 0 20px;
+  font-size:clamp(32px,7.3vw,52px);
+  font-weight:900;
+}
+.beat{
+  background:#fff0f0;
+  color:var(--red);
+  border-radius:18px;
+  padding:18px 12px;
+  font-size:clamp(30px,7.5vw,52px);
+  font-weight:900;
+}
+.status-row{
+  margin-top:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  font-size:clamp(17px,4vw,26px);
+  font-weight:800;
+}
+.badge{
+  background:#fff;
+  color:var(--red);
+  border-radius:999px;
+  padding:9px 17px;
+}
+.metro{
+  border-top:2px dashed rgba(255,255,255,.8);
+  margin:18px 0 0;
+  padding-top:16px;
+  font-size:clamp(19px,4.7vw,29px);
+  font-weight:800;
+}
+.metro b{color:#ffe800;font-size:1.3em}
+.stop{
+  width:100%;
+  margin-top:20px;
+  min-height:82px;
+  border:2px solid #888;
+  border-radius:22px;
+  background:#f4f4f4;
+  color:var(--green);
+  font-size:clamp(21px,5vw,32px);
+  font-weight:900;
+}
+.notice{
+  border-top:2px solid #4b9b75;
+  margin-top:20px;
+  padding:16px 6px 0;
+  display:flex;
+  gap:12px;
+  color:#111;
+  font-size:clamp(15px,3.8vw,21px);
+  line-height:1.55;
+  font-weight:650;
+}
+.notice .icon{color:var(--green);font-size:28px}
+
+/* Symptom selection and results */
+#screen-symptoms,
+#screen-results,
+#screen-summary{background:#fff}
+.sym-main{
+  width:min(100%,820px);
+  margin:0 auto;
+  padding:max(18px,env(safe-area-inset-top)) 14px max(28px,env(safe-area-inset-bottom));
+}
+.sym-header{
+  background:#d32f2f;
+  color:#fff;
+  border-radius:18px;
+  padding:16px 18px;
+  text-align:center;
+  font-size:clamp(24px,6.3vw,35px);
+  line-height:1.3;
+  font-weight:900;
+}
+.sym-lead{
+  margin:18px 2px 12px;
+  font-size:clamp(17px,4.5vw,22px);
+  line-height:1.6;
+  font-weight:750;
+}
+.sym-onset{
+  margin:18px 0 22px;
+  padding:14px 16px 16px;
+  border:2px solid #d32f2f;
+  border-radius:16px;
+  background:#fff6f6;
+}
+.sym-onset-title{
+  margin:0 0 10px;
+  font-size:clamp(20px,5.2vw,27px);
+  font-weight:900;
+}
+.sym-onset-options{
+  display:grid;
+  gap:10px;
+  padding-left:18px;
+}
+.sym-onset-options label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:clamp(18px,4.7vw,23px);
+  font-weight:750;
+}
+.sym-onset-options input{
+  width:26px;
+  height:26px;
+  accent-color:#d32f2f;
+}
+.sym-category-list{border-top:2px solid #d32f2f}
+.sym-category{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-height:62px;
+  padding:14px 4px;
+  border-bottom:2px solid #d32f2f;
+  cursor:pointer;
+  font-size:clamp(19px,5vw,25px);
+  font-weight:800;
+}
+.sym-category input,
+.sym-option input{
+  flex:0 0 auto;
+  width:27px;
+  height:27px;
+  accent-color:#d32f2f;
+}
+.sym-actions{
+  display:grid;
+  gap:12px;
+  margin-top:22px;
+}
+.sym-btn{
+  width:100%;
+  min-height:60px;
+  border:0;
+  border-radius:15px;
+  padding:13px 18px;
+  font-size:clamp(20px,5vw,25px);
+  font-weight:900;
+  cursor:pointer;
+}
+.sym-btn-primary{background:#d32f2f;color:#fff}
+.sym-btn-primary:disabled{
+  background:#ccc;
+  color:#777;
+  cursor:not-allowed;
+}
+.sym-btn-secondary{
+  background:#fff;
+  color:#a91f1f;
+  border:2px solid #d32f2f;
+}
+.sym-results-intro{
+  margin:16px 2px 18px;
+  font-size:clamp(16px,4.1vw,21px);
+  font-weight:700;
+  line-height:1.55;
+}
+.sym-section{
+  margin:0 0 22px;
+  border:2px solid #d32f2f;
+  border-radius:18px;
+  background:#fff;
+  overflow:hidden;
+  box-shadow:0 4px 14px rgba(0,0,0,.06);
+}
+.sym-section-title{
+  margin:0;
+  padding:14px 16px;
+  background:#fff6f6;
+  border-bottom:2px solid #d32f2f;
+  font-size:clamp(22px,5.6vw,30px);
+  font-weight:900;
+}
+.sym-column-heads,
+.sym-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.sym-column-head{
+  padding:12px 8px;
+  background:#fafafa;
+  text-align:center;
+  font-size:clamp(15px,3.8vw,19px);
+  line-height:1.35;
+  font-weight:900;
+}
+.sym-column-head:first-child,
+.sym-cell:first-child{border-right:1px solid #dedede}
+.sym-row{border-top:1px solid #dedede}
+.sym-cell{
+  min-width:0;
+  padding:7px 9px 10px;
+}
+.sym-option{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  padding:8px 0;
+  font-size:clamp(15px,3.8vw,19px);
+  line-height:1.45;
+  font-weight:700;
+  cursor:pointer;
+}
+.sym-option input{
+  width:22px;
+  height:22px;
+  margin-top:1px;
+}
+.sym-group-label{
+  display:block;
+  padding:9px 8px 5px 0;
+  color:#a91f1f;
+  font-size:clamp(15px,3.9vw,19px);
+  font-weight:900;
+  text-align:right;
+}
+.sym-group-row .sym-cell:last-child{padding-left:34px}
+.sym-onset-result{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px 20px;
+  padding:14px 16px 16px;
+}
+.sym-onset-bullet{
+  font-size:clamp(17px,4.3vw,21px);
+  line-height:1.55;
+  font-weight:750;
+}
+.patient-info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:14px;
+}
+.patient-info-item{
+  padding:12px 10px;
+  border:2px solid #d8d8d8;
+  border-radius:12px;
+  background:#fff;
+  text-align:center;
+  font-size:clamp(17px,4.3vw,22px);
+  line-height:1.4;
+  font-weight:900;
+}
+.patient-info-label{
+  display:block;
+  margin-bottom:3px;
+  color:#555;
+  font-size:.78em;
+  font-weight:800;
+}
+.sym-result-actions{display:grid;gap:12px}
+.sym-summary-list{
+  margin:0;
+  padding:4px 0 4px 1.25em;
+  list-style:none;
+}
+.sym-summary-list li{
+  position:relative;
+  padding:6px 0;
+  font-size:clamp(15px,3.9vw,19px);
+  line-height:1.5;
+  font-weight:700;
+}
+.sym-summary-list li::before{
+  content:"•";
+  position:absolute;
+  left:-1.05em;
+  font-weight:900;
+}
+.sym-summary-empty{min-height:20px}
+.triage-card{
+  margin:0 0 22px;
+  padding:18px;
+  border-radius:20px;
+  color:#fff;
+  text-align:center;
+  box-shadow:0 6px 16px rgba(0,0,0,.14);
+}
+.triage-card.emergency{background:linear-gradient(#e51f25,#c90000)}
+.triage-card.consult{background:linear-gradient(#168e58,#08723f)}
+.triage-label{
+  margin:0 0 5px;
+  font-size:clamp(16px,4.2vw,21px);
+  font-weight:800;
+}
+.triage-number{
+  margin:0;
+  font-size:clamp(38px,10vw,64px);
+  line-height:1.1;
+  font-weight:950;
+}
+.triage-message{
+  margin:10px 0 15px;
+  font-size:clamp(18px,4.7vw,24px);
+  line-height:1.45;
+  font-weight:850;
+}
+.triage-call{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:62px;
+  border-radius:15px;
+  background:#fff;
+  text-decoration:none;
+  font-size:clamp(20px,5vw,28px);
+  font-weight:950;
+}
+.triage-card.emergency .triage-call{color:#c90000}
+.triage-card.consult .triage-call{color:#08723f}
+.triage-operator-guide{
+  margin:-6px 0 22px;
+  padding:18px;
+  border:3px solid #c90000;
+  border-radius:16px;
+  background:#fff;
+  color:#111;
+  text-align:left;
+  font-size:clamp(17px,4.4vw,22px);
+  line-height:1.65;
+  font-weight:800;
+  box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+.triage-operator-guide-title{
+  margin:0 0 10px;
+  color:#c90000;
+  font-size:clamp(19px,4.8vw,24px);
+  font-weight:950;
+  text-align:center;
+}
+.triage-operator-guide-quote{
+  display:block;
+  margin:10px 0;
+  padding:12px;
+  border-radius:10px;
+  background:#f5f5f5;
+  color:#000;
+  font-weight:900;
+}
+.triage-reasons{
+  margin:13px 0 0;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.16);
+  text-align:left;
+  font-size:clamp(14px,3.7vw,18px);
+  line-height:1.5;
+  font-weight:750;
+}
+.triage-reasons div::before{content:"• "}
+.sym-sticky-actions{
+  position:sticky;
+  bottom:0;
+  padding:13px 0 max(5px,env(safe-area-inset-bottom));
+  background:linear-gradient(to bottom,rgba(255,255,255,0),#fff 28%);
+}
+.sym-summary-back-actions{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+}
+#sym-summary-back-btn{
+  width:auto;
+  min-height:42px;
+  padding:8px 13px;
+  border-radius:11px;
+  font-size:clamp(14px,3.5vw,17px);
+  font-weight:800;
+}
+@media(max-width:460px){
+  .sym-main{padding-left:10px;padding-right:10px}
+  .sym-cell{padding-left:6px;padding-right:6px}
+  .sym-option{gap:5px}
+  .sym-option input{width:20px;height:20px}
+  .sym-column-head{padding-left:4px;padding-right:4px}
+  .emergency-main{padding-left:12px;padding-right:12px}
+  .hero{
+    grid-template-columns:52px 1fr 52px;
+    padding:18px 12px;
+    border-radius:22px;
+  }
+  .warning{width:50px;height:48px}
+  .step{
+    grid-template-columns:48px 1fr;
+    padding:16px 14px;
+    border-radius:18px;
+    gap:12px;
+  }
+  .num{width:46px;height:46px;font-size:27px}
+}
+</style>
+</head>
+<body>
+
+<section id="screen-start" class="screen active">
+  <main class="start-main">
+    <div class="start-header">⏱️ Current Condition</div>
+    <p class="lead">Select the option that applies.</p>
+
+    <label class="choice">
+      <input type="checkbox" class="emergency-check">
+      <span class="label-text">Not breathing</span>
+    </label>
+
+    <label class="choice">
+      <input type="checkbox" class="emergency-check">
+      <span class="label-text">The chest is not moving up and down</span>
+    </label>
+
+    <label class="choice">
+      <input type="checkbox" class="emergency-check">
+      <span class="label-text">The abdomen does not move up and down when a hand is placed on it</span>
+    </label>
+
+    <label class="choice">
+      <input id="not-emergency" type="checkbox">
+      <span class="label-text">
+        None of the above
+        <span class="subtext">(The person is breathing, and the chest or abdomen is moving up and down.)</span>
+      </span>
+    </label>
+  </main>
+</section>
+
+<section id="screen-emergency" class="screen">
+  <main class="emergency-main">
+    <section class="hero">
+      <div class="warning" aria-hidden="true">
+        <svg viewBox="0 0 64 58">
+          <path d="M32 2L62 55H2Z" fill="#FFD42A" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="29" y="17" width="6" height="22" rx="3" fill="#111"/>
+          <circle cx="32" cy="46" r="3.5" fill="#111"/>
+        </svg>
+      </div>
+      <h1>Start Chest<br>Compressions</h1>
+      <div class="warning" aria-hidden="true">
+        <svg viewBox="0 0 64 58">
+          <path d="M32 2L62 55H2Z" fill="#FFD42A" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="29" y="17" width="6" height="22" rx="3" fill="#111"/>
+          <circle cx="32" cy="46" r="3.5" fill="#111"/>
+        </svg>
+      </div>
+    </section>
+
+    <section class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <p>Call <span class="red">119</span> immediately.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <p>Put the phone on speaker and turn the volume to <span class="red">maximum</span>.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <p>Begin <span class="red">chest compressions</span>.</p>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <p>Ask people nearby for help.</p>
+      </div>
+    </section>
+
+    <a id="call119" class="call" href="tel:119" aria-label="Call 119">
+      ☎ Call 119
+    </a>
+
+    <button id="cprBox" class="cpr" type="button">
+      <h2>❤️ Chest Compressions</h2>
+      <div class="beat">BEEP • BEEP • BEEP • BEEP</div>
+      <div class="status-row">
+        <span id="badge" class="badge">🔊 Voice guidance on</span>
+        <span id="status">Continue chest compressions</span>
+      </div>
+      <div class="metro">Metronome: <b>110</b> beats per minute</div>
+    </button>
+
+    <button id="stopBtn" class="stop" type="button">
+      ■ Stop voice guidance and metronome
+    </button>
+
+    <footer class="notice">
+      <div class="icon">📣</div>
+      <div>
+        This page provides emergency guidance.<br>
+        After calling 119, follow the dispatcher's instructions.
+      </div>
+    </footer>
+  </main>
+</section>
+
+<section id="screen-symptoms" class="screen">
+  <main class="sym-main">
+    <div class="sym-header">Select Symptoms</div>
+    <p class="sym-lead">Select all options that apply.</p>
+
+    <div class="sym-onset">
+      <div class="sym-onset-title">⌚ Onset</div>
+      <div class="sym-onset-options">
+        <label><input type="checkbox" class="onset-choice" value="Unknown">Unknown</label>
+        <label><input type="checkbox" class="onset-choice" value="Started suddenly">Started suddenly</label>
+        <label><input type="checkbox" class="onset-choice" value="Developed gradually">Developed gradually</label>
+      </div>
+    </div>
+
+    <div class="sym-category-list">
+      <label class="sym-category"><input type="checkbox" value="eye">👁️ Eyes</label>
+      <label class="sym-category"><input type="checkbox" value="limbs">🦵 Arms and Legs</label>
+      <label class="sym-category"><input type="checkbox" value="face">🙂 Face</label>
+      <label class="sym-category"><input type="checkbox" value="head">😵 Head</label>
+      <label class="sym-category"><input type="checkbox" value="breath">😮‍💨 Breathing</label>
+      <label class="sym-category"><input type="checkbox" value="body">🤢 Chest, Abdomen, and Body</label>
+      <label class="sym-category"><input type="checkbox" value="skin">🩹 Skin</label>
+      <label class="sym-category"><input type="checkbox" value="other">❓ Other</label>
+    </div>
+
+    <div class="sym-actions">
+      <button id="sym-next-btn" class="sym-btn sym-btn-primary" type="button" disabled>Next</button>
+    </div>
+  </main>
+</section>
+
+<section id="screen-results" class="screen">
+  <main class="sym-main">
+    <div class="sym-header">Select the Symptoms That Apply</div>
+    <p class="sym-results-intro">Only the categories selected on the previous screen are shown.</p>
+
+    <div id="sym-results"></div>
+
+    <div class="sym-sticky-actions sym-result-actions">
+      <button id="sym-detail-next-btn" class="sym-btn sym-btn-primary" type="button" disabled>Next</button>
+      <button id="sym-back-btn" class="sym-btn sym-btn-secondary" type="button">Change Categories</button>
+    </div>
+  </main>
+</section>
+
+<section id="screen-summary" class="screen">
+  <main class="sym-main">
+    <div class="sym-header">Selected Results</div>
+    <p id="sym-summary-intro" class="sym-results-intro"></p>
+
+    <div id="sym-summary"></div>
+
+    <div class="sym-sticky-actions sym-summary-back-actions">
+      <button id="sym-summary-back-btn" class="sym-btn sym-btn-secondary" type="button">Change Symptoms</button>
+    </div>
+  </main>
+</section>
+
+<script>
+const screens = document.querySelectorAll('.screen');
+
+let audioCtx = null;
+let metroTimer = null;
+let repeatTimer = null;
+let stopped = true;
+let guidanceRunning = false;
+let called119 = false;
+
+const interval = 60000 / 110;
+const badge = document.getElementById('badge');
+const status = document.getElementById('status');
+const stopBtn = document.getElementById('stopBtn');
+const cprBox = document.getElementById('cprBox');
+const call119 = document.getElementById('call119');
+
+function showScreen(id){
+  screens.forEach(screen => screen.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function sleep(ms){
+  return new Promise(resolve => setTimeout(resolve,ms));
+}
+
+function getCtx(){
+  if(!audioCtx){
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if(!Ctx) return null;
+    audioCtx = new Ctx();
+  }
+  return audioCtx;
+}
+
+function speakText(text){
+  return new Promise(resolve => {
+    if(stopped || !('speechSynthesis' in window)){
+      resolve();
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+    utterance.onend = resolve;
+    utterance.onerror = resolve;
+    speechSynthesis.speak(utterance);
+  });
+}
+
+function beep(){
+  if(stopped) return;
+
+  const ctx = getCtx();
+  if(!ctx || ctx.state !== 'running') return;
+
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'sine';
+  osc.frequency.value = 880;
+  gain.gain.setValueAtTime(0.20,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime + 0.07);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.08);
+}
+
+async function startMetronome(){
+  const ctx = getCtx();
+  if(!ctx) return;
+
+  try{
+    await ctx.resume();
+  }catch(error){}
+
+  if(metroTimer) clearInterval(metroTimer);
+  beep();
+  metroTimer = setInterval(beep,interval);
+}
+
+function scheduleRepeatGuidance(){
+  if(repeatTimer) clearInterval(repeatTimer);
+  repeatTimer = setInterval(repeatGuidance,18000);
+}
+
+async function repeatGuidance(){
+  if(stopped || guidanceRunning) return;
+
+  guidanceRunning = true;
+
+  if(!called119){
+    status.textContent = 'Call 119 now';
+    await speakText('119 has not been called. Ask someone to call 119 now.');
+  }else{
+    status.textContent = 'Voice guidance in progress';
+    await speakText(
+      'Continue chest compressions. Push hard and fast without stopping. Continue until the ambulance arrives.'
+    );
+  }
+
+  if(!stopped){
+    status.textContent = called119
+      ? 'Continue chest compressions'
+      : 'Call 119 now';
+  }
+
+  guidanceRunning = false;
+}
+
+async function startGuidance(){
+  stopAll(false);
+
+  stopped = false;
+  guidanceRunning = true;
+  badge.textContent = '🔊 Voice guidance on';
+  status.textContent = 'Starting voice guidance';
+  stopBtn.textContent = '■ Stop voice guidance and metronome';
+
+  const ctx = getCtx();
+  if(ctx){
+    try{
+      await ctx.resume();
+    }catch(error){}
+  }
+
+  if('speechSynthesis' in window){
+    speechSynthesis.cancel();
+  }
+
+  await speakText('Put the phone on speaker and turn the volume all the way up.');
+  await sleep(1000);
+  if(stopped) return;
+
+  await speakText('Call 119 now.');
+  await sleep(1000);
+  if(stopped) return;
+
+  await speakText('Start chest compressions.');
+  await startMetronome();
+  await sleep(1000);
+  if(stopped) return;
+
+  if(!called119){
+    await speakText('If 119 has not been called, ask someone to call 119 now.');
+    await sleep(1000);
+    if(stopped) return;
+  }
+
+  await speakText('Ask someone to bring an A E D.');
+  await sleep(1000);
+  if(stopped) return;
+
+  await speakText('Ask another person to help with chest compressions.');
+  await sleep(1000);
+  if(stopped) return;
+
+  await speakText('Switch the person doing chest compressions every one to two minutes.');
+  if(stopped) return;
+
+  guidanceRunning = false;
+  status.textContent = 'Continue chest compressions';
+  scheduleRepeatGuidance();
+}
+
+function stopAll(updateDisplay = true){
+  stopped = true;
+  guidanceRunning = false;
+
+  if('speechSynthesis' in window){
+    speechSynthesis.cancel();
+  }
+
+  if(metroTimer){
+    clearInterval(metroTimer);
+    metroTimer = null;
+  }
+
+  if(repeatTimer){
+    clearInterval(repeatTimer);
+    repeatTimer = null;
+  }
+
+  if(updateDisplay){
+    badge.textContent = '🔇 Stopped';
+    status.textContent = 'Voice guidance and metronome stopped';
+    stopBtn.textContent = 'Stopped';
+  }
+}
+
+async function activateEmergency(){
+  showScreen('screen-emergency');
+  called119 = false;
+  await startGuidance();
+}
+
+document.querySelectorAll('.emergency-check').forEach(box => {
+  box.addEventListener('change', () => {
+    if(box.checked){
+      activateEmergency();
+    }
+  });
+});
+
+document.getElementById('not-emergency').addEventListener('change', event => {
+  if(event.target.checked){
+    stopAll(false);
+    showScreen('screen-symptoms');
+  }
+});
+
+call119.addEventListener('click', () => {
+  called119 = true;
+  status.textContent = 'Calling 119. Continue chest compressions.';
+});
+
+stopBtn.addEventListener('click', () => {
+  stopAll(true);
+});
+
+cprBox.addEventListener('click', () => {
+  if(stopped || (!metroTimer && !guidanceRunning)){
+    startGuidance();
+  }else{
+    stopAll(true);
+  }
+});
+
+/* Symptom data */
+const symptomData = {
+  eye:{
+    title:'👁️ Eyes',
+    rows:[
+      {person:['I cannot see'],observer:['Unable to move','Moving by feeling around','Reaching for something to hold on to','Asking for help','Bumping into objects','Bumping into people']},
+      {person:['My vision is blurred'],observer:['Holding things close to the face','Squinting']},
+      {person:['My field of vision is narrower than usual'],observer:['Bumping into people or objects approaching from the side']},
+      {person:['My eye hurts'],observer:['Holding the eye','Grimacing']},
+      {person:['My eyes will not stop watering'],observer:['Tears continue to flow']},
+      {person:['I cannot open my eyes'],observer:['Keeping the eyes closed']},
+      {person:['Light is too bright'],observer:['Covering the eyes with a hand','Turning the face away','Trying to move to a darker place']}
+    ]
+  },
+  limbs:{
+    title:'🦵 Arms and Legs',
+    rows:[
+      {person:['I cannot feel the left side of my body'],observer:['Does not notice being touched on the left side','Does not notice bumping the left side']},
+      {person:['My left hand is difficult to move'],observer:['The left hand hangs loosely','Dropping objects']},
+      {person:['I have difficulty walking'],observer:['Unable to stand for long']},
+      {person:['I cannot stand'],observer:['Unable to stand even with support']},
+      {person:['My left arm and leg feel numb'],observer:['Appears unable to put strength into the left arm or leg']}
+    ]
+  },
+  face:{
+    title:'🙂 Face',
+    rows:[
+      {person:['The left side of my face feels numb'],observer:['One side of the mouth is difficult to move','The two sides of the face look different']}
+    ]
+  },
+  head:{
+    title:'😵 Head',
+    rows:[
+      {person:['I have a headache','I have a sudden, severe headache'],observer:['Holding the head']},
+      {person:[{label:'First aid',group:true}],observer:['Pain medicine taken']},
+      {person:['I feel dizzy'],observer:['Unsteady on the feet']},
+      {person:['I cannot concentrate'],observer:['Slow to respond']},
+      {person:['No response'],observer:['No response when spoken to','No response when the shoulder is tapped']}
+    ]
+  },
+  breath:{
+    title:'😮‍💨 Breathing',
+    rows:[
+      {person:['I am coughing'],observer:['Coughing repeatedly']},
+      {person:['I am short of breath'],observer:['Breathing appears difficult']}
+    ]
+  },
+  body:{
+    title:'🤢 Chest, Abdomen, and Body',
+    rows:[
+      {person:['I feel nauseated','Severe nausea'],observer:['Looks unwell']},
+      {person:[{label:'First aid',group:true}],observer:['Provided a vomit bag and water']},
+      {person:['Sudden severe chest or abdominal pain'],observer:['Holding the chest','Holding the abdomen']},
+      {person:['I feel very weak'],observer:['Unable to move','Resting','Cold sweat']}
+    ]
+  },
+  skin:{
+    title:'🩹 Skin',
+    rows:[
+      {person:['My skin is itchy'],observer:['Scratching the skin','Redness']}
+    ]
+  },
+  other:{
+    title:'❓ Other',
+    rows:[
+      {person:['I am in severe pain'],observer:['Holding the arm or hand','Holding the leg','Holding the lower back or back']},
+      {person:[{label:'First aid',group:true}],observer:['Reported taking pain medicine']},
+      {person:['I am having a seizure'],observer:['Conscious','Unconscious','The whole body is convulsing','Only the arms or legs are convulsing','The seizure will not stop','Does not regain consciousness after the seizure']},
+      {person:['I am bleeding'],observer:['A small amount that can be controlled with a tissue','A towel is becoming soaked with blood','The bleeding has stopped','The bleeding does not stop with pressure']},
+      {person:[{label:'First aid',group:true}],observer:['Applying pressure to stop the bleeding','The bleeding stopped after pressure was applied']},
+      {person:['I have a burn'],observer:['The skin is red','Blisters have formed','The skin has turned white or black','A large area is burned']},
+      {person:[{label:'First aid',group:true}],observer:['Cooled the burn']},
+      {person:['I may have a broken bone'],observer:['An arm or leg is bent unnaturally','Swelling','Unable to move the injured area']},
+      {person:[{label:'First aid',group:true}],observer:['Keeping the injured area still','Lying down','Seated']}
+    ]
+  }
+};
+
+const symNextBtn = document.getElementById('sym-next-btn');
+const symDetailNextBtn = document.getElementById('sym-detail-next-btn');
+const symBackBtn = document.getElementById('sym-back-btn');
+const symSummaryBackBtn = document.getElementById('sym-summary-back-btn');
+const symResults = document.getElementById('sym-results');
+const symSummary = document.getElementById('sym-summary');
+const symSummaryIntro = document.getElementById('sym-summary-intro');
+const symptomCategoryBoxes = [...document.querySelectorAll('.sym-category input')];
+const onsetChoices = [...document.querySelectorAll('.onset-choice')];
+
+function selectedSymptomCategories(){
+  return symptomCategoryBoxes
+    .filter(box => box.checked)
+    .map(box => box.value);
+}
+
+function updateSymptomNextButton(){
+  const hasCategory = selectedSymptomCategories().length > 0;
+  const hasOnset = onsetChoices.some(box => box.checked);
+  symNextBtn.disabled = !(hasCategory || hasOnset);
+}
+
+function escapeHtml(value){
+  return String(value)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
+}
+
+function symptomOptionHtml(item,key,side,prefix=''){
+  if(typeof item === 'object' && item.group){
+    return `<span class="sym-group-label">${escapeHtml(item.label)}</span>`;
+  }
+
+  const text = escapeHtml(item);
+  const safePrefix = escapeHtml(prefix);
+
+  return `<label class="sym-option">
+    <input
+      type="checkbox"
+      name="${key}-${side}"
+      value="${text}"
+      data-category="${key}"
+      data-side="${side}"
+      data-prefix="${safePrefix}">
+    <span>${text}</span>
+  </label>`;
+}
+
+function calculateAge(birthYear,birthMonth,birthDay){
+  const today = new Date();
+  let age = today.getFullYear() - birthYear;
+
+  const birthdayThisYear = new Date(
+    today.getFullYear(),
+    birthMonth - 1,
+    birthDay
+  );
+
+  if(today < birthdayThisYear){
+    age -= 1;
+  }
+
+  return age;
+}
+
+function patientInfoSection(){
+  const age = calculateAge(1974,1,26);
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">👤 Basic Information</h2>
+    <div class="patient-info-grid">
+      <div class="patient-info-item">
+        <span class="patient-info-label">Age</span>
+        ${age}
+      </div>
+      <div class="patient-info-item">
+        <span class="patient-info-label">Blood Type</span>
+        AB
+      </div>
+    </div>
+  </section>`;
+}
+
+function selectedOnsetValues(){
+  return onsetChoices
+    .filter(box => box.checked)
+    .map(box => box.value);
+}
+
+function onsetResultSection(){
+  const selectedOnset = selectedOnsetValues();
+
+  if(selectedOnset.length === 0) return '';
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">⌚ Onset</h2>
+    <div class="sym-onset-result">
+      ${selectedOnset.map(text =>
+        `<div class="sym-onset-bullet">• ${escapeHtml(text)}</div>`
+      ).join('')}
+    </div>
+  </section>`;
+}
+
+function symptomResultSection(key,item){
+  const rowsHtml = item.rows.map(row => {
+    const isGroupRow = row.person.some(
+      value => typeof value === 'object' && value.group
+    );
+
+    const groupItem = row.person.find(
+      value => typeof value === 'object' && value.group
+    );
+    const groupLabel = groupItem ? groupItem.label : '';
+
+    return `<div class="sym-row${isGroupRow ? ' sym-group-row' : ''}">
+      <div class="sym-cell">
+        ${row.person.map(value => symptomOptionHtml(value,key,'person')).join('')}
+      </div>
+      <div class="sym-cell">
+        ${row.observer.map(value =>
+          symptomOptionHtml(value,key,'observer',groupLabel)
+        ).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">${item.title}</h2>
+    <div class="sym-column-heads">
+      <div class="sym-column-head">Reported by the Person</div>
+      <div class="sym-column-head">Observed by Others</div>
+    </div>
+    ${rowsHtml}
+  </section>`;
+}
+
+function updateDetailNextButton(){
+  const symptomChecks = [
+    ...symResults.querySelectorAll('input[type="checkbox"]')
+  ];
+  const hasCheckedSymptom = symptomChecks.some(box => box.checked);
+  const hasNoSymptomChecks = symptomChecks.length === 0;
+  const hasOnset = selectedOnsetValues().length > 0;
+
+  symDetailNextBtn.disabled =
+    !(hasCheckedSymptom || (hasNoSymptomChecks && hasOnset));
+}
+
+function showSymptomResults(){
+  const keys = selectedSymptomCategories();
+  const onsetHtml = onsetResultSection();
+
+  if(keys.length === 0 && onsetHtml === '') return;
+
+  symResults.innerHTML =
+    onsetHtml +
+    keys.map(key =>
+      symptomResultSection(key,symptomData[key])
+    ).join('');
+
+  symResults
+    .querySelectorAll('input[type="checkbox"]')
+    .forEach(box => box.addEventListener('change',updateDetailNextButton));
+
+  updateDetailNextButton();
+  showScreen('screen-results');
+}
+
+symptomCategoryBoxes.forEach(box => {
+  box.addEventListener('change',updateSymptomNextButton);
+});
+
+onsetChoices.forEach(box => {
+  box.addEventListener('change',updateSymptomNextButton);
+});
+
+function summaryListHtml(items){
+  if(items.length === 0){
+    return '<div class="sym-summary-empty"></div>';
+  }
+
+  return `<ul class="sym-summary-list">
+    ${items.map(text => `<li>${escapeHtml(text)}</li>`).join('')}
+  </ul>`;
+}
+
+const emergencySymptoms = new Set([
+  'No response',
+  'No response when spoken to',
+  'No response when the shoulder is tapped',
+  'I have a sudden, severe headache',
+  'I am short of breath',
+  'Breathing appears difficult',
+  'Sudden severe chest or abdominal pain',
+  'Unconscious',
+  'The seizure will not stop',
+  'Does not regain consciousness after the seizure',
+  'A towel is becoming soaked with blood',
+  'The bleeding does not stop with pressure',
+  'The skin has turned white or black',
+  'A large area is burned'
+]);
+
+function determineTriage(selectedValues){
+  const values = new Set(selectedValues);
+  const reasons = [];
+
+  emergencySymptoms.forEach(symptom => {
+    if(values.has(symptom)){
+      reasons.push(symptom);
+    }
+  });
+
+  if(
+    values.has('Severe nausea') &&
+    values.has('Cold sweat')
+  ){
+    reasons.push('Severe nausea and cold sweat');
+  }
+
+  if(
+    values.has('Cold sweat') &&
+    (
+      values.has('Holding the chest') ||
+      values.has('Holding the abdomen')
+    )
+  ){
+    reasons.push('Holding the chest or abdomen with a cold sweat');
+  }
+
+  return {
+    emergency:reasons.length > 0,
+    reasons:[...new Set(reasons)]
+  };
+}
+
+function triageCardHtml(triage){
+  if(triage.emergency){
+    return `<section class="triage-card emergency">
+      <p class="triage-label">Based on the selected symptoms</p>
+      <p class="triage-number">119</p>
+      <p class="triage-message">Call an ambulance</p>
+      <a class="triage-call" href="tel:119">☎ Call 119</a>
+      <div class="triage-reasons">
+        ${triage.reasons.map(reason =>
+          `<div>${escapeHtml(reason)}</div>`
+        ).join('')}
+      </div>
+    </section>
+    <section class="triage-operator-guide">
+      <h2 class="triage-operator-guide-title">Tell the Dispatcher</h2>
+      The person has medical information stored in their Help Mark.
+      <span class="triage-operator-guide-quote">“Please tell the responding crew to hold a smartphone over the heart section of the Help Mark to check the medical information.”</span>
+    </section>`;
+  }
+
+  return `<section class="triage-card consult">
+    <p class="triage-label">Based on the selected symptoms</p>
+    <p class="triage-number">#7119</p>
+    <p class="triage-message">Use the emergency medical advice service</p>
+    <a class="triage-call" href="tel:%237119">☎ Call #7119</a>
+  </section>`;
+}
+
+function showFinalSummary(){
+  const onsetValues = selectedOnsetValues();
+  const checkedSymptoms = [
+    ...symResults.querySelectorAll('input[type="checkbox"]:checked')
+  ];
+  const selectedValues = checkedSymptoms.map(box => box.value);
+  const triage = determineTriage(selectedValues);
+
+  const grouped = {};
+
+  checkedSymptoms.forEach(box => {
+    const key = box.dataset.category;
+    const side = box.dataset.side;
+    const prefix = box.dataset.prefix;
+    const value = prefix ? `${prefix}: ${box.value}` : box.value;
+
+    if(!grouped[key]){
+      grouped[key] = {
+        person:[],
+        observer:[]
+      };
+    }
+
+    grouped[key][side].push(value);
+  });
+
+  const onsetHtml = onsetValues.length
+    ? `<section class="sym-section">
+        <h2 class="sym-section-title">⌚ Onset</h2>
+        <div class="sym-onset-result">
+          ${onsetValues.map(text =>
+            `<div class="sym-onset-bullet">• ${escapeHtml(text)}</div>`
+          ).join('')}
+        </div>
+      </section>`
+    : '';
+
+  const categoryHtml = selectedSymptomCategories()
+    .filter(key => grouped[key])
+    .map(key => `
+      <section class="sym-section">
+        <h2 class="sym-section-title">${symptomData[key].title}</h2>
+        <div class="sym-column-heads">
+          <div class="sym-column-head">Reported by the Person</div>
+          <div class="sym-column-head">Observed by Others</div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-cell">
+            ${summaryListHtml(grouped[key].person)}
+          </div>
+          <div class="sym-cell">
+            ${summaryListHtml(grouped[key].observer)}
+          </div>
+        </div>
+      </section>
+    `).join('');
+
+  symSummaryIntro.innerHTML = triage.emergency
+    ? 'Thank you for your help.'
+    : 'Thank you for your help.<br>The selected symptoms are shown below.<br>Tell the operator the symptoms and ask which nearby hospital to visit.';
+
+  symSummary.innerHTML =
+    triageCardHtml(triage) +
+    patientInfoSection() +
+    onsetHtml +
+    categoryHtml;
+
+  showScreen('screen-summary');
+}
+
+symNextBtn.addEventListener('click',showSymptomResults);
+symDetailNextBtn.addEventListener('click',showFinalSummary);
+
+symBackBtn.addEventListener('click',() => {
+  showScreen('screen-symptoms');
+});
+
+symSummaryBackBtn.addEventListener('click',() => {
+  showScreen('screen-results');
+});
+</script>
+</body>
+</html>
