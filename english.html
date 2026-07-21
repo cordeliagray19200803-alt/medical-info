@@ -766,9 +766,26 @@ function speakText(text){
     utterance.rate = 0.9;
     utterance.pitch = 1;
     utterance.volume = 1;
-    utterance.onend = resolve;
-    utterance.onerror = resolve;
-    speechSynthesis.speak(utterance);
+
+    let finished = false;
+    const finish = () => {
+      if(finished) return;
+      finished = true;
+      clearTimeout(timeoutId);
+      resolve();
+    };
+
+    utterance.onend = finish;
+    utterance.onerror = finish;
+
+    /* Some mobile browsers occasionally fail to fire onend/onerror. */
+    const timeoutId = setTimeout(finish,12000);
+
+    try{
+      speechSynthesis.speak(utterance);
+    }catch(error){
+      finish();
+    }
   });
 }
 
@@ -792,17 +809,38 @@ function beep(){
   osc.stop(ctx.currentTime + 0.08);
 }
 
-async function startMetronome(){
+function startMetronome(){
   const ctx = getCtx();
   if(!ctx) return;
 
-  try{
-    await ctx.resume();
-  }catch(error){}
-
   if(metroTimer) clearInterval(metroTimer);
-  beep();
-  metroTimer = setInterval(beep,interval);
+
+  const begin = () => {
+    if(stopped) return;
+    beep();
+    metroTimer = setInterval(beep,interval);
+  };
+
+  if(ctx.state === 'running'){
+    begin();
+  }else{
+    ctx.resume().then(begin).catch(() => {});
+  }
+}
+
+function unlockMobileAudio(){
+  const ctx = getCtx();
+
+  if(ctx && ctx.state !== 'running'){
+    ctx.resume().catch(() => {});
+  }
+
+  if('speechSynthesis' in window){
+    try{
+      speechSynthesis.getVoices();
+      speechSynthesis.resume();
+    }catch(error){}
+  }
 }
 
 function scheduleRepeatGuidance(){
@@ -843,42 +881,40 @@ async function startGuidance(){
   status.textContent = 'Starting voice guidance';
   stopBtn.textContent = '■ Stop voice guidance and metronome';
 
-  const ctx = getCtx();
-  if(ctx){
-    try{
-      await ctx.resume();
-    }catch(error){}
-  }
+  /* Start the metronome immediately from the same tap. */
+  unlockMobileAudio();
+  startMetronome();
 
   if('speechSynthesis' in window){
     speechSynthesis.cancel();
+    speechSynthesis.getVoices();
   }
 
+  /* The first speech request is issued before any await for iPhone/Android. */
   await speakText('Put the phone on speaker and turn the volume all the way up.');
-  await sleep(1000);
+  await sleep(600);
   if(stopped) return;
 
   await speakText('Call 119 now.');
-  await sleep(1000);
+  await sleep(600);
   if(stopped) return;
 
   await speakText('Start chest compressions.');
-  await startMetronome();
-  await sleep(1000);
+  await sleep(600);
   if(stopped) return;
 
   if(!called119){
     await speakText('If 119 has not been called, ask someone to call 119 now.');
-    await sleep(1000);
+    await sleep(600);
     if(stopped) return;
   }
 
   await speakText('Ask someone to bring an A E D.');
-  await sleep(1000);
+  await sleep(600);
   if(stopped) return;
 
   await speakText('Ask another person to help with chest compressions.');
-  await sleep(1000);
+  await sleep(600);
   if(stopped) return;
 
   await speakText('Switch the person doing chest compressions every one to two minutes.');
@@ -914,10 +950,12 @@ function stopAll(updateDisplay = true){
   }
 }
 
-async function activateEmergency(){
+function activateEmergency(){
+  /* This function is called directly by the user's checkbox tap. */
+  unlockMobileAudio();
   showScreen('screen-emergency');
   called119 = false;
-  await startGuidance();
+  startGuidance();
 }
 
 document.querySelectorAll('.emergency-check').forEach(box => {
