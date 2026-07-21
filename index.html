@@ -219,38 +219,367 @@ body{
 }
 .notice .icon{color:var(--green);font-size:28px}
 
-/* 症状選択 */
-#screen-symptoms{background:#f4f4f4}
-.symptoms-wrap{
-  max-width:720px;
+
+/* 症状選択・結果 */
+#screen-symptoms,
+#screen-results{
+  background:#ffffff;
+}
+.sym-main{
+  width:min(100%,820px);
   margin:0 auto;
-  padding:16px;
+  padding:max(18px,env(safe-area-inset-top)) 14px max(28px,env(safe-area-inset-bottom));
 }
-.symptoms-card{
-  background:#fff;
-  border-radius:18px;
-  padding:18px;
-  box-shadow:0 2px 10px rgba(0,0,0,.08);
-}
-.symptoms-title{
-  background:#c40000;
+.sym-header{
+  background:#d32f2f;
   color:#fff;
-  border-radius:16px;
+  border-radius:18px;
   padding:16px 18px;
   text-align:center;
-  font-size:1.55rem;
-  font-weight:800;
-  margin-bottom:18px;
+  font-size:clamp(24px,6.6vw,36px);
+  line-height:1.3;
+  font-weight:900;
 }
-.symptom-item{
+.sym-lead{
+  margin:18px 2px 12px;
+  font-size:clamp(17px,4.5vw,22px);
+  line-height:1.6;
+  font-weight:750;
+}
+.sym-onset{
+  margin:18px 0 22px;
+  padding:14px 16px 16px;
+  border:2px solid #d32f2f;
+  border-radius:16px;
+  background:#fff6f6;
+}
+.sym-onset-title{
+  margin:0 0 10px;
+  font-size:clamp(20px,5.2vw,27px);
+  font-weight:900;
+}
+.sym-onset-options{
+  display:grid;
+  gap:10px;
+  padding-left:18px;
+}
+.sym-onset-options label{
   display:flex;
   align-items:center;
-  gap:12px;
-  padding:15px 4px;
-  border-bottom:1px solid var(--line);
-  font-size:1.12rem;
+  gap:10px;
+  font-size:clamp(18px,4.7vw,23px);
+  font-weight:750;
 }
-.symptom-item input{width:25px;height:25px}
+.sym-onset-options input{
+  width:26px;
+  height:26px;
+  accent-color:#d32f2f;
+}
+.sym-category-list{
+  border-top:2px solid #d32f2f;
+}
+.sym-category{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-height:62px;
+  padding:14px 4px;
+  border-bottom:2px solid #d32f2f;
+  cursor:pointer;
+  font-size:clamp(19px,5vw,25px);
+  font-weight:800;
+}
+.sym-category input,
+.sym-option input{
+  flex:0 0 auto;
+  width:27px;
+  height:27px;
+  accent-color:#d32f2f;
+}
+.sym-actions{
+  display:grid;
+  gap:12px;
+  margin-top:22px;
+}
+.sym-btn{
+  width:100%;
+  min-height:60px;
+  border:0;
+  border-radius:15px;
+  padding:13px 18px;
+  font-size:clamp(20px,5vw,25px);
+  font-weight:900;
+  cursor:pointer;
+}
+.sym-btn-primary{
+  background:#d32f2f;
+  color:#fff;
+}
+.sym-btn-primary:disabled{
+  background:#ccc;
+  color:#777;
+  cursor:not-allowed;
+}
+.sym-btn-secondary{
+  background:#fff;
+  color:#a91f1f;
+  border:2px solid #d32f2f;
+}
+.sym-results-intro{
+  margin:16px 2px 18px;
+  font-size:clamp(16px,4.1vw,21px);
+  font-weight:700;
+  line-height:1.55;
+}
+.sym-section{
+  margin:0 0 22px;
+  border:2px solid #d32f2f;
+  border-radius:18px;
+  background:#fff;
+  overflow:hidden;
+  box-shadow:0 4px 14px rgba(0,0,0,.06);
+}
+.sym-section-title{
+  margin:0;
+  padding:14px 16px;
+  background:#fff6f6;
+  border-bottom:2px solid #d32f2f;
+  font-size:clamp(22px,5.6vw,30px);
+  font-weight:900;
+}
+.sym-column-heads,
+.sym-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.sym-column-head{
+  padding:12px 8px;
+  background:#fafafa;
+  text-align:center;
+  font-size:clamp(15px,3.8vw,19px);
+  line-height:1.35;
+  font-weight:900;
+}
+.sym-column-head:first-child,
+.sym-cell:first-child{
+  border-right:1px solid #dedede;
+}
+.sym-row{
+  border-top:1px solid #dedede;
+}
+.sym-cell{
+  min-width:0;
+  padding:7px 9px 10px;
+}
+.sym-option{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  padding:8px 0;
+  font-size:clamp(15px,3.9vw,19px);
+  line-height:1.45;
+  font-weight:700;
+  cursor:pointer;
+}
+.sym-option input{
+  width:22px;
+  height:22px;
+  margin-top:1px;
+}
+.sym-group-label{
+  display:block;
+  padding:9px 8px 5px 0;
+  color:#a91f1f;
+  font-size:clamp(15px,3.9vw,19px);
+  font-weight:900;
+  text-align:right;
+}
+.sym-group-row .sym-cell:last-child{
+  padding-left:34px;
+}
+.sym-onset-result{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px 20px;
+  padding:14px 16px 16px;
+}
+.sym-onset-result .sym-option{
+  border:0;
+  padding:4px 0;
+  white-space:nowrap;
+}
+.sym-onset-bullet{
+  font-size:clamp(17px,4.3vw,21px);
+  line-height:1.55;
+  font-weight:750;
+  white-space:nowrap;
+}
+.patient-info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:14px;
+}
+.patient-info-item{
+  padding:12px 10px;
+  border:2px solid #d8d8d8;
+  border-radius:12px;
+  background:#fff;
+  text-align:center;
+  font-size:clamp(17px,4.3vw,22px);
+  line-height:1.4;
+  font-weight:900;
+}
+.patient-info-label{
+  display:block;
+  margin-bottom:3px;
+  color:#555;
+  font-size:.78em;
+  font-weight:800;
+}
+.sym-result-actions{
+  display:grid;
+  gap:12px;
+}
+.sym-summary-list{
+  margin:0;
+  padding:4px 0 4px 1.25em;
+  list-style:none;
+}
+.sym-summary-list li{
+  position:relative;
+  padding:6px 0;
+  font-size:clamp(15px,3.9vw,19px);
+  line-height:1.5;
+  font-weight:700;
+}
+.sym-summary-list li::before{
+  content:"・";
+  position:absolute;
+  left:-1.15em;
+  font-weight:900;
+}
+.sym-summary-empty{
+  min-height:20px;
+}
+.triage-card{
+  margin:0 0 22px;
+  padding:18px;
+  border-radius:20px;
+  color:#fff;
+  text-align:center;
+  box-shadow:0 6px 16px rgba(0,0,0,.14);
+}
+.triage-card.emergency{
+  background:linear-gradient(#e51f25,#c90000);
+}
+.triage-card.consult{
+  background:linear-gradient(#168e58,#08723f);
+}
+.triage-label{
+  margin:0 0 5px;
+  font-size:clamp(16px,4.2vw,21px);
+  font-weight:800;
+}
+.triage-number{
+  margin:0;
+  font-size:clamp(38px,10vw,64px);
+  line-height:1.1;
+  font-weight:950;
+}
+.triage-message{
+  margin:10px 0 15px;
+  font-size:clamp(18px,4.7vw,24px);
+  line-height:1.45;
+  font-weight:850;
+}
+.triage-call{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:62px;
+  border-radius:15px;
+  background:#fff;
+  text-decoration:none;
+  font-size:clamp(20px,5vw,28px);
+  font-weight:950;
+}
+.triage-card.emergency .triage-call{
+  color:#c90000;
+}
+.triage-card.consult .triage-call{
+  color:#08723f;
+}
+.triage-operator-guide{
+  margin:-6px 0 22px;
+  padding:18px;
+  border:3px solid #c90000;
+  border-radius:16px;
+  background:#fff;
+  color:#111;
+  text-align:left;
+  font-size:clamp(17px,4.4vw,22px);
+  line-height:1.65;
+  font-weight:800;
+  box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+.triage-operator-guide-title{
+  margin:0 0 10px;
+  color:#c90000;
+  font-size:clamp(19px,4.8vw,24px);
+  font-weight:950;
+  text-align:center;
+}
+.triage-operator-guide-quote{
+  display:block;
+  margin:10px 0;
+  padding:12px;
+  border-radius:10px;
+  background:#f5f5f5;
+  color:#000;
+  font-weight:900;
+}
+.triage-reasons{
+  margin:13px 0 0;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.16);
+  text-align:left;
+  font-size:clamp(14px,3.7vw,18px);
+  line-height:1.5;
+  font-weight:750;
+}
+.triage-reasons div::before{
+  content:"・";
+}
+.sym-sticky-actions{
+  position:sticky;
+  bottom:0;
+  padding:13px 0 max(5px,env(safe-area-inset-bottom));
+  background:linear-gradient(to bottom,rgba(255,255,255,0),#fff 28%);
+}
+.sym-summary-back-actions{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+}
+#sym-summary-back-btn{
+  width:auto;
+  min-height:42px;
+  padding:8px 13px;
+  border-radius:11px;
+  font-size:clamp(14px,3.5vw,17px);
+  font-weight:800;
+}
+@media(max-width:460px){
+  .sym-main{padding-left:10px;padding-right:10px}
+  .sym-cell{padding-left:6px;padding-right:6px}
+  .sym-option{gap:5px}
+  .sym-option input{width:20px;height:20px}
+  .sym-column-head{padding-left:4px;padding-right:4px}
+}
 
 @media(max-width:460px){
   .emergency-main{padding-left:12px;padding-right:12px}
@@ -369,20 +698,63 @@ body{
   </main>
 </section>
 
+
 <section id="screen-symptoms" class="screen">
-  <div class="symptoms-wrap">
-    <div class="symptoms-card">
-      <div class="symptoms-title">症状を選択してください</div>
-      <label class="symptom-item"><input type="checkbox"><span>👁️ 目</span></label>
-      <label class="symptom-item"><input type="checkbox"><span>🦵 手・足</span></label>
-      <label class="symptom-item"><input type="checkbox"><span>🙂 顔</span></label>
-      <label class="symptom-item"><input type="checkbox"><span>😵 頭</span></label>
-      <label class="symptom-item"><input type="checkbox"><span>😮‍💨 息</span></label>
-      <label class="symptom-item"><input type="checkbox"><span>🤢 体</span></label>
-      <label class="symptom-item"><input type="checkbox"><span>🩹 皮膚</span></label>
-      <label class="symptom-item"><input type="checkbox"><span>❓ その他</span></label>
+  <main class="sym-main">
+    <div class="sym-header">症状を選択してください</div>
+    <p class="sym-lead">当てはまるものをすべて選択してください。</p>
+
+    <div class="sym-onset">
+      <div class="sym-onset-title">⌚ 発生状況</div>
+      <div class="sym-onset-options">
+        <label><input type="checkbox" class="onset-choice" value="分からない">分からない</label>
+        <label><input type="checkbox" class="onset-choice" value="急に起こった">急に起こった</label>
+        <label><input type="checkbox" class="onset-choice" value="徐々に起こった">徐々に起こった</label>
+      </div>
     </div>
-  </div>
+
+    <div class="sym-category-list">
+      <label class="sym-category"><input type="checkbox" value="eye">👁️ 目</label>
+      <label class="sym-category"><input type="checkbox" value="limbs">🦵 手・足</label>
+      <label class="sym-category"><input type="checkbox" value="face">🙂 顔</label>
+      <label class="sym-category"><input type="checkbox" value="head">😵 頭</label>
+      <label class="sym-category"><input type="checkbox" value="breath">😮‍💨 息</label>
+      <label class="sym-category"><input type="checkbox" value="body">🤢 お腹・体</label>
+      <label class="sym-category"><input type="checkbox" value="skin">🩹 皮膚</label>
+      <label class="sym-category"><input type="checkbox" value="other">❓ その他</label>
+    </div>
+
+    <div class="sym-actions">
+      <button id="sym-next-btn" class="sym-btn sym-btn-primary" type="button" disabled>次へ</button>
+    </div>
+  </main>
+</section>
+
+<section id="screen-results" class="screen">
+  <main class="sym-main">
+    <div class="sym-header">該当する症状を選択</div>
+    <p class="sym-results-intro">最初の画面で選択した項目だけを表示しています。</p>
+
+    <div id="sym-results"></div>
+
+    <div class="sym-sticky-actions sym-result-actions">
+      <button id="sym-detail-next-btn" class="sym-btn sym-btn-primary" type="button" disabled>次へ</button>
+      <button id="sym-back-btn" class="sym-btn sym-btn-secondary" type="button">選択し直す</button>
+    </div>
+  </main>
+</section>
+
+<section id="screen-summary" class="screen">
+  <main class="sym-main">
+    <div class="sym-header">選択結果</div>
+    <p id="sym-summary-intro" class="sym-results-intro"></p>
+
+    <div id="sym-summary"></div>
+
+    <div class="sym-sticky-actions sym-summary-back-actions">
+      <button id="sym-summary-back-btn" class="sym-btn sym-btn-secondary" type="button">症状を選び直す</button>
+    </div>
+  </main>
 </section>
 
 <script>
@@ -617,6 +989,434 @@ cprBox.addEventListener('click', () => {
   }else{
     stopAll(true);
   }
+});
+
+/* 症状選択 */
+const symptomData = {
+  eye:{
+    title:'👁️ 目',
+    rows:[
+      {person:['見えない'],observer:['動けない','手探りで動いている','何かにつかまろうとしている','助けを求めている','物にぶつかる','人にぶつかる']},
+      {person:['ぼやけて見える'],observer:['顔を近づけて見ている','目を細めている']},
+      {person:['視野がいつもより狭い'],observer:['横から来た人や物にぶつかる']},
+      {person:['目が痛い'],observer:['目を押さえている','顔をしかめている']},
+      {person:['涙が止まらない'],observer:['涙が出続けている']},
+      {person:['目が開けられない'],observer:['目を閉じたまま']},
+      {person:['まぶしい'],observer:['手で目を覆っている','顔を背けている','暗い場所へ移動しようとしている']}
+    ]
+  },
+  limbs:{
+    title:'🦵 手・足',
+    rows:[
+      {person:['左半身の感覚がない'],observer:['左側を触られても気づかない','左側をぶつけても気づかない']},
+      {person:['左手が動かしにくい'],observer:['左手がだらんとしている','物を落とす']},
+      {person:['歩きにくい'],observer:['長時間立てていない']},
+      {person:['立てない'],observer:['支えがあっても立てない']},
+      {person:['左手足にしびれがある'],observer:['力が入っていないように見える']}
+    ]
+  },
+  face:{
+    title:'🙂 顔',
+    rows:[
+      {person:['左側の顔がしびれる'],observer:['口元が動きにくい','顔の左右差がある']}
+    ]
+  },
+  head:{
+    title:'😵 頭',
+    rows:[
+      {person:['頭が痛い','突然の激しい頭痛'],observer:['頭を押さえている']},
+      {person:[{label:'応急処置',group:true}],observer:['痛み止めの服用']},
+      {person:['めまいがする'],observer:['ふらついている']},
+      {person:['集中できない'],observer:['反応が遅い']},
+      {person:['無反応'],observer:['声をかけても反応がない','肩をたたいても反応がない']}
+    ]
+  },
+  breath:{
+    title:'😮‍💨 息',
+    rows:[
+      {person:['咳が出る'],observer:['咳き込んでいる']},
+      {person:['息苦しい'],observer:['呼吸が苦しそう']}
+    ]
+  },
+  body:{
+    title:'🤢 お腹・体',
+    rows:[
+      {person:['吐き気','吐き気が非常に強い'],observer:['気分が悪そう']},
+      {person:[{label:'応急処置',group:true}],observer:['エチケット袋・水の提供']},
+      {person:['突然の強い胸痛・腹痛'],observer:['胸を押さえている','お腹を押さえている']},
+      {person:['体がだるい'],observer:['動けなくなる','休んでいる','冷や汗']}
+    ]
+  },
+  skin:{
+    title:'🩹 皮膚',
+    rows:[
+      {person:['皮膚がかゆい'],observer:['皮膚をかいている','赤みがある']}
+    ]
+  },
+  other:{
+    title:'❓ その他',
+    rows:[
+      {person:['強い痛みがある'],observer:['腕・手を押さえている','足を押さえている','腰・背中を押さえている']},
+      {person:[{label:'応急処置',group:true}],observer:['痛み止めを使用したと話している']},
+      {person:['けいれんしている'],observer:['意識がある','意識がない','全身がけいれんしている','手足だけがけいれんしている','けいれんが止まらない','けいれん後も意識が戻らない']},
+      {person:['出血している'],observer:['ティッシュで押さえられる程度','タオルが血で濡れる程度','出血は止まった','圧迫しても出血が止まらない']},
+      {person:[{label:'応急処置',group:true}],observer:['止血中','止血して止まった']},
+      {person:['やけどをした'],observer:['赤くなっている','水ぶくれができている','皮膚が白色・黒色になっている','広い範囲のやけど']},
+      {person:[{label:'応急処置',group:true}],observer:['冷やした']},
+      {person:['骨折したかもしれない'],observer:['手足が不自然に曲がっている','腫れている','動かせない']},
+      {person:[{label:'応急処置',group:true}],observer:['動かさないようにしている','寝かせている','座らせている']}
+    ]
+  }
+};
+
+const symNextBtn = document.getElementById('sym-next-btn');
+const symDetailNextBtn = document.getElementById('sym-detail-next-btn');
+const symBackBtn = document.getElementById('sym-back-btn');
+const symSummaryBackBtn = document.getElementById('sym-summary-back-btn');
+const symResults = document.getElementById('sym-results');
+const symSummary = document.getElementById('sym-summary');
+const symSummaryIntro = document.getElementById('sym-summary-intro');
+const symptomCategoryBoxes = [...document.querySelectorAll('.sym-category input')];
+const onsetChoices = [...document.querySelectorAll('.onset-choice')];
+
+function selectedSymptomCategories(){
+  return symptomCategoryBoxes
+    .filter(box => box.checked)
+    .map(box => box.value);
+}
+
+function updateSymptomNextButton(){
+  const hasCategory = selectedSymptomCategories().length > 0;
+  const hasOnset = onsetChoices.some(box => box.checked);
+  symNextBtn.disabled = !(hasCategory || hasOnset);
+}
+
+function escapeHtml(value){
+  return String(value)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
+}
+
+function symptomOptionHtml(item,key,side,prefix=''){
+  if(typeof item === 'object' && item.group){
+    return `<span class="sym-group-label">${escapeHtml(item.label)}</span>`;
+  }
+
+  const text = escapeHtml(item);
+  const safePrefix = escapeHtml(prefix);
+
+  return `<label class="sym-option">
+    <input
+      type="checkbox"
+      name="${key}-${side}"
+      value="${text}"
+      data-category="${key}"
+      data-side="${side}"
+      data-prefix="${safePrefix}">
+    <span>${text}</span>
+  </label>`;
+}
+
+function calculateAge(birthYear,birthMonth,birthDay){
+  const today = new Date();
+  let age = today.getFullYear() - birthYear;
+
+  const birthdayThisYear = new Date(
+    today.getFullYear(),
+    birthMonth - 1,
+    birthDay
+  );
+
+  if(today < birthdayThisYear){
+    age -= 1;
+  }
+
+  return age;
+}
+
+function patientInfoSection(){
+  const age = calculateAge(1974,1,26);
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">👤 基本情報</h2>
+    <div class="patient-info-grid">
+      <div class="patient-info-item">
+        <span class="patient-info-label">年齢</span>
+        ${age}歳
+      </div>
+      <div class="patient-info-item">
+        <span class="patient-info-label">血液型</span>
+        AB型
+      </div>
+    </div>
+  </section>`;
+}
+
+function selectedOnsetValues(){
+  return onsetChoices
+    .filter(box => box.checked)
+    .map(box => box.value);
+}
+
+function onsetResultSection(){
+  const selectedOnset = selectedOnsetValues();
+
+  if(selectedOnset.length === 0) return '';
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">⌚ 発生状況</h2>
+    <div class="sym-onset-result">
+      ${selectedOnset.map(text =>
+        `<div class="sym-onset-bullet">・${escapeHtml(text)}</div>`
+      ).join('')}
+    </div>
+  </section>`;
+}
+
+function symptomResultSection(key,item){
+  const rowsHtml = item.rows.map(row => {
+    const isGroupRow = row.person.some(
+      value => typeof value === 'object' && value.group
+    );
+
+    const groupItem = row.person.find(
+      value => typeof value === 'object' && value.group
+    );
+    const groupLabel = groupItem ? groupItem.label : '';
+
+    return `<div class="sym-row${isGroupRow ? ' sym-group-row' : ''}">
+      <div class="sym-cell">
+        ${row.person.map(value => symptomOptionHtml(value,key,'person')).join('')}
+      </div>
+      <div class="sym-cell">
+        ${row.observer.map(value =>
+          symptomOptionHtml(value,key,'observer',groupLabel)
+        ).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">${item.title}</h2>
+    <div class="sym-column-heads">
+      <div class="sym-column-head">本人の訴え</div>
+      <div class="sym-column-head">周囲の判断</div>
+    </div>
+    ${rowsHtml}
+  </section>`;
+}
+
+function updateDetailNextButton(){
+  const symptomChecks = [
+    ...symResults.querySelectorAll('input[type="checkbox"]')
+  ];
+  const hasCheckedSymptom = symptomChecks.some(box => box.checked);
+  const hasNoSymptomChecks = symptomChecks.length === 0;
+  const hasOnset = selectedOnsetValues().length > 0;
+
+  symDetailNextBtn.disabled =
+    !(hasCheckedSymptom || (hasNoSymptomChecks && hasOnset));
+}
+
+function showSymptomResults(){
+  const keys = selectedSymptomCategories();
+  const onsetHtml = onsetResultSection();
+
+  if(keys.length === 0 && onsetHtml === '') return;
+
+  symResults.innerHTML =
+    onsetHtml +
+    keys.map(key =>
+      symptomResultSection(key,symptomData[key])
+    ).join('');
+
+  symResults
+    .querySelectorAll('input[type="checkbox"]')
+    .forEach(box => box.addEventListener('change',updateDetailNextButton));
+
+  updateDetailNextButton();
+  showScreen('screen-results');
+}
+
+symptomCategoryBoxes.forEach(box => {
+  box.addEventListener('change',updateSymptomNextButton);
+});
+
+onsetChoices.forEach(box => {
+  box.addEventListener('change',updateSymptomNextButton);
+});
+
+function summaryListHtml(items){
+  if(items.length === 0){
+    return '<div class="sym-summary-empty"></div>';
+  }
+
+  return `<ul class="sym-summary-list">
+    ${items.map(text => `<li>${escapeHtml(text)}</li>`).join('')}
+  </ul>`;
+}
+
+const emergencySymptoms = new Set([
+  '無反応',
+  '声をかけても反応がない',
+  '肩をたたいても反応がない',
+  '突然の激しい頭痛',
+  '息苦しい',
+  '呼吸が苦しそう',
+  '突然の強い胸痛・腹痛',
+  '意識がない',
+  'けいれんが止まらない',
+  'けいれん後も意識が戻らない',
+  'タオルが血で濡れる程度',
+  '圧迫しても出血が止まらない',
+  '皮膚が白色・黒色になっている',
+  '広い範囲のやけど'
+]);
+
+function determineTriage(selectedValues){
+  const values = new Set(selectedValues);
+  const reasons = [];
+
+  emergencySymptoms.forEach(symptom => {
+    if(values.has(symptom)){
+      reasons.push(symptom);
+    }
+  });
+
+  if(
+    values.has('吐き気が非常に強い') &&
+    values.has('冷や汗')
+  ){
+    reasons.push('吐き気が非常に強い＋冷や汗');
+  }
+
+  if(
+    values.has('冷や汗') &&
+    (
+      values.has('胸を押さえている') ||
+      values.has('お腹を押さえている')
+    )
+  ){
+    reasons.push('胸またはお腹を押さえている＋冷や汗');
+  }
+
+  return {
+    emergency:reasons.length > 0,
+    reasons:[...new Set(reasons)]
+  };
+}
+
+function triageCardHtml(triage){
+  if(triage.emergency){
+    return `<section class="triage-card emergency">
+      <p class="triage-label">選択内容から</p>
+      <p class="triage-number">119番</p>
+      <p class="triage-message">救急車を呼んでください</p>
+      <a class="triage-call" href="tel:119">☎ 119番に電話する</a>
+      <div class="triage-reasons">
+        ${triage.reasons.map(reason =>
+          `<div>${escapeHtml(reason)}</div>`
+        ).join('')}
+      </div>
+    </section>
+    <section class="triage-operator-guide">
+      <h2 class="triage-operator-guide-title">オペレーターに伝えること</h2>
+      本人はヘルプマークに医療情報を登録しています。
+      <span class="triage-operator-guide-quote">「到着する隊員へ、ヘルプマークのハート部分にスマホをかざして確認するよう共有してください」</span>
+      とお伝えください。
+    </section>`;
+  }
+
+  return `<section class="triage-card consult">
+    <p class="triage-label">選択内容から</p>
+    <p class="triage-number">＃7119番</p>
+    <p class="triage-message">救急相談を利用してください</p>
+    <a class="triage-call" href="tel:%237119">☎ ＃7119番に電話する</a>
+  </section>`;
+}
+
+function showFinalSummary(){
+  const onsetValues = selectedOnsetValues();
+  const checkedSymptoms = [
+    ...symResults.querySelectorAll('input[type="checkbox"]:checked')
+  ];
+  const selectedValues = checkedSymptoms.map(box => box.value);
+  const triage = determineTriage(selectedValues);
+
+  const grouped = {};
+
+  checkedSymptoms.forEach(box => {
+    const key = box.dataset.category;
+    const side = box.dataset.side;
+    const prefix = box.dataset.prefix;
+    const value = prefix ? `${prefix}：${box.value}` : box.value;
+
+    if(!grouped[key]){
+      grouped[key] = {
+        person:[],
+        observer:[]
+      };
+    }
+
+    grouped[key][side].push(value);
+  });
+
+  const onsetHtml = onsetValues.length
+    ? `<section class="sym-section">
+        <h2 class="sym-section-title">⌚ 発生状況</h2>
+        <div class="sym-onset-result">
+          ${onsetValues.map(text =>
+            `<div class="sym-onset-bullet">・${escapeHtml(text)}</div>`
+          ).join('')}
+        </div>
+      </section>`
+    : '';
+
+  const categoryHtml = selectedSymptomCategories()
+    .filter(key => grouped[key])
+    .map(key => `
+      <section class="sym-section">
+        <h2 class="sym-section-title">${symptomData[key].title}</h2>
+        <div class="sym-column-heads">
+          <div class="sym-column-head">本人の訴え</div>
+          <div class="sym-column-head">周囲の判断</div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-cell">
+            ${summaryListHtml(grouped[key].person)}
+          </div>
+          <div class="sym-cell">
+            ${summaryListHtml(grouped[key].observer)}
+          </div>
+        </div>
+      </section>
+    `).join('');
+
+  symSummaryIntro.innerHTML = triage.emergency
+    ? 'ご協力ありがとうございます。'
+    : 'ご協力ありがとうございます。<br>チェックした症状を表示しました。<br>オペレーターに症状を伝え近隣の病院を聞いてください。';
+
+  symSummary.innerHTML =
+    triageCardHtml(triage) +
+    patientInfoSection() +
+    onsetHtml +
+    categoryHtml;
+
+  showScreen('screen-summary');
+}
+
+symNextBtn.addEventListener('click',showSymptomResults);
+symDetailNextBtn.addEventListener('click',showFinalSummary);
+
+symBackBtn.addEventListener('click',() => {
+  showScreen('screen-symptoms');
+});
+
+symSummaryBackBtn.addEventListener('click',() => {
+  showScreen('screen-results');
 });
 </script>
 </body>
