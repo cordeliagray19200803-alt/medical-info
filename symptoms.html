@@ -648,9 +648,9 @@ body{
   }
   50%{
     background:linear-gradient(#ff3b3b,#e60000);
-    filter:brightness(1.30);
+    filter: brightness(1.01);
     transform:scale(1.04);
-    box-shadow:0 0 30px rgba(255,255,255,.70);
+    box-shadow:0 0 10px rgba(255,255,255,.70);
   }
 }
 .hero.cpr-pulse{
@@ -1131,10 +1131,10 @@ async function startGuidance(){
   await speakText('どなたか、119番通報をお願いします。');
   if(stopped) return;
 
-  await speakText('どなたか、AEDを持ってきてください。');
+  await speakText('どなたか、エーイーディーを持ってきてください。');
   if(stopped) return;
 
-  await speakText('心臓マッサージを交代できるよう、もう1人か2人近くに来てください。');
+  await speakText('心臓マッサージを交代できるよう、もうヒトリカ、フタリ近くに来てください。');
   if(stopped) return;
 
   setMetronomeVolume(1.0);
