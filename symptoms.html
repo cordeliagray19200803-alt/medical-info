@@ -687,17 +687,12 @@ body{
 
     <label class="choice">
       <input type="checkbox" class="emergency-check">
-      <span class="label-text">呼吸をしていない</span>
+      <span class="label-text">10カウントしても呼吸が確認できない</span>
     </label>
 
     <label class="choice">
       <input type="checkbox" class="emergency-check">
-      <span class="label-text">胸のあたりが上下に動いていない</span>
-    </label>
-
-    <label class="choice">
-      <input type="checkbox" class="emergency-check">
-      <span class="label-text">おなかに手を当てても上下に動いていない</span>
+      <span class="label-text">10カウントしても胸やお腹が動かない</span>
     </label>
 
     <label class="choice">
@@ -852,6 +847,9 @@ let metroTimer = null;
 let metroSource = null;
 let metroGain = null;
 let repeatTimer = null;
+let periodicTimer = null;
+let cueTimer = null;
+let cueIndex = 0;
 let stopped = true;
 let guidanceRunning = false;
 let called119 = false;
@@ -1105,9 +1103,55 @@ function setMetronomeVolume(value){
   }
 }
 
+const compressionCues = ['強く','速く','絶え間なく','押してください'];
+
+function startCompressionCues(){
+  if(cueTimer) clearInterval(cueTimer);
+  cueIndex = 0;
+  status.textContent = compressionCues[cueIndex];
+  cueTimer = setInterval(() => {
+    if(stopped || guidanceRunning) return;
+    cueIndex = (cueIndex + 1) % compressionCues.length;
+    status.textContent = compressionCues[cueIndex];
+    speakText(compressionCues[cueIndex],{rate:0.95});
+  }, interval * 4);
+}
+
 function scheduleRepeatGuidance(){
   if(repeatTimer) clearInterval(repeatTimer);
+  if(periodicTimer) clearInterval(periodicTimer);
   repeatTimer = setInterval(repeatGuidance,120000);
+  periodicTimer = setInterval(periodicGuidance,25000);
+}
+
+async function periodicGuidance(){
+  if(stopped || guidanceRunning) return;
+
+  guidanceRunning = true;
+  setMetronomeVolume(0.6);
+  badge.textContent = '🔊 音声案内中';
+
+  const messages = [
+    '救急隊が到着するまで続けてください。',
+    '119番通報がまだでしたら、どなたか119番へ通報してください。',
+    'どなたか、エーイーディーを持ってきてください。',
+    'マップをクリック！エーイーディーの場所を確認できます。',
+    'どなたか心肺蘇生のご協力をお願いします。'
+  ];
+
+  for(const message of messages){
+    if(stopped) break;
+    status.textContent = message;
+    await speakText(message);
+  }
+
+  setMetronomeVolume(1.0);
+  guidanceRunning = false;
+  if(!stopped){
+    badge.textContent = '🔊 メトロノーム作動中';
+    await speakText('強く。速く。絶え間なく。押してください。',{rate:0.95});
+    startCompressionCues();
+  }
 }
 
 async function repeatGuidance(){
@@ -1116,16 +1160,22 @@ async function repeatGuidance(){
   guidanceRunning = true;
   setMetronomeVolume(0.6);
   badge.textContent = '🔊 音声案内中';
-  status.textContent = '交代の音声案内中';
+  status.textContent = '交代できる方は、1、2、3で交代してください';
 
-  await speakText('心臓マッサージを交代してください。');
+  await speakText('交代できる方は、いち、に、さんで交代してください。');
+  if(stopped) return;
+  await sleep(2000);
+  if(stopped) return;
+  status.textContent = '1、2、3！！！';
+  await speakText('いち、に、さん！',{rate:0.82,pitch:1.08});
 
   setMetronomeVolume(1.0);
+  guidanceRunning = false;
   if(!stopped){
     badge.textContent = '🔊 メトロノーム作動中';
-    status.textContent = '心臓マッサージを続けてください';
+    await speakText('強く。速く。絶え間なく。押してください。',{rate:0.95});
+    startCompressionCues();
   }
-  guidanceRunning = false;
 }
 
 async function startGuidance(){
@@ -1159,26 +1209,36 @@ async function startGuidance(){
   }
   if(stopped) return;
 
-  /* 固定文：変更しない */
   await speakText('しんぞうが、とまっているかのうせいがあります。');
   if(stopped) return;
 
   badge.textContent = '🔊 音声案内中';
-  status.textContent = '心臓マッサージを始めてください';
-  await speakText('心臓マッサージを始めてください。');
+  status.textContent = '音量を最大にしてください';
+  await speakText('音量を最大にしてください。');
+  if(stopped) return;
+
+  status.textContent = '心臓マッサージを、おこなってください';
+  await speakText('心臓マッサージを、おこなってください。');
+  if(stopped) return;
+
+  status.textContent = '胸の真ん中に両手を重ね、乾電池1本分沈むように強く押しこみます';
+  await speakText('胸の真ん中に両手を重ね、乾電池1本分沈むように強く押しこみます。');
+  if(stopped) return;
+
+  status.textContent = 'メトロノームに合わせて押してください';
+  await speakText('メトロノームに合わせて押してください。');
   if(stopped) return;
 
   startMetronome();
   setMetronomeVolume(0.6);
 
-  /* 確定版：以下の4案内は順番を変えず、間を空けずに連続再生 */
-  await speakText('電話をスピーカーにして音量を最大にしてください。');
-  if(stopped) return;
-
   await speakText('どなたか、119番通報をお願いします。');
   if(stopped) return;
 
-  await speakText('どなたか、エーイーディーを持ってきてください。');
+  await speakText('緊急事態。どなたか、エーイーディーを持ってきてください！');
+  if(stopped) return;
+
+  await speakText('マップをクリック！エーイーディーの場所を確認できます。');
   if(stopped) return;
 
   await speakText('心臓マッサージを交代できるよう、もうヒトリカ、フタリ近くに来てください。');
@@ -1187,7 +1247,8 @@ async function startGuidance(){
   setMetronomeVolume(1.0);
   guidanceRunning = false;
   badge.textContent = '🔊 メトロノーム作動中';
-  status.textContent = '心臓マッサージを続けてください';
+  await speakText('強く。速く。絶え間なく。押してください。',{rate:0.95});
+  startCompressionCues();
   scheduleRepeatGuidance();
 }
 
@@ -1220,6 +1281,16 @@ function stopAll(updateDisplay = true){
   if(repeatTimer){
     clearInterval(repeatTimer);
     repeatTimer = null;
+  }
+
+  if(periodicTimer){
+    clearInterval(periodicTimer);
+    periodicTimer = null;
+  }
+
+  if(cueTimer){
+    clearInterval(cueTimer);
+    cueTimer = null;
   }
 
   if(updateDisplay){
