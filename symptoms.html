@@ -812,7 +812,7 @@ function getCtx(){
   return audioCtx;
 }
 
-function speakText(text){
+function speakText(text, options = {}){
   return new Promise(resolve => {
     if(stopped || !('speechSynthesis' in window)){
       resolve();
@@ -821,9 +821,9 @@ function speakText(text){
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'ja-JP';
-    utterance.rate = 0.88;
-    utterance.pitch = 1;
-    utterance.volume = 1;
+    utterance.rate = options.rate ?? 0.88;
+    utterance.pitch = options.pitch ?? 1;
+    utterance.volume = options.volume ?? 1;
 
     let finished = false;
     const finish = () => {
@@ -865,6 +865,44 @@ function beep(){
   gain.connect(ctx.destination);
   osc.start();
   osc.stop(ctx.currentTime + 0.08);
+}
+
+function playEmergencyWarningTone(durationMs = 2500){
+  return new Promise(resolve => {
+    const ctx = getCtx();
+    if(!ctx){
+      resolve();
+      return;
+    }
+
+    const begin = () => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const now = ctx.currentTime;
+      const durationSeconds = durationMs / 1000;
+
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(760,now);
+      gain.gain.setValueAtTime(0.0001,now);
+      gain.gain.exponentialRampToValueAtTime(0.32,now + 0.03);
+      gain.gain.setValueAtTime(0.32,now + Math.max(0.04,durationSeconds - 0.08));
+      gain.gain.exponentialRampToValueAtTime(0.0001,now + durationSeconds);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + durationSeconds);
+      osc.onended = resolve;
+
+      setTimeout(resolve,durationMs + 300);
+    };
+
+    if(ctx.state === 'running'){
+      begin();
+    }else{
+      ctx.resume().then(begin).catch(resolve);
+    }
+  });
 }
 
 function startMetronome(){
@@ -935,21 +973,48 @@ async function startGuidance(){
 
   stopped = false;
   guidanceRunning = true;
-  badge.textContent = '🔊 音声案内中';
-  status.textContent = '音声案内を開始します';
+  badge.textContent = '🚨 緊急警告中';
+  status.textContent = '心臓が止まっている可能性があります。';
   stopBtn.textContent = '■ 音声・メトロノームを停止する';
 
-  /* Start the metronome immediately from the same tap. */
   unlockMobileAudio();
-  startMetronome();
 
   if('speechSynthesis' in window){
     speechSynthesis.cancel();
     speechSynthesis.getVoices();
   }
 
-  /* The first speech request is issued before any await for iPhone/Android. */
-  await speakText('電話をスピーカーにして、音量を最大にしてください。');
+  await playEmergencyWarningTone(2500);
+  if(stopped) return;
+
+  // AI音声が未配置の場合は通常音声で案内
+  try {
+    const emergencyVoice = new Audio('audio/cardiac-arrest-warning.mp3');
+    emergencyVoice.volume = 1.0;
+    await emergencyVoice.play();
+  } catch (e) {
+    await speakText('しんぞうが、とまっているかのうせいがあります。', {
+      rate: 0.88,
+      pitch: 1.0,
+      volume: 1.0
+    });
+  }
+  await sleep(600);
+  if(stopped) return;
+
+  await speakText('おんりょうを、さいだいに、してください。', {
+    rate: 0.86,
+    pitch: 0.78,
+    volume: 1
+  });
+  await sleep(600);
+  if(stopped) return;
+
+  badge.textContent = '🔊 音声案内中';
+  status.textContent = '音声案内を開始します';
+  startMetronome();
+
+  await speakText('電話をスピーカーにしてください。');
   await sleep(600);
   if(stopped) return;
 
