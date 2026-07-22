@@ -768,7 +768,18 @@ body{
       ■ 音声・メトロノームを停止する
     </button>
 
-    <button class="privacy-close" type="button" onclick="closePrivatePage()" aria-label="心肺蘇生画面を閉じます">閉じる</button>
+    <button class="privacy-close" type="button" onclick="closePrivatePage()" aria-label="心肺蘇生画面を閉じます" style="text-align:center;flex-direction:column;">
+  <span style="display:block;text-align:center;">閉じる</span>
+  <span style="display:block;
+               margin-top:4px;
+               font-size:12px;
+               font-weight:bold;
+               line-height:1.4;
+               color:#000;
+               text-align:center;">
+    個人情報保護のためここを押して閉じてください
+  </span>
+</button>
 
     <footer class="notice">
       <div class="icon">📣</div>
@@ -849,6 +860,9 @@ let metroGain = null;
 let repeatTimer = null;
 let periodicTimer = null;
 let cueTimer = null;
+let oneMinuteTimer = null;
+let exchangeWarningTimer = null;
+let exchangeReadyTimer = null;
 let cueIndex = 0;
 let stopped = true;
 let guidanceRunning = false;
@@ -1103,55 +1117,102 @@ function setMetronomeVolume(value){
   }
 }
 
-const compressionCues = ['強く','速く','絶え間なく','押してください'];
+const compressionCues = [
+  '強く！',
+  '乾電池1本分沈むまで！',
+  '速く！',
+  '絶え間なく！',
+  'メトロノームに合わせて押してください。',
+  'AEDが届いたら、すぐに使用してください。',
+  'AEDの準備をしている間も、心臓マッサージを続けてください。'
+];
 
 function startCompressionCues(){
   if(cueTimer) clearInterval(cueTimer);
   cueIndex = 0;
   status.textContent = compressionCues[cueIndex];
-  cueTimer = setInterval(() => {
+
+  cueTimer = setInterval(async () => {
     if(stopped || guidanceRunning) return;
+
+    guidanceRunning = true;
+    setMetronomeVolume(0.6);
+    badge.textContent = '🔊 音声案内中';
+
+    const message = compressionCues[cueIndex];
+    status.textContent = message;
+    await speakText(message,{rate:0.95});
+
     cueIndex = (cueIndex + 1) % compressionCues.length;
-    status.textContent = compressionCues[cueIndex];
-    speakText(compressionCues[cueIndex],{rate:0.95});
-  }, interval * 4);
+    setMetronomeVolume(1.0);
+    guidanceRunning = false;
+
+    if(!stopped){
+      badge.textContent = '🔊 メトロノーム作動中';
+    }
+  },25000);
 }
 
 function scheduleRepeatGuidance(){
   if(repeatTimer) clearInterval(repeatTimer);
   if(periodicTimer) clearInterval(periodicTimer);
+  if(oneMinuteTimer) clearTimeout(oneMinuteTimer);
+  if(exchangeWarningTimer) clearTimeout(exchangeWarningTimer);
+  if(exchangeReadyTimer) clearTimeout(exchangeReadyTimer);
+
+  oneMinuteTimer = setTimeout(async () => {
+    if(stopped || guidanceRunning || called119) return;
+
+    guidanceRunning = true;
+    setMetronomeVolume(0.6);
+    badge.textContent = '🔊 音声案内中';
+    status.textContent = 'どなたか119番に電話してください';
+    await speakText('どなたか119番に電話してください。');
+    setMetronomeVolume(1.0);
+    guidanceRunning = false;
+
+    if(!stopped){
+      badge.textContent = '🔊 メトロノーム作動中';
+    }
+  },60000);
+
+  exchangeWarningTimer = setTimeout(async () => {
+    if(stopped || guidanceRunning) return;
+
+    guidanceRunning = true;
+    setMetronomeVolume(0.6);
+    badge.textContent = '🔊 音声案内中';
+    status.textContent = '疲れる前に交代しましょう';
+    await speakText('疲れる前に交代しましょう。');
+    setMetronomeVolume(1.0);
+    guidanceRunning = false;
+
+    if(!stopped){
+      badge.textContent = '🔊 メトロノーム作動中';
+    }
+  },90000);
+
+  exchangeReadyTimer = setTimeout(async () => {
+    if(stopped || guidanceRunning) return;
+
+    guidanceRunning = true;
+    setMetronomeVolume(0.6);
+    badge.textContent = '🔊 音声案内中';
+    status.textContent = '交代できる方は準備してください';
+    await speakText('交代できるかたは準備してください。');
+    setMetronomeVolume(1.0);
+    guidanceRunning = false;
+
+    if(!stopped){
+      badge.textContent = '🔊 メトロノーム作動中';
+    }
+  },110000);
+
   repeatTimer = setInterval(repeatGuidance,120000);
-  periodicTimer = setInterval(periodicGuidance,25000);
 }
 
 async function periodicGuidance(){
-  if(stopped || guidanceRunning) return;
-
-  guidanceRunning = true;
-  setMetronomeVolume(0.6);
-  badge.textContent = '🔊 音声案内中';
-
-  const messages = [
-    '救急隊が到着するまで続けてください。',
-    '119番通報がまだでしたら、どなたか119番へ通報してください。',
-    'どなたか、エーイーディーを持ってきてください。',
-    'マップをクリック！エーイーディーの場所を確認できます。',
-    'どなたか心肺蘇生のご協力をお願いします。'
-  ];
-
-  for(const message of messages){
-    if(stopped) break;
-    status.textContent = message;
-    await speakText(message);
-  }
-
-  setMetronomeVolume(1.0);
-  guidanceRunning = false;
-  if(!stopped){
-    badge.textContent = '🔊 メトロノーム作動中';
-    await speakText('強く。速く。絶え間なく。押してください。',{rate:0.95});
-    startCompressionCues();
-  }
+  return;
 }
 
 async function repeatGuidance(){
@@ -1160,21 +1221,30 @@ async function repeatGuidance(){
   guidanceRunning = true;
   setMetronomeVolume(0.6);
   badge.textContent = '🔊 音声案内中';
-  status.textContent = '交代できる方は、1、2、3で交代してください';
 
-  await speakText('交代できる方は、いち、に、さんで交代してください。');
-  if(stopped) return;
-  await sleep(2000);
-  if(stopped) return;
-  status.textContent = '1、2、3！！！';
-  await speakText('いち、に、さん！',{rate:0.82,pitch:1.08});
+  const messages = [
+    {display:'交代できる方がいましたらお願いします。',audio:'交代できるかたがいましたらお願いします。'},
+    '交代は3秒以内で行います。',
+    '1、2、3。',
+    '交代してください。'
+  ];
+
+  for(const message of messages){
+    if(stopped) break;
+    if(typeof message==='string'){
+      status.textContent = message;
+      await speakText(message);
+    }else{
+      status.textContent = message.display;
+      await speakText(message.audio);
+    }
+  }
 
   setMetronomeVolume(1.0);
   guidanceRunning = false;
+
   if(!stopped){
     badge.textContent = '🔊 メトロノーム作動中';
-    await speakText('強く。速く。絶え間なく。押してください。',{rate:0.95});
-    startCompressionCues();
   }
 }
 
@@ -1195,13 +1265,14 @@ async function startGuidance(){
     speechSynthesis.getVoices();
   }
 
-  /* 警告音中から、背景・両側の警告絵文字・文字を110回/分で脈動 */
   if(emergencyHero){
     emergencyHero.classList.remove('cpr-pulse');
     void emergencyHero.offsetWidth;
     emergencyHero.classList.add('cpr-pulse');
   }
+
   await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
   try{
     await playEmergencyWarningTone(2500);
   }catch(error){
@@ -1209,45 +1280,51 @@ async function startGuidance(){
   }
   if(stopped) return;
 
-  await speakText('しんぞうが、とまっているかのうせいがあります。');
-  if(stopped) return;
+  const openingMessages = [
+    {
+      display:'心臓が止まっている可能性があります。',
+      audio:'しんぞうが、とまっているかのうせいがあります。'
+    },
+    {
+      display:'電話をスピーカーにして音量は最大にしてください。',
+      audio:'電話をスピーカーにして音量は最大にしてください。'
+    },
+    {
+      display:'119番に電話してください。',
+      audio:'119番に電話してください。'
+    },
+    {
+      display:'心臓マッサージを行ってください。',
+      audio:'心臓マッサージを、おこなってください。'
+    },
+    {
+      display:'胸の真ん中に両手を重ね、乾電池1本分沈むように強く押し込みます。',
+      audio:'胸の真ん中に両手を重ね、乾電池1本分沈むように強く押しこみます。'
+    },
+    {
+      display:'どなたか、AEDを持ってきてください。',
+      audio:'どなたか、AEDを持ってきてください。'
+    }
+  ];
 
   badge.textContent = '🔊 音声案内中';
-  status.textContent = '音量を最大にしてください';
-  await speakText('音量を最大にしてください。');
+
+  for(const message of openingMessages){
+    if(stopped) return;
+    status.textContent = message.display;
+    await speakText(message.audio);
+
+    if(message.display === '119番に電話してください。'){
+      startMetronome();
+      setMetronomeVolume(1.0);
+    }
+  }
+
   if(stopped) return;
 
-  status.textContent = '心臓マッサージを、おこなってください';
-  await speakText('心臓マッサージを、おこなってください。');
-  if(stopped) return;
-
-  status.textContent = '胸の真ん中に両手を重ね、乾電池1本分沈むように強く押しこみます';
-  await speakText('胸の真ん中に両手を重ね、乾電池1本分沈むように強く押しこみます。');
-  if(stopped) return;
-
-  status.textContent = 'メトロノームに合わせて押してください';
-  await speakText('メトロノームに合わせて押してください。');
-  if(stopped) return;
-
-  startMetronome();
-  setMetronomeVolume(0.6);
-
-  await speakText('どなたか、119番通報をお願いします。');
-  if(stopped) return;
-
-  await speakText('緊急事態。どなたか、エーイーディーを持ってきてください！');
-  if(stopped) return;
-
-  await speakText('マップをクリック！エーイーディーの場所を確認できます。');
-  if(stopped) return;
-
-  await speakText('心臓マッサージを交代できるよう、もうヒトリカ、フタリ近くに来てください。');
-  if(stopped) return;
-
-  setMetronomeVolume(1.0);
   guidanceRunning = false;
   badge.textContent = '🔊 メトロノーム作動中';
-  await speakText('強く。速く。絶え間なく。押してください。',{rate:0.95});
+
   startCompressionCues();
   scheduleRepeatGuidance();
 }
@@ -1293,6 +1370,21 @@ function stopAll(updateDisplay = true){
     cueTimer = null;
   }
 
+  if(oneMinuteTimer){
+    clearTimeout(oneMinuteTimer);
+    oneMinuteTimer = null;
+  }
+
+  if(exchangeWarningTimer){
+    clearTimeout(exchangeWarningTimer);
+    exchangeWarningTimer = null;
+  }
+
+  if(exchangeReadyTimer){
+    clearTimeout(exchangeReadyTimer);
+    exchangeReadyTimer = null;
+  }
+
   if(updateDisplay){
     badge.textContent = '🔇 停止中';
     status.textContent = '音声・メトロノームを停止しました';
@@ -1331,11 +1423,13 @@ call119.addEventListener('click', () => {
   status.textContent = '119番へ発信しました。心臓マッサージを続けてください';
 });
 
-stopBtn.addEventListener('click', () => {
-  stopAll(true);
+stopBtn.addEventListener('click', async () => {
+  await finishWithThanks(false);
 });
 
-cprBox.addEventListener('click', () => {
+cprBox.addEventListener('click', event => {
+  if(event.target.closest('input, button, a, label')) return;
+
   if(stopped || (!metroSource && !guidanceRunning)){
     unlockMobileAudio();
     primeMobileSpeech();
@@ -1715,8 +1809,58 @@ function triageCardHtml(triage){
 }
 
 
-function closePrivatePage(){
-  stopAll(false);
+function clearGuidanceTimersForThanks(){
+  if(repeatTimer){
+    clearInterval(repeatTimer);
+    repeatTimer = null;
+  }
+
+  if(periodicTimer){
+    clearInterval(periodicTimer);
+    periodicTimer = null;
+  }
+
+  if(cueTimer){
+    clearInterval(cueTimer);
+    cueTimer = null;
+  }
+
+  if(oneMinuteTimer){
+    clearTimeout(oneMinuteTimer);
+    oneMinuteTimer = null;
+  }
+
+  if(exchangeWarningTimer){
+    clearTimeout(exchangeWarningTimer);
+    exchangeWarningTimer = null;
+  }
+
+  if(exchangeReadyTimer){
+    clearTimeout(exchangeReadyTimer);
+    exchangeReadyTimer = null;
+  }
+}
+
+async function finishWithThanks(closeAfter){
+  // 現在の案内だけを止め、メトロノームはお礼の音声が終わるまで継続します。
+  stopped = true;
+  guidanceRunning = false;
+  clearGuidanceTimersForThanks();
+
+  if('speechSynthesis' in window){
+    speechSynthesis.cancel();
+  }
+
+  // 中断した案内処理が終了する時間を確保します。
+  await new Promise(resolve => setTimeout(resolve, 120));
+
+  stopped = false;
+  await speakText('ご協力ありがとうございました。');
+
+  // お礼の音声終了後にメトロノームと残りの処理を停止します。
+  stopAll(!closeAfter);
+
+  if(!closeAfter) return;
 
   // 個人情報をすぐ画面から消してから、ブラウザのタブを閉じます。
   document.body.innerHTML = '';
@@ -1733,6 +1877,10 @@ function closePrivatePage(){
       location.replace('about:blank');
     }catch(error){}
   }, 120);
+}
+
+async function closePrivatePage(){
+  await finishWithThanks(true);
 }
 
 function showFinalSummary(){
