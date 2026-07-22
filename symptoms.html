@@ -849,6 +849,8 @@ const screens = document.querySelectorAll('.screen');
 
 let audioCtx = null;
 let metroTimer = null;
+let metroSource = null;
+let metroGain = null;
 let repeatTimer = null;
 let stopped = true;
 let guidanceRunning = false;
@@ -1007,12 +1009,52 @@ function startMetronome(){
   const ctx = getCtx();
   if(!ctx) return;
 
-  if(metroTimer) clearInterval(metroTimer);
+  if(metroTimer){
+    clearInterval(metroTimer);
+    metroTimer = null;
+  }
+
+  if(metroSource){
+    try{ metroSource.stop(); }catch(error){}
+    try{ metroSource.disconnect(); }catch(error){}
+    metroSource = null;
+  }
+
+  if(metroGain){
+    try{ metroGain.disconnect(); }catch(error){}
+    metroGain = null;
+  }
 
   const begin = () => {
     if(stopped) return;
-    beep();
-    metroTimer = setInterval(beep,interval);
+
+    /*
+      JavaScriptのsetIntervalは、AEDマップなど別画面を開くと
+      ブラウザにより約1秒間隔へ遅くされることがあります。
+      Web Audioのループ音源にすることで110回/分を維持します。
+    */
+    const beatSeconds = 60 / 110;
+    const sampleRate = ctx.sampleRate;
+    const frameCount = Math.max(1, Math.round(sampleRate * beatSeconds));
+    const buffer = ctx.createBuffer(1, frameCount, sampleRate);
+    const data = buffer.getChannelData(0);
+    const clickLength = Math.min(frameCount, Math.round(sampleRate * 0.08));
+
+    for(let i = 0; i < clickLength; i++){
+      const t = i / sampleRate;
+      const envelope = Math.exp(-42 * t);
+      data[i] = Math.sin(2 * Math.PI * 880 * t) * envelope * 0.20;
+    }
+
+    metroSource = ctx.createBufferSource();
+    metroGain = ctx.createGain();
+    metroGain.gain.setValueAtTime(metronomeVolume, ctx.currentTime);
+
+    metroSource.buffer = buffer;
+    metroSource.loop = true;
+    metroSource.connect(metroGain);
+    metroGain.connect(ctx.destination);
+    metroSource.start();
   };
 
   if(ctx.state === 'running'){
@@ -1056,6 +1098,11 @@ function primeMobileSpeech(){
 
 function setMetronomeVolume(value){
   metronomeVolume = Math.max(0, Math.min(1, value));
+  if(metroGain && audioCtx){
+    try{
+      metroGain.gain.setTargetAtTime(metronomeVolume, audioCtx.currentTime, 0.02);
+    }catch(error){}
+  }
 }
 
 function scheduleRepeatGuidance(){
@@ -1159,6 +1206,17 @@ function stopAll(updateDisplay = true){
     metroTimer = null;
   }
 
+  if(metroSource){
+    try{ metroSource.stop(); }catch(error){}
+    try{ metroSource.disconnect(); }catch(error){}
+    metroSource = null;
+  }
+
+  if(metroGain){
+    try{ metroGain.disconnect(); }catch(error){}
+    metroGain = null;
+  }
+
   if(repeatTimer){
     clearInterval(repeatTimer);
     repeatTimer = null;
@@ -1207,12 +1265,24 @@ stopBtn.addEventListener('click', () => {
 });
 
 cprBox.addEventListener('click', () => {
-  if(stopped || (!metroTimer && !guidanceRunning)){
+  if(stopped || (!metroSource && !guidanceRunning)){
     unlockMobileAudio();
     primeMobileSpeech();
     startGuidance();
   }else{
     stopAll(true);
+  }
+});
+
+window.addEventListener('focus', () => {
+  if(!stopped && audioCtx && audioCtx.state !== 'running'){
+    audioCtx.resume().catch(() => {});
+  }
+});
+
+document.addEventListener('visibilitychange', () => {
+  if(!document.hidden && !stopped && audioCtx){
+    audioCtx.resume().catch(() => {});
   }
 });
 
