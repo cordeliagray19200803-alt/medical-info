@@ -105,6 +105,14 @@ body{
   line-height:1.25;
   font-weight:900;
 }
+.pulse-note{
+  margin:-14px 4px 24px;
+  color:#000;
+  text-align:center;
+  font-size:clamp(15px,3.8vw,19px);
+  line-height:1.5;
+  font-weight:700;
+}
 .warning{width:70px;height:64px}
 .warning svg{width:100%;height:100%;display:block}
 .steps{display:grid;gap:20px}
@@ -148,6 +156,37 @@ body{
   box-shadow:0 6px 14px rgba(0,0,0,.12);
 }
 .call:active{transform:translateY(1px)}
+.call-row{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:14px;
+  align-items:stretch;
+  margin:24px 0;
+}
+.aed-panel{
+  border-radius:24px;
+  border:3px solid #e08a00;
+  background:#fff8e8;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:14px 10px;
+}
+.aed-title{
+  font-size:clamp(18px,4vw,24px);
+  font-weight:900;
+  line-height:1.4;
+}
+.aed-map{
+  margin-top:10px;
+  font-size:clamp(18px,4vw,24px);
+  font-weight:900;
+}
+@media(max-width:460px){
+  .call-row{grid-template-columns:2fr 1fr;gap:10px;}
+}
 .cpr{
   width:100%;
   border:0;
@@ -598,6 +637,29 @@ body{
   .sym-column-head{padding-left:4px;padding-right:4px}
 }
 
+
+/* 警告音中からCPR中まで、帯全体を110回/分で脈動 */
+@keyframes emergencyHeroPulse{
+  0%,100%{
+    background:linear-gradient(#b90000,#8f0000);
+    filter:brightness(.78);
+    transform:scale(1);
+    box-shadow:0 0 0 rgba(255,255,255,0);
+  }
+  50%{
+    background:linear-gradient(#ff3b3b,#e60000);
+    filter:brightness(1.30);
+    transform:scale(1.04);
+    box-shadow:0 0 30px rgba(255,255,255,.70);
+  }
+}
+.hero.cpr-pulse{
+  transform-origin:center;
+  will-change:transform,filter,box-shadow,background;
+  animation:emergencyHeroPulse 545.45ms linear infinite !important;
+}
+
+
 @media(max-width:460px){
   .emergency-main{padding-left:12px;padding-right:12px}
   .hero{
@@ -650,7 +712,7 @@ body{
 
 <section id="screen-emergency" class="screen">
   <main class="emergency-main">
-    <section class="hero">
+    <section id="emergencyHero" class="hero">
       <div class="warning" aria-hidden="true">
         <svg viewBox="0 0 64 58">
           <path d="M32 2L62 55H2Z" fill="#FFD42A" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
@@ -668,28 +730,34 @@ body{
       </div>
     </section>
 
+    <p class="pulse-note">※この表示は、心臓マッサージのリズムに合わせて脈動します。</p>
+
     <section class="steps">
       <div class="step">
         <div class="num">1</div>
-        <p>今すぐ<span class="red">119番</span>に電話してください。</p>
+        <p>反応・呼吸を確認してください。</p>
       </div>
       <div class="step">
         <div class="num">2</div>
-        <p>電話をスピーカーにして、<br>音量を<span class="red">最大</span>にしてください。</p>
-      </div>
-      <div class="step">
-        <div class="num">3</div>
         <p><span class="red">心臓マッサージ</span>を始めてください。</p>
       </div>
       <div class="step">
-        <div class="num">4</div>
+        <div class="num">3</div>
         <p>周囲に助けを求めてください。</p>
       </div>
     </section>
 
-    <a id="call119" class="call" href="tel:119" aria-label="119番に電話する">
-      ☎ 119番に電話する
-    </a>
+    <div class="call-row">
+      <a id="call119" class="call" href="tel:119" aria-label="119番へ電話">
+        ☎ 119番へ電話
+      </a>
+
+      <div class="aed-panel">
+        <div class="aed-title">⚡ AEDを<br>持ってきて</div>
+        <a class="aed-map" target="_blank"
+        href="https://aed-navi.jp/home.html">🔗 AEDマップ</a>
+      </div>
+    </div>
 
     <button id="cprBox" class="cpr" type="button">
       <h2>❤️ 心臓マッサージ</h2>
@@ -785,6 +853,7 @@ let repeatTimer = null;
 let stopped = true;
 let guidanceRunning = false;
 let called119 = false;
+let metronomeVolume = 1.0;
 
 const interval = 60000 / 110;
 const badge = document.getElementById('badge');
@@ -792,6 +861,7 @@ const status = document.getElementById('status');
 const stopBtn = document.getElementById('stopBtn');
 const cprBox = document.getElementById('cprBox');
 const call119 = document.getElementById('call119');
+const emergencyHero = document.getElementById('emergencyHero');
 
 function showScreen(id){
   screens.forEach(screen => screen.classList.remove('active'));
@@ -858,7 +928,7 @@ function beep(){
 
   osc.type = 'sine';
   osc.frequency.value = 880;
-  gain.gain.setValueAtTime(0.20,ctx.currentTime);
+  gain.gain.setValueAtTime(0.20 * metronomeVolume,ctx.currentTime);
   gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime + 0.07);
 
   osc.connect(gain);
@@ -869,38 +939,66 @@ function beep(){
 
 function playEmergencyWarningTone(durationMs = 2500){
   return new Promise(resolve => {
-    const ctx = getCtx();
-    if(!ctx){
+    let finished = false;
+    const finish = () => {
+      if(finished) return;
+      finished = true;
       resolve();
-      return;
-    }
-
-    const begin = () => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const now = ctx.currentTime;
-      const durationSeconds = durationMs / 1000;
-
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(760,now);
-      gain.gain.setValueAtTime(0.0001,now);
-      gain.gain.exponentialRampToValueAtTime(0.32,now + 0.03);
-      gain.gain.setValueAtTime(0.32,now + Math.max(0.04,durationSeconds - 0.08));
-      gain.gain.exponentialRampToValueAtTime(0.0001,now + durationSeconds);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + durationSeconds);
-      osc.onended = resolve;
-
-      setTimeout(resolve,durationMs + 300);
     };
 
-    if(ctx.state === 'running'){
-      begin();
-    }else{
-      ctx.resume().then(begin).catch(resolve);
+    /* 万一Web Audioが使えなくても、案内全体を停止させない */
+    const safetyTimer = setTimeout(finish, durationMs + 500);
+
+    try{
+      const ctx = getCtx();
+      if(!ctx){
+        clearTimeout(safetyTimer);
+        finish();
+        return;
+      }
+
+      const begin = () => {
+        try{
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const now = ctx.currentTime;
+          const endTime = now + durationMs / 1000;
+
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(760, now);
+
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(0.30, now + 0.03);
+          gain.gain.setValueAtTime(0.30, Math.max(now + 0.04, endTime - 0.08));
+          gain.gain.exponentialRampToValueAtTime(0.0001, endTime);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.onended = () => {
+            clearTimeout(safetyTimer);
+            finish();
+          };
+
+          osc.start(now);
+          osc.stop(endTime);
+        }catch(error){
+          clearTimeout(safetyTimer);
+          finish();
+        }
+      };
+
+      if(ctx.state === 'running'){
+        begin();
+      }else{
+        ctx.resume().then(begin).catch(() => {
+          clearTimeout(safetyTimer);
+          finish();
+        });
+      }
+    }catch(error){
+      clearTimeout(safetyTimer);
+      finish();
     }
   });
 }
@@ -939,32 +1037,47 @@ function unlockMobileAudio(){
   }
 }
 
+function primeMobileSpeech(){
+  if(!('speechSynthesis' in window)) return;
+
+  try{
+    speechSynthesis.cancel();
+    speechSynthesis.resume();
+    speechSynthesis.getVoices();
+
+    /* iPhone/Safari向け：利用者の操作中に音声合成を一度起動しておく */
+    const primer = new SpeechSynthesisUtterance(' ');
+    primer.lang = 'ja-JP';
+    primer.volume = 0;
+    primer.rate = 1;
+    speechSynthesis.speak(primer);
+  }catch(error){}
+}
+
+function setMetronomeVolume(value){
+  metronomeVolume = Math.max(0, Math.min(1, value));
+}
+
 function scheduleRepeatGuidance(){
   if(repeatTimer) clearInterval(repeatTimer);
-  repeatTimer = setInterval(repeatGuidance,18000);
+  repeatTimer = setInterval(repeatGuidance,120000);
 }
 
 async function repeatGuidance(){
   if(stopped || guidanceRunning) return;
 
   guidanceRunning = true;
+  setMetronomeVolume(0.6);
+  badge.textContent = '🔊 音声案内中';
+  status.textContent = '交代の音声案内中';
 
-  if(!called119){
-    status.textContent = '119番通報をしてください';
-    await speakText('119番通報がまだです。どなたか通報してください。');
-  }else{
-    status.textContent = '継続の音声案内中';
-    await speakText(
-      '心臓マッサージを続けてください。強く、速く、絶え間なく。救急隊が到着するまで続けてください。'
-    );
-  }
+  await speakText('心臓マッサージを交代してください。');
 
+  setMetronomeVolume(1.0);
   if(!stopped){
-    status.textContent = called119
-      ? '心臓マッサージを続けてください'
-      : '119番通報がまだです';
+    badge.textContent = '🔊 メトロノーム作動中';
+    status.textContent = '心臓マッサージを続けてください';
   }
-
   guidanceRunning = false;
 }
 
@@ -973,84 +1086,69 @@ async function startGuidance(){
 
   stopped = false;
   guidanceRunning = true;
+  setMetronomeVolume(1.0);
   badge.textContent = '🚨 緊急警告中';
-  status.textContent = '心臓が止まっている可能性があります。';
+  status.textContent = '音声案内を開始します';
   stopBtn.textContent = '■ 音声・メトロノームを停止する';
 
   unlockMobileAudio();
 
   if('speechSynthesis' in window){
-    speechSynthesis.cancel();
+    speechSynthesis.resume();
     speechSynthesis.getVoices();
   }
 
-  await playEmergencyWarningTone(2500);
-  if(stopped) return;
-
-  // AI音声が未配置の場合は通常音声で案内
-  try {
-    const emergencyVoice = new Audio('audio/cardiac-arrest-warning.mp3');
-    emergencyVoice.volume = 1.0;
-    await emergencyVoice.play();
-  } catch (e) {
-    await speakText('しんぞうが、とまっているかのうせいがあります。', {
-      rate: 0.88,
-      pitch: 1.0,
-      volume: 1.0
-    });
+  /* 警告音中から、背景・両側の警告絵文字・文字を110回/分で脈動 */
+  if(emergencyHero){
+    emergencyHero.classList.remove('cpr-pulse');
+    void emergencyHero.offsetWidth;
+    emergencyHero.classList.add('cpr-pulse');
   }
-  await sleep(600);
+  await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  try{
+    await playEmergencyWarningTone(2500);
+  }catch(error){
+    console.warn('警告音を再生できませんでしたが、音声案内を続けます。', error);
+  }
   if(stopped) return;
 
-  await speakText('おんりょうを、さいだいに、してください。', {
-    rate: 0.86,
-    pitch: 0.78,
-    volume: 1
-  });
-  await sleep(600);
+  /* 固定文：変更しない */
+  await speakText('しんぞうが、とまっているかのうせいがあります。');
   if(stopped) return;
 
   badge.textContent = '🔊 音声案内中';
-  status.textContent = '音声案内を開始します';
-  startMetronome();
-
-  await speakText('電話をスピーカーにしてください。');
-  await sleep(600);
-  if(stopped) return;
-
-  await speakText('今すぐ119番に電話してください。');
-  await sleep(600);
-  if(stopped) return;
-
+  status.textContent = '心臓マッサージを始めてください';
   await speakText('心臓マッサージを始めてください。');
-  await sleep(600);
   if(stopped) return;
 
-  if(!called119){
-    await speakText('119番通報がまだなら、どなたか119番通報してください。');
-    await sleep(600);
-    if(stopped) return;
-  }
+  startMetronome();
+  setMetronomeVolume(0.6);
 
-  await speakText('誰かAEDを持ってきてください。');
-  await sleep(600);
+  /* 確定版：以下の4案内は順番を変えず、間を空けずに連続再生 */
+  await speakText('電話をスピーカーにして音量を最大にしてください。');
   if(stopped) return;
 
-  await speakText('どなたかもう1人、心臓マッサージを手伝って。');
-  await sleep(600);
+  await speakText('どなたか、119番通報をお願いします。');
   if(stopped) return;
 
-  await speakText('心臓マッサージは、1分から2分で交代してください。');
+  await speakText('どなたか、AEDを持ってきてください。');
   if(stopped) return;
 
+  await speakText('心臓マッサージを交代できるよう、もう1人か2人近くに来てください。');
+  if(stopped) return;
+
+  setMetronomeVolume(1.0);
   guidanceRunning = false;
+  badge.textContent = '🔊 メトロノーム作動中';
   status.textContent = '心臓マッサージを続けてください';
   scheduleRepeatGuidance();
 }
 
 function stopAll(updateDisplay = true){
   stopped = true;
+  emergencyHero?.classList.remove('cpr-pulse');
   guidanceRunning = false;
+  setMetronomeVolume(1.0);
 
   if('speechSynthesis' in window){
     speechSynthesis.cancel();
@@ -1076,8 +1174,10 @@ function stopAll(updateDisplay = true){
 function activateEmergency(){
   /* This function is called directly by the user's checkbox tap. */
   unlockMobileAudio();
+  primeMobileSpeech();
   showScreen('screen-emergency');
   called119 = false;
+  call119.textContent = '☎ 119番へ電話';
   startGuidance();
 }
 
@@ -1098,6 +1198,7 @@ document.getElementById('not-emergency').addEventListener('change', event => {
 
 call119.addEventListener('click', () => {
   called119 = true;
+  call119.textContent = '✅ 119番通報済';
   status.textContent = '119番へ発信しました。心臓マッサージを続けてください';
 });
 
@@ -1107,6 +1208,8 @@ stopBtn.addEventListener('click', () => {
 
 cprBox.addEventListener('click', () => {
   if(stopped || (!metroTimer && !guidanceRunning)){
+    unlockMobileAudio();
+    primeMobileSpeech();
     startGuidance();
   }else{
     stopAll(true);
@@ -1445,7 +1548,7 @@ function triageCardHtml(triage){
       <p class="triage-label">選択内容から</p>
       <p class="triage-number">119番</p>
       <p class="triage-message">救急車を呼んでください</p>
-      <a class="triage-call" href="tel:119">☎ 119番に電話する</a>
+      <a class="triage-call" href="tel:119">☎ 119番へ電話</a>
       <button class="privacy-close" type="button" onclick="closePrivatePage()" aria-label="この画面を閉じます">閉じる</button>
       <div class="triage-reasons">
         ${triage.reasons.map(reason =>
@@ -1465,7 +1568,7 @@ function triageCardHtml(triage){
     <p class="triage-label">選択内容から</p>
     <p class="triage-number">＃7119番</p>
     <p class="triage-message">救急相談を利用してください</p>
-    <a class="triage-call" href="tel:%237119">☎ ＃7119番に電話する</a>
+    <a class="triage-call" href="tel:%237119">☎ ＃7119番へ電話</a>
     <button class="privacy-close" type="button" onclick="closePrivatePage()" aria-label="この画面を閉じます">閉じる</button>
   </section>`;
 }
