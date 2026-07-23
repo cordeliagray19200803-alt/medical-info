@@ -932,6 +932,7 @@ body{
 
     <div class="sym-category-list">
       <label class="sym-category"><input type="checkbox" value="eye">👁️ 目</label>
+      <label class="sym-category"><input type="checkbox" value="mouth">👄 口・のど</label>
       <label class="sym-category"><input type="checkbox" value="limbs">🦵 手・足</label>
       <label class="sym-category"><input type="checkbox" value="face">🙂 顔</label>
       <label class="sym-category"><input type="checkbox" value="head">😵 頭</label>
@@ -1600,6 +1601,14 @@ const symptomData = {
       {person:['まぶしい'],observer:['手で目を覆っている','顔を背けている','暗い場所へ移動しようとしている']}
     ]
   },
+  mouth:{
+    title:'👄 口・のど',
+    rows:[
+      {person:['のどに物が詰まった'],observer:['声が出せない','苦しそうに首を押さえている']},
+      {person:['飲み込みにくい'],observer:['水や食べ物が飲み込めない','むせている']},
+      {person:['のどが痛い'],observer:['咳き込んでいる','声がかすれている・声が出にくそう']}
+    ]
+  },
   limbs:{
     title:'🦵 手・足',
     rows:[
@@ -1619,8 +1628,11 @@ const symptomData = {
   head:{
     title:'😵 頭',
     rows:[
-      {person:['頭が痛い','突然の激しい頭痛'],observer:['頭を押さえている']},
+      {person:['頭が痛い'],observer:['頭を押さえている']},
+      {person:['突然の激しい頭痛'],observer:['頭を押さえている']},
       {person:[{label:'応急処置',group:true}],observer:['痛み止めの服用']},
+      {person:['頭を打った'],observer:['頭に出血や大きなたんこぶがある']},
+      {person:['ぼーっとする'],observer:['朦朧としている','呼びかけへの返事がおかしい','会話がかみ合わない','うとうとしている']},
       {person:['めまいがする'],observer:['ふらついている']},
       {person:['集中できない'],observer:['反応が遅い']},
       {person:['無反応'],observer:['声をかけても反応がない','肩をたたいても反応がない']}
@@ -1637,13 +1649,13 @@ const symptomData = {
     title:'🤢 お腹・体',
     rows:[
       {person:['発熱がある','悪寒がする'],observer:['体が熱い']},
-      {person:['のどが痛い'],observer:[]},
       {person:['吐き気','吐き気が非常に強い','何度も吐いている'],observer:['気分が悪そう','短時間に何度も吐いている']},
       {person:[{label:'応急処置',group:true}],observer:['エチケット袋・水の提供']},
       {person:['下痢をしている'],observer:[]},
       {person:['水分が飲めない','強いのどの渇き'],observer:['水分が飲めていない']},
       {person:['筋肉痛・関節痛がある'],observer:[]},
       {person:['突然の強い胸痛・腹痛'],observer:['胸を押さえている','お腹を押さえている']},
+      {person:['血を吐いた','血便・黒い便が出た'],observer:['吐いた物に血が混じっている','赤い便や黒い便が出ている']},
       {person:['体がだるい'],observer:['動けなくなる','休んでいる','冷や汗']},
       {person:[],observer:['汗が異常に多い','暑いのに汗が出ていない']}
     ]
@@ -1653,7 +1665,8 @@ const symptomData = {
     rows:[
       {person:['皮膚がかゆい'],observer:['皮膚をかいている','赤みがある']},
       {person:['発疹がある'],observer:['発疹がある']},
-      {person:['マダニに刺された'],observer:['マダニが付いている']}
+      {person:['マダニに刺された'],observer:['マダニが付いている']},
+      {person:['顔や唇が急に腫れた'],observer:['顔や唇が大きく腫れている']}
     ]
   },
   other:{
@@ -1667,7 +1680,14 @@ const symptomData = {
       {person:['やけどをした'],observer:['赤くなっている','水ぶくれができている','皮膚が白色・黒色になっている','広い範囲のやけど']},
       {person:[{label:'応急処置',group:true}],observer:['冷やした']},
       {person:['骨折したかもしれない'],observer:['手足が不自然に曲がっている','腫れている','動かせない']},
-      {person:[{label:'応急処置',group:true}],observer:['動かさないようにしている','寝かせている','座らせている']}
+      {person:[{label:'応急処置',group:true}],observer:['動かさないようにしている','寝かせている','座らせている']},
+      {person:['薬を飲みすぎた・間違えて飲んだ'],observer:['薬の空き容器や散らばった薬がある']},
+      {person:['洗剤・薬品を飲んだ'],observer:['洗剤・薬品の容器が近くにある']},
+      {person:['ガスや煙を吸った'],observer:['同じ場所にいる人も具合が悪い']},
+      {person:['感電した'],observer:['電気製品や電線に触れたあと倒れた']},
+      {person:['交通事故にあった'],observer:['車・バイク・自転車との事故']},
+      {person:['高い所から落ちた'],observer:['高所から転落した']},
+      {person:['溺れた'],observer:['水を大量に飲み込んだようだ','激しく咳き込んでいる','呼吸が苦しそう','ふらついている','朦朧としている','顔色や唇の色が悪い']}
     ]
   }
 };
