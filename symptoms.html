@@ -629,6 +629,130 @@ body{
   font-size:clamp(14px,3.5vw,17px);
   font-weight:800;
 }
+
+/* 119番・#7119 結果画面：追加部分 */
+.triage-purpose-note{
+  margin:14px 0 0;
+  padding:11px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.16);
+  font-size:clamp(14px,3.7vw,18px);
+  line-height:1.55;
+  font-weight:800;
+}
+.triage-consult-list{
+  margin:14px 0 0;
+  padding:14px 16px;
+  border-radius:14px;
+  background:rgba(255,255,255,.16);
+  text-align:left;
+}
+.triage-consult-list-title{
+  margin:0 0 8px;
+  text-align:center;
+  font-size:clamp(17px,4.4vw,22px);
+  font-weight:950;
+}
+.triage-consult-list ul{
+  margin:0;
+  padding-left:1.3em;
+}
+.triage-consult-list li{
+  margin:5px 0;
+  font-size:clamp(15px,4vw,20px);
+  line-height:1.5;
+  font-weight:800;
+}
+.operator-heading-only{
+  margin:-6px 0 22px;
+  padding:15px 16px;
+  border:3px solid #c90000;
+  border-radius:16px;
+  background:#fff;
+  color:#c90000;
+  text-align:center;
+  font-size:clamp(20px,5vw,26px);
+  font-weight:950;
+  box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+.location-table,
+.medical-info-table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+.location-table th,
+.location-table td,
+.medical-info-table th,
+.medical-info-table td{
+  padding:12px 10px;
+  border-top:1px solid #dedede;
+  vertical-align:top;
+  font-size:clamp(15px,3.9vw,19px);
+  line-height:1.5;
+}
+.location-table tr:first-child th,
+.location-table tr:first-child td,
+.medical-info-table tr:first-child th,
+.medical-info-table tr:first-child td{
+  border-top:0;
+}
+.location-table th,
+.medical-info-table th{
+  width:29%;
+  background:#fafafa;
+  text-align:left;
+  font-weight:900;
+}
+.location-table td,
+.medical-info-table td{
+  font-weight:750;
+  overflow-wrap:anywhere;
+}
+.location-note{
+  margin:0;
+  padding:0 14px 14px;
+  color:#555;
+  font-size:clamp(13px,3.4vw,16px);
+  line-height:1.5;
+  font-weight:700;
+}
+.location-status{
+  color:#555;
+}
+
+.result-close-area{
+  margin:0 0 18px;
+}
+.result-close-area.bottom{
+  margin:22px 0 0;
+}
+.result-close-button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:58px;
+  border:0;
+  border-radius:15px;
+  background:#d32f2f;
+  color:#fff;
+  font-size:clamp(20px,5vw,27px);
+  font-weight:950;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,.12);
+}
+.result-close-button:active{
+  transform:translateY(1px);
+}
+.result-close-note{
+  margin:8px 4px 0;
+  color:#111;
+  text-align:center;
+  font-size:clamp(13px,3.5vw,16px);
+  line-height:1.5;
+  font-weight:800;
+}
 @media(max-width:460px){
   .sym-main{padding-left:10px;padding-right:10px}
   .sym-cell{padding-left:6px;padding-right:6px}
@@ -1224,12 +1348,23 @@ async function repeatGuidance(){
 
   const messages = [
     {display:'交代できる方がいましたらお願いします。',audio:'交代できるかたがいましたらお願いします。'},
-    '交代は3秒以内で行います。',
-    '1、2、3。',
+    {display:'3カウントで交代します。',audio:'スリーカウントで交代します。'},
+    {pause:2000},
+    {display:'行きます！',audio:'行きます！'},
+    {pause:500},
+    {display:'1、2、3！',audio:'1。'},
+    {pause:545},
+    {display:'1、2、3！',audio:'2。'},
+    {pause:545},
+    {display:'1、2、3！',audio:'3。'},
     '交代してください。'
   ];
 
   for(const message of messages){
+    if(message.pause){
+      await new Promise(r=>setTimeout(r,message.pause));
+      continue;
+    }
     if(stopped) break;
     if(typeof message==='string'){
       status.textContent = message;
@@ -1778,34 +1913,46 @@ function determineTriage(selectedValues){
 }
 
 function triageCardHtml(triage){
+  const purposeNote = `
+    <p class="triage-purpose-note">
+      このページは、119番と#7119の判断の目安として作成しています。
+    </p>`;
+
   if(triage.emergency){
     return `<section class="triage-card emergency">
       <p class="triage-label">選択内容から</p>
       <p class="triage-number">119番</p>
       <p class="triage-message">救急車を呼んでください</p>
       <a class="triage-call" href="tel:119">☎ 119番へ電話</a>
-      <button class="privacy-close" type="button" onclick="closePrivatePage()" aria-label="この画面を閉じます">閉じる</button>
+      ${purposeNote}
       <div class="triage-reasons">
         ${triage.reasons.map(reason =>
           `<div>${escapeHtml(reason)}</div>`
         ).join('')}
       </div>
     </section>
-    <section class="triage-operator-guide">
-      <h2 class="triage-operator-guide-title">オペレーターに伝えること</h2>
-      本人はヘルプマークに医療情報を登録しています。
-      <span class="triage-operator-guide-quote">「到着する隊員へ、ヘルプマークのハート部分にスマホをかざして確認するよう共有してください」</span>
-      とお伝えください。
-    </section>`;
+    <h2 class="operator-heading-only">オペレーターに伝えること</h2>`;
   }
 
   return `<section class="triage-card consult">
     <p class="triage-label">選択内容から</p>
-    <p class="triage-number">＃7119番</p>
-    <p class="triage-message">救急相談を利用してください</p>
-    <a class="triage-call" href="tel:%237119">☎ ＃7119番へ電話</a>
-    <button class="privacy-close" type="button" onclick="closePrivatePage()" aria-label="この画面を閉じます">閉じる</button>
-  </section>`;
+    <p class="triage-number">#7119</p>
+    <p class="triage-message">救急安心センターへ相談してください</p>
+
+    <div class="triage-consult-list">
+      <p class="triage-consult-list-title">こんなことを相談できます</p>
+      <ul>
+        <li>救急車を呼んだ方がいい？</li>
+        <li>今受診できる病院を知りたい</li>
+        <li>自宅で様子を見ても大丈夫？</li>
+        <li>応急処置の方法を知りたい</li>
+      </ul>
+    </div>
+
+    <a class="triage-call" href="tel:%237119">☎ #7119へ電話</a>
+    ${purposeNote}
+  </section>
+  <h2 class="operator-heading-only">オペレーターに伝えること</h2>`;
 }
 
 
@@ -1883,6 +2030,235 @@ async function closePrivatePage(){
   await finishWithThanks(true);
 }
 
+
+function resultCloseSectionHtml(position = 'top'){
+  const positionClass = position === 'bottom' ? ' bottom' : '';
+
+  return `<section class="result-close-area${positionClass}">
+    <button
+      class="result-close-button"
+      type="button"
+      onclick="closePrivatePage()"
+      aria-label="この画面を閉じます">
+      閉じる
+    </button>
+    <p class="result-close-note">※ 個人情報保護のため必ず「閉じる」をクリックしてください</p>
+  </section>`;
+}
+
+function locationSectionHtml(forConsult = false){
+  const note = forConsult
+    ? '※ 119番へ切り替わった場合に利用します。スマートフォンが通信可能で、位置情報の利用が許可されている場合に自動取得します。'
+    : '※ スマートフォンが通信可能で、位置情報の利用が許可されている場合に自動取得します。';
+
+  return `<section class="sym-section" id="current-location-section">
+    <h2 class="sym-section-title">📍 現在地</h2>
+    <table class="location-table">
+      <tbody>
+        <tr>
+          <th scope="row">住所</th>
+          <td id="current-address" class="location-status">取得中…</td>
+        </tr>
+        <tr>
+          <th scope="row">建物名</th>
+          <td id="current-building" class="location-status">取得中…</td>
+        </tr>
+        <tr>
+          <th scope="row">周辺の目印</th>
+          <td id="current-landmarks" class="location-status">取得中…</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="location-note">${note}</p>
+  </section>`;
+}
+
+function medicalInfoSection(){
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">ℹ️ 医療情報</h2>
+    <table class="medical-info-table">
+      <tbody>
+        <tr>
+          <th scope="row">医療情報</th>
+          <td>ヘルプマークのハートにスマホをかざすと詳細な医療情報を取得できます。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>`;
+}
+
+function setLocationText(id,textValue){
+  const element = document.getElementById(id);
+  if(!element) return;
+  element.textContent = textValue;
+  element.classList.toggle('location-status', textValue.includes('取得') || textValue.includes('許可') || textValue.includes('通信'));
+}
+
+function distanceMeters(lat1,lon1,lat2,lon2){
+  const toRad = value => value * Math.PI / 180;
+  const earthRadius = 6371000;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) *
+    Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) ** 2;
+
+  return earthRadius * 2 * Math.atan2(Math.sqrt(a),Math.sqrt(1 - a));
+}
+
+function buildJapaneseAddress(address){
+  if(!address) return '';
+
+  const parts = [
+    address.province || address.state,
+    address.city || address.town || address.village || address.municipality,
+    address.city_district || address.suburb || address.quarter || address.neighbourhood,
+    address.road,
+    address.house_number
+  ].filter(Boolean);
+
+  return [...new Set(parts)].join('');
+}
+
+async function reverseGeocodeCurrentPosition(latitude,longitude){
+  const url =
+    'https://nominatim.openstreetmap.org/reverse' +
+    `?format=jsonv2&lat=${encodeURIComponent(latitude)}` +
+    `&lon=${encodeURIComponent(longitude)}` +
+    '&zoom=18&addressdetails=1&namedetails=1&accept-language=ja';
+
+  const response = await fetch(url,{
+    headers:{'Accept':'application/json'}
+  });
+
+  if(!response.ok){
+    throw new Error('住所取得に失敗しました');
+  }
+
+  return response.json();
+}
+
+async function fetchNearbyLandmarks(latitude,longitude){
+  const query = `
+    [out:json][timeout:12];
+    (
+      nwr(around:500,${latitude},${longitude})["name"]["amenity"];
+      nwr(around:500,${latitude},${longitude})["name"]["shop"];
+      nwr(around:500,${latitude},${longitude})["name"]["tourism"];
+      nwr(around:500,${latitude},${longitude})["name"]["leisure"];
+      nwr(around:500,${latitude},${longitude})["name"]["railway"="station"];
+      nwr(around:500,${latitude},${longitude})["name"]["public_transport"="station"];
+    );
+    out center 20;
+  `;
+
+  const url =
+    'https://overpass-api.de/api/interpreter?data=' +
+    encodeURIComponent(query);
+
+  const response = await fetch(url);
+  if(!response.ok){
+    throw new Error('目印取得に失敗しました');
+  }
+
+  const data = await response.json();
+
+  const landmarks = (data.elements || [])
+    .map(item => {
+      const lat = item.lat ?? item.center?.lat;
+      const lon = item.lon ?? item.center?.lon;
+      const name = item.tags?.name;
+      if(!name || lat == null || lon == null) return null;
+
+      return {
+        name,
+        distance:distanceMeters(latitude,longitude,lat,lon)
+      };
+    })
+    .filter(Boolean)
+    .sort((a,b) => a.distance - b.distance);
+
+  const uniqueNames = [];
+  for(const item of landmarks){
+    if(!uniqueNames.includes(item.name)){
+      uniqueNames.push(item.name);
+    }
+    if(uniqueNames.length === 3) break;
+  }
+
+  return uniqueNames;
+}
+
+async function updateCurrentLocation(){
+  if(!document.getElementById('current-location-section')) return;
+
+  if(!navigator.onLine){
+    setLocationText('current-address','通信できないため取得できません');
+    setLocationText('current-building','通信できないため取得できません');
+    setLocationText('current-landmarks','通信できないため取得できません');
+    return;
+  }
+
+  if(!('geolocation' in navigator)){
+    setLocationText('current-address','現在地を取得できません');
+    setLocationText('current-building','現在地を取得できません');
+    setLocationText('current-landmarks','現在地を取得できません');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(async position => {
+    const {latitude,longitude} = position.coords;
+
+    try{
+      const place = await reverseGeocodeCurrentPosition(latitude,longitude);
+      const address = buildJapaneseAddress(place.address) || place.display_name || '住所を取得できません';
+
+      const possibleBuilding =
+        place.address?.building ||
+        place.namedetails?.name ||
+        place.name ||
+        '';
+
+      setLocationText('current-address',address);
+      setLocationText(
+        'current-building',
+        possibleBuilding && !address.includes(possibleBuilding)
+          ? possibleBuilding
+          : '建物名を取得できません'
+      );
+    }catch(error){
+      setLocationText('current-address','住所を取得できません');
+      setLocationText('current-building','建物名を取得できません');
+    }
+
+    try{
+      const landmarks = await fetchNearbyLandmarks(latitude,longitude);
+      setLocationText(
+        'current-landmarks',
+        landmarks.length
+          ? landmarks.join('、')
+          : '周辺の目印を取得できません'
+      );
+    }catch(error){
+      setLocationText('current-landmarks','周辺の目印を取得できません');
+    }
+  }, error => {
+    const message = error.code === 1
+      ? '位置情報の利用が許可されていません'
+      : '現在地を取得できません';
+
+    setLocationText('current-address',message);
+    setLocationText('current-building',message);
+    setLocationText('current-landmarks',message);
+  },{
+    enableHighAccuracy:true,
+    timeout:15000,
+    maximumAge:60000
+  });
+}
+
 function showFinalSummary(){
   const onsetValues = selectedOnsetValues();
   const checkedSymptoms = [
@@ -1944,13 +2320,30 @@ function showFinalSummary(){
     ? 'ご協力ありがとうございます。'
     : 'ご協力ありがとうございます。<br>チェックした症状を表示しました。<br>オペレーターに症状を伝え近隣の病院を聞いてください。';
 
-  symSummary.innerHTML =
-    triageCardHtml(triage) +
+  const detailsHtml =
     patientInfoSection() +
     onsetHtml +
     categoryHtml;
 
+  symSummary.innerHTML = triage.emergency
+    ? (
+        resultCloseSectionHtml('top') +
+        triageCardHtml(triage) +
+        locationSectionHtml(false) +
+        detailsHtml +
+        medicalInfoSection() +
+        resultCloseSectionHtml('bottom')
+      )
+    : (
+        resultCloseSectionHtml('top') +
+        triageCardHtml(triage) +
+        detailsHtml +
+        locationSectionHtml(true) +
+        resultCloseSectionHtml('bottom')
+      );
+
   showScreen('screen-summary');
+  updateCurrentLocation();
 }
 
 symNextBtn.addEventListener('click',showSymptomResults);
