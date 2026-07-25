@@ -397,13 +397,8 @@
   <a class="top" href="#top" aria-label="ページ上部へ戻る">↑</a>
 
 <script>
-function closePage(){
-  if (window.history.length > 1) {
-    window.history.back();
-  } else {
-    alert('このタブを「×」で閉じてください。');
-    window.location.href = "index.html";
-  }
+function closePage() {
+  window.location.replace("close.html");
 }
 </script>
 
