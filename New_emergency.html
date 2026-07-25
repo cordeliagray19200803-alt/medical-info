@@ -123,17 +123,26 @@
       border-radius:999px;padding:4px 10px;margin:3px 3px 3px 0;font-weight:700;
     }
     .disability-tag{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      width:fit-content;
+      min-width:17em;
+      max-width:100%;
       background:#eaf3ff;
       border-color:#8fb3df;
       color:#174a7e;
+      margin:6px 0;
     }
 
     .disability-tag .label{
+      display:inline-block;
       width:8.5em;
     }
 
     .disability-tag .grade{
       font-weight:bold;
+      white-space:nowrap;
     }
     .danger-tag{
       background:#fff0f1;border-color:#efb4b8;color:#9e1117;font-weight:850;
@@ -176,6 +185,75 @@
   margin-bottom:4px;
   font-size:1.05rem;
 }
+
+
+    .watermark-layer{
+      position:fixed;
+      inset:0;
+      z-index:9990;
+      pointer-events:none;
+      overflow:hidden;
+      opacity:.055;
+    }
+    .watermark-layer::before{
+      content:"緊急時確認用・無断保存禁止";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:150vw;
+      transform:translate(-50%,-50%) rotate(-28deg);
+      text-align:center;
+      color:#b00020;
+      font-size:clamp(2rem,8vw,5rem);
+      font-weight:900;
+      letter-spacing:.15em;
+      white-space:nowrap;
+    }
+
+    .privacy-screen{
+      position:fixed;
+      inset:0;
+      z-index:10000;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background:#fff;
+      color:#20242a;
+      text-align:center;
+    }
+    .privacy-screen.show{
+      display:flex;
+    }
+    .privacy-screen-inner{
+      width:100%;
+      max-width:420px;
+      border:2px solid #d71920;
+      border-radius:16px;
+      padding:24px 18px;
+      box-shadow:0 5px 18px rgba(0,0,0,.10);
+    }
+    .privacy-screen h2{
+      margin:0 0 12px;
+      color:#b00020;
+      font-size:1.35rem;
+    }
+    .privacy-screen p{
+      margin:0 0 18px;
+      line-height:1.7;
+      font-weight:700;
+    }
+    .privacy-screen button{
+      width:100%;
+      border:0;
+      border-radius:10px;
+      background:#111;
+      color:#fff;
+      font:inherit;
+      font-weight:900;
+      padding:13px 18px;
+      cursor:pointer;
+    }
 
     .privacy-close{
       background:#fff;
@@ -221,7 +299,18 @@
   </style>
 
 </head>
+
 <body id="top">
+  <div class="watermark-layer" aria-hidden="true"></div>
+
+  <div id="privacyScreen" class="privacy-screen" role="dialog" aria-modal="true" aria-labelledby="privacyScreenTitle">
+    <div class="privacy-screen-inner">
+      <h2 id="privacyScreenTitle">画面を一時的に非表示にしています</h2>
+      <p>個人情報保護のため、内容を再表示するには下のボタンを押してください。</p>
+      <button type="button" id="resumeButton">再表示</button>
+    </div>
+  </div>
+
   <main class="wrap">
     <header>
       <div class="header-row">
@@ -462,5 +551,41 @@ function calculateAge(){
 }
 calculateAge();
 </script>
+
+<script>
+(function(){
+  const privacyScreen = document.getElementById("privacyScreen");
+  const resumeButton = document.getElementById("resumeButton");
+  let needsManualResume = false;
+
+  function hideMedicalInfo(){
+    needsManualResume = true;
+    privacyScreen.classList.add("show");
+    document.body.style.overflow = "hidden";
+  }
+
+  function showMedicalInfo(){
+    needsManualResume = false;
+    privacyScreen.classList.remove("show");
+    document.body.style.overflow = "";
+  }
+
+  document.addEventListener("visibilitychange", function(){
+    if (document.hidden) {
+      hideMedicalInfo();
+    } else if (needsManualResume) {
+      privacyScreen.classList.add("show");
+    }
+  });
+
+  window.addEventListener("pagehide", hideMedicalInfo);
+  window.addEventListener("blur", function(){
+    if (document.hidden) hideMedicalInfo();
+  });
+
+  resumeButton.addEventListener("click", showMedicalInfo);
+})();
+</script>
+
 </body>
 </html>
