@@ -236,14 +236,28 @@
       <h2>基本情報・既往歴</h2>
       <div class="content">
         <dl>
-          <dt>生年月日</dt>
-          <dd>1974年1月26日</dd>
+          <dt>氏名</dt>
+          <dd>金輪 聖希子（かなわ みきこ）</dd>
+
+          <dt>基本情報</dt>
+          <dd>
+            生年月日：1974年1月26日 ｜ 年齢：<span id="age"></span>歳 ｜ 血液型：Rh(+) AB型
+          </dd>
+
+          <dt>身体障害者手帳</dt>
+          <dd>1級</dd>
+
+          <dt>障害</dt>
+          <dd>
+            ・視覚障害　1級<br>
+            ・左上肢機能障害　2級<br>
+            ・左下肢機能障害　3級
+          </dd>
+
           <dt>既往歴</dt>
           <dd>
             <span class="tag">先天性脳疾患</span>
             <span class="tag">てんかん</span>
-            <span class="tag">視力障害（ロービジョン）</span>
-            <span class="tag">左半身麻痺</span>
             <span class="tag">化学物質過敏症（MCS）</span>
           </dd>
         </dl>
@@ -384,27 +398,27 @@
 
 <script>
 function closePage(){
-  const goToClosePage = () => {
-    window.location.replace("close.html");
-  };
-
-  try {
-    const audio = new Audio("close-sound.wav");
-    audio.preload = "auto";
-    audio.addEventListener("ended", goToClosePage, { once: true });
-    audio.addEventListener("error", goToClosePage, { once: true });
-
-    const playPromise = audio.play();
-    if (playPromise && typeof playPromise.catch === "function") {
-      playPromise.catch(goToClosePage);
-    }
-
-    setTimeout(goToClosePage, 3000);
-  } catch (error) {
-    goToClosePage();
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    alert('このタブを「×」で閉じてください。');
+    window.location.href = "index.html";
   }
 }
 </script>
 
+
+<script>
+function calculateAge(){
+ const birth=new Date(1974,0,26);
+ const today=new Date();
+ let age=today.getFullYear()-birth.getFullYear();
+ const bd=new Date(today.getFullYear(),birth.getMonth(),birth.getDate());
+ if(today<bd) age--;
+ const e=document.getElementById('age');
+ if(e)e.textContent=age;
+}
+calculateAge();
+</script>
 </body>
 </html>

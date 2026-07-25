@@ -53,28 +53,42 @@
 <body>
   <main>
     <h1>ご協力ありがとうございました。</h1>
-
     <p>
       個人情報保護のため、<br>
       このタブを「×」で閉じてください。
     </p>
-
     <p class="note">
       このまま検索などを続けることもできます。
     </p>
   </main>
 
   <script>
+    function keepClosePage(){
+      try {
+        history.pushState({closePage:true}, "", location.href);
+      } catch (error) {}
+    }
+
     window.addEventListener("load", function(){
+      /*
+        アドレス欄は完全には消せないため、
+        close.html のファイル名だけを消してサイトのルートURLにします。
+      */
+      try {
+        history.replaceState({closePage:true}, "", "./");
+        keepClosePage();
+        window.addEventListener("popstate", keepClosePage);
+      } catch (error) {}
+
       if (!("speechSynthesis" in window)) return;
       try {
-        window.speechSynthesis.cancel();
+        speechSynthesis.cancel();
         const message = new SpeechSynthesisUtterance("ご協力ありがとうございました。");
         message.lang = "ja-JP";
         message.rate = 0.95;
         message.pitch = 1.0;
         message.volume = 1.0;
-        window.speechSynthesis.speak(message);
+        speechSynthesis.speak(message);
       } catch (error) {}
     });
   </script>
