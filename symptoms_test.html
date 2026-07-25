@@ -1,0 +1,2372 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>発生状況・緊急対応</title>
+<style>
+:root{
+  --red:#d90000;
+  --red-dark:#c90000;
+  --green:#07862f;
+  --soft-green:#eef7e8;
+  --text:#111;
+  --line:#dedede;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;color:var(--text)}
+body{
+  background:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",
+  "Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+.screen{display:none;min-height:100vh}
+.screen.active{display:block}
+
+/* 発生状況 */
+#screen-start{
+  background:#fff;
+}
+.start-main{
+  width:min(100%,720px);
+  margin:0 auto;
+  padding:20px 18px 36px;
+}
+.start-header{
+  margin-bottom:22px;
+  padding:16px;
+  border-radius:14px;
+  background:#d32f2f;
+  color:#fff;
+  text-align:center;
+  font-size:clamp(27px,7vw,34px);
+  font-weight:800;
+  line-height:1.3;
+}
+.lead{
+  margin:0 0 14px;
+  font-size:clamp(18px,4.8vw,22px);
+  font-weight:700;
+}
+.choice{
+  display:flex;
+  align-items:flex-start;
+  gap:13px;
+  width:100%;
+  padding:17px 2px;
+  border-bottom:2px solid #d32f2f;
+  cursor:pointer;
+}
+.choice:first-of-type{border-top:2px solid #d32f2f}
+.choice input{
+  flex:0 0 auto;
+  width:27px;
+  height:27px;
+  margin:2px 0 0;
+  accent-color:#d32f2f;
+}
+.label-text{
+  font-size:clamp(18px,4.8vw,22px);
+  font-weight:700;
+  line-height:1.5;
+}
+.subtext{
+  display:block;
+  margin-top:4px;
+  color:#555;
+  font-size:clamp(15px,4vw,18px);
+  font-weight:500;
+}
+
+/* 心臓マッサージ */
+#screen-emergency{background:var(--soft-green)}
+.emergency-main{
+  width:min(100%,720px);
+  margin:auto;
+  padding:max(18px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom));
+}
+.hero{
+  display:grid;
+  grid-template-columns:74px 1fr 74px;
+  gap:12px;
+  align-items:center;
+  background:linear-gradient(#ea1111,#c90000);
+  color:#fff;
+  border-radius:28px;
+  padding:22px 18px;
+  margin-bottom:28px;
+}
+.hero h1{
+  margin:0;
+  text-align:center;
+  font-size:clamp(32px,7.5vw,54px);
+  line-height:1.25;
+  font-weight:900;
+}
+.pulse-note{
+  margin:-14px 4px 24px;
+  color:#000;
+  text-align:center;
+  font-size:clamp(15px,3.8vw,19px);
+  line-height:1.5;
+  font-weight:700;
+}
+.warning{width:70px;height:64px}
+.warning svg{width:100%;height:100%;display:block}
+.steps{display:grid;gap:20px}
+.step{
+  background:#fff;
+  border:4px solid var(--red);
+  border-radius:22px;
+  padding:20px 24px;
+  display:grid;
+  grid-template-columns:64px 1fr;
+  gap:18px;
+  align-items:center;
+  box-shadow:0 4px 12px rgba(0,0,0,.05);
+}
+.num{
+  width:58px;height:58px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--red);color:#fff;
+  font-size:34px;font-weight:900;
+}
+.step p{
+  margin:0;
+  font-size:clamp(21px,5.1vw,34px);
+  line-height:1.4;
+  font-weight:800;
+}
+.red{color:var(--red)}
+.call{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  min-height:100px;
+  margin:24px 0;
+  border-radius:24px;
+  background:linear-gradient(#07943a,#067c2f);
+  color:#fff;
+  text-decoration:none;
+  font-size:clamp(29px,7vw,48px);
+  font-weight:900;
+  box-shadow:0 6px 14px rgba(0,0,0,.12);
+}
+.call:active{transform:translateY(1px)}
+.call-row{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:14px;
+  align-items:stretch;
+  margin:24px 0;
+}
+.aed-panel{
+  border-radius:24px;
+  border:3px solid #e08a00;
+  background:#fff8e8;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:14px 10px;
+}
+.aed-title{
+  font-size:clamp(18px,4vw,24px);
+  font-weight:900;
+  line-height:1.4;
+}
+.aed-map{
+  margin-top:10px;
+  font-size:clamp(18px,4vw,24px);
+  font-weight:900;
+}
+@media(max-width:460px){
+  .call-row{grid-template-columns:2fr 1fr;gap:10px;}
+}
+.cpr{
+  width:100%;
+  border:0;
+  border-radius:26px;
+  background:linear-gradient(#e51515,#c90000);
+  color:#fff;
+  padding:26px 20px 22px;
+  text-align:center;
+  box-shadow:0 6px 14px rgba(0,0,0,.12);
+}
+.cpr h2{
+  margin:0 0 20px;
+  font-size:clamp(34px,7.8vw,54px);
+  font-weight:900;
+}
+.beat{
+  background:#fff0f0;
+  color:var(--red);
+  border-radius:18px;
+  padding:18px 12px;
+  font-size:clamp(34px,8.3vw,58px);
+  font-weight:900;
+}
+.status-row{
+  margin-top:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  font-size:clamp(18px,4.3vw,28px);
+  font-weight:800;
+}
+.badge{
+  background:#fff;
+  color:var(--red);
+  border-radius:999px;
+  padding:9px 17px;
+}
+.metro{
+  border-top:2px dashed rgba(255,255,255,.8);
+  margin:18px 0 0;
+  padding-top:16px;
+  font-size:clamp(20px,5vw,31px);
+  font-weight:800;
+}
+.metro b{color:#ffe800;font-size:1.3em}
+.stop{
+  width:100%;
+  margin-top:20px;
+  min-height:82px;
+  border:2px solid #888;
+  border-radius:22px;
+  background:#f4f4f4;
+  color:var(--green);
+  font-size:clamp(23px,5.3vw,34px);
+  font-weight:900;
+}
+.notice{
+  border-top:2px solid #4b9b75;
+  margin-top:20px;
+  padding:16px 6px 0;
+  display:flex;
+  gap:12px;
+  color:#111;
+  font-size:clamp(15px,3.8vw,21px);
+  line-height:1.55;
+  font-weight:650;
+}
+.notice .icon{color:var(--green);font-size:28px}
+
+
+/* 症状選択・結果 */
+#screen-symptoms,
+#screen-results{
+  background:#ffffff;
+}
+.sym-main{
+  width:min(100%,820px);
+  margin:0 auto;
+  padding:max(18px,env(safe-area-inset-top)) 14px max(28px,env(safe-area-inset-bottom));
+}
+.sym-header{
+  background:#d32f2f;
+  color:#fff;
+  border-radius:18px;
+  padding:16px 18px;
+  text-align:center;
+  font-size:clamp(24px,6.6vw,36px);
+  line-height:1.3;
+  font-weight:900;
+}
+.sym-lead{
+  margin:18px 2px 12px;
+  font-size:clamp(17px,4.5vw,22px);
+  line-height:1.6;
+  font-weight:750;
+}
+.sym-onset{
+  margin:18px 0 22px;
+  padding:14px 16px 16px;
+  border:2px solid #d32f2f;
+  border-radius:16px;
+  background:#fff6f6;
+}
+.sym-onset-title{
+  margin:0 0 10px;
+  font-size:clamp(20px,5.2vw,27px);
+  font-weight:900;
+}
+.sym-onset-options{
+  display:grid;
+  gap:10px;
+  padding-left:18px;
+}
+.sym-onset-options label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:clamp(18px,4.7vw,23px);
+  font-weight:750;
+}
+.sym-onset-options input{
+  width:26px;
+  height:26px;
+  accent-color:#d32f2f;
+}
+.sym-category-list{
+  border-top:2px solid #d32f2f;
+}
+.sym-category{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-height:62px;
+  padding:14px 4px;
+  border-bottom:2px solid #d32f2f;
+  cursor:pointer;
+  font-size:clamp(19px,5vw,25px);
+  font-weight:800;
+}
+.sym-category input,
+.sym-option input{
+  flex:0 0 auto;
+  width:27px;
+  height:27px;
+  accent-color:#d32f2f;
+}
+.sym-actions{
+  display:grid;
+  gap:12px;
+  margin-top:22px;
+}
+.sym-btn{
+  width:100%;
+  min-height:60px;
+  border:0;
+  border-radius:15px;
+  padding:13px 18px;
+  font-size:clamp(20px,5vw,25px);
+  font-weight:900;
+  cursor:pointer;
+}
+.sym-btn-primary{
+  background:#d32f2f;
+  color:#fff;
+}
+.sym-btn-primary:disabled{
+  background:#ccc;
+  color:#777;
+  cursor:not-allowed;
+}
+.sym-btn-secondary{
+  background:#fff;
+  color:#a91f1f;
+  border:2px solid #d32f2f;
+}
+.sym-results-intro{
+  margin:16px 2px 18px;
+  font-size:clamp(16px,4.1vw,21px);
+  font-weight:700;
+  line-height:1.55;
+}
+.sym-section{
+  margin:0 0 22px;
+  border:2px solid #d32f2f;
+  border-radius:18px;
+  background:#fff;
+  overflow:hidden;
+  box-shadow:0 4px 14px rgba(0,0,0,.06);
+}
+.sym-section-title{
+  margin:0;
+  padding:14px 16px;
+  background:#fff6f6;
+  border-bottom:2px solid #d32f2f;
+  font-size:clamp(22px,5.6vw,30px);
+  font-weight:900;
+}
+.sym-column-heads,
+.sym-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.sym-column-head{
+  padding:12px 8px;
+  background:#fafafa;
+  text-align:center;
+  font-size:clamp(15px,3.8vw,19px);
+  line-height:1.35;
+  font-weight:900;
+}
+.sym-column-head:first-child,
+.sym-cell:first-child{
+  border-right:1px solid #dedede;
+}
+.sym-row{
+  border-top:1px solid #dedede;
+}
+.sym-cell{
+  min-width:0;
+  padding:7px 9px 10px;
+}
+.sym-option{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  padding:8px 0;
+  font-size:clamp(15px,3.9vw,19px);
+  line-height:1.45;
+  font-weight:700;
+  cursor:pointer;
+}
+.sym-option input{
+  width:22px;
+  height:22px;
+  margin-top:1px;
+}
+.sym-group-label{
+  display:block;
+  padding:9px 8px 5px 0;
+  color:#a91f1f;
+  font-size:clamp(15px,3.9vw,19px);
+  font-weight:900;
+  text-align:right;
+}
+.sym-group-row .sym-cell:last-child{
+  padding-left:34px;
+}
+.sym-onset-result{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px 20px;
+  padding:14px 16px 16px;
+}
+.sym-onset-result .sym-option{
+  border:0;
+  padding:4px 0;
+  white-space:nowrap;
+}
+.sym-onset-bullet{
+  font-size:clamp(17px,4.3vw,21px);
+  line-height:1.55;
+  font-weight:750;
+  white-space:nowrap;
+}
+.patient-info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:14px;
+}
+.patient-info-item{
+  padding:12px 10px;
+  border:2px solid #d8d8d8;
+  border-radius:12px;
+  background:#fff;
+  text-align:center;
+  font-size:clamp(17px,4.3vw,22px);
+  line-height:1.4;
+  font-weight:900;
+}
+.patient-info-label{
+  display:block;
+  margin-bottom:3px;
+  color:#555;
+  font-size:.78em;
+  font-weight:800;
+}
+.sym-result-actions{
+  display:grid;
+  gap:12px;
+}
+.sym-summary-list{
+  margin:0;
+  padding:4px 0 4px 1.25em;
+  list-style:none;
+}
+.sym-summary-list li{
+  position:relative;
+  padding:6px 0;
+  font-size:clamp(15px,3.9vw,19px);
+  line-height:1.5;
+  font-weight:700;
+}
+.sym-summary-list li::before{
+  content:"・";
+  position:absolute;
+  left:-1.15em;
+  font-weight:900;
+}
+.sym-summary-empty{
+  min-height:20px;
+}
+.triage-card{
+  margin:0 0 22px;
+  padding:18px;
+  border-radius:20px;
+  color:#fff;
+  text-align:center;
+  box-shadow:0 6px 16px rgba(0,0,0,.14);
+}
+.triage-card.emergency{
+  background:linear-gradient(#e51f25,#c90000);
+}
+.triage-card.consult{
+  background:linear-gradient(#168e58,#08723f);
+}
+.triage-label{
+  margin:0 0 5px;
+  font-size:clamp(16px,4.2vw,21px);
+  font-weight:800;
+}
+.triage-number{
+  margin:0;
+  font-size:clamp(38px,10vw,64px);
+  line-height:1.1;
+  font-weight:950;
+}
+.triage-message{
+  margin:10px 0 15px;
+  font-size:clamp(18px,4.7vw,24px);
+  line-height:1.45;
+  font-weight:850;
+}
+.triage-call{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:62px;
+  border-radius:15px;
+  background:#fff;
+  text-decoration:none;
+  font-size:clamp(20px,5vw,28px);
+  font-weight:950;
+}
+.triage-card.emergency .triage-call{
+  color:#c90000;
+}
+.triage-card.consult .triage-call{
+  color:#08723f;
+}
+.privacy-close{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:58px;
+  margin-top:14px;
+  border:3px solid #fff;
+  border-radius:15px;
+  background:rgba(0,0,0,.22);
+  color:#fff;
+  font-size:clamp(20px,5vw,27px);
+  font-weight:950;
+  cursor:pointer;
+}
+.privacy-close:active{transform:translateY(1px)}
+
+.triage-operator-guide{
+  margin:-6px 0 22px;
+  padding:18px;
+  border:3px solid #c90000;
+  border-radius:16px;
+  background:#fff;
+  color:#111;
+  text-align:left;
+  font-size:clamp(17px,4.4vw,22px);
+  line-height:1.65;
+  font-weight:800;
+  box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+.triage-operator-guide-title{
+  margin:0 0 10px;
+  color:#c90000;
+  font-size:clamp(19px,4.8vw,24px);
+  font-weight:950;
+  text-align:center;
+}
+.triage-operator-guide-quote{
+  display:block;
+  margin:10px 0;
+  padding:12px;
+  border-radius:10px;
+  background:#f5f5f5;
+  color:#000;
+  font-weight:900;
+}
+.triage-reasons{
+  margin:13px 0 0;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.16);
+  text-align:left;
+  font-size:clamp(14px,3.7vw,18px);
+  line-height:1.5;
+  font-weight:750;
+}
+.triage-reasons div::before{
+  content:"・";
+}
+.sym-sticky-actions{
+  position:sticky;
+  bottom:0;
+  padding:13px 0 max(5px,env(safe-area-inset-bottom));
+  background:linear-gradient(to bottom,rgba(255,255,255,0),#fff 28%);
+}
+.sym-summary-back-actions{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+}
+#sym-summary-back-btn{
+  width:auto;
+  min-height:42px;
+  padding:8px 13px;
+  border-radius:11px;
+  font-size:clamp(14px,3.5vw,17px);
+  font-weight:800;
+}
+
+/* 119番・#7119 結果画面：追加部分 */
+.triage-purpose-note{
+  margin:14px 0 0;
+  padding:11px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.16);
+  font-size:clamp(14px,3.7vw,18px);
+  line-height:1.55;
+  font-weight:800;
+}
+.triage-consult-list{
+  margin:14px 0 0;
+  padding:14px 16px;
+  border-radius:14px;
+  background:rgba(255,255,255,.16);
+  text-align:left;
+}
+.triage-consult-list-title{
+  margin:0 0 8px;
+  text-align:center;
+  font-size:clamp(17px,4.4vw,22px);
+  font-weight:950;
+}
+.triage-consult-list ul{
+  margin:0;
+  padding-left:1.3em;
+}
+.triage-consult-list li{
+  margin:5px 0;
+  font-size:clamp(15px,4vw,20px);
+  line-height:1.5;
+  font-weight:800;
+}
+.operator-heading-only{
+  margin:-6px 0 22px;
+  padding:15px 16px;
+  border:3px solid #c90000;
+  border-radius:16px;
+  background:#fff;
+  color:#c90000;
+  text-align:center;
+  font-size:clamp(20px,5vw,26px);
+  font-weight:950;
+  box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+.location-table,
+.medical-info-table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+.location-table th,
+.location-table td,
+.medical-info-table th,
+.medical-info-table td{
+  padding:12px 10px;
+  border-top:1px solid #dedede;
+  vertical-align:top;
+  font-size:clamp(15px,3.9vw,19px);
+  line-height:1.5;
+}
+.location-table tr:first-child th,
+.location-table tr:first-child td,
+.medical-info-table tr:first-child th,
+.medical-info-table tr:first-child td{
+  border-top:0;
+}
+.location-table th,
+.medical-info-table th{
+  width:29%;
+  background:#fafafa;
+  text-align:left;
+  font-weight:900;
+}
+.location-table td,
+.medical-info-table td{
+  font-weight:750;
+  overflow-wrap:anywhere;
+}
+.location-note{
+  margin:0;
+  padding:0 14px 14px;
+  color:#555;
+  font-size:clamp(13px,3.4vw,16px);
+  line-height:1.5;
+  font-weight:700;
+}
+.location-status{
+  color:#555;
+}
+
+.result-close-area{
+  margin:0 0 18px;
+}
+.result-close-area.bottom{
+  margin:22px 0 0;
+}
+.result-close-button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:58px;
+  border:0;
+  border-radius:15px;
+  background:#d32f2f;
+  color:#fff;
+  font-size:clamp(20px,5vw,27px);
+  font-weight:950;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,.12);
+}
+.result-close-button:active{
+  transform:translateY(1px);
+}
+.result-close-note{
+  margin:8px 4px 0;
+  color:#111;
+  text-align:center;
+  font-size:clamp(13px,3.5vw,16px);
+  line-height:1.5;
+  font-weight:800;
+}
+@media(max-width:460px){
+  .sym-main{padding-left:10px;padding-right:10px}
+  .sym-cell{padding-left:6px;padding-right:6px}
+  .sym-option{gap:5px}
+  .sym-option input{width:20px;height:20px}
+  .sym-column-head{padding-left:4px;padding-right:4px}
+}
+
+
+/* 警告音中からCPR中まで、帯全体を110回/分で脈動 */
+@keyframes emergencyHeroPulse{
+  0%,100%{
+    background:linear-gradient(#b90000,#8f0000);
+    filter:brightness(.78);
+    transform:scale(1);
+    box-shadow:0 0 0 rgba(255,255,255,0);
+  }
+  50%{
+    background:linear-gradient(#ff3b3b,#e60000);
+    filter: brightness(1.01);
+    transform:scale(1.04);
+    box-shadow:0 0 10px rgba(255,255,255,.70);
+  }
+}
+.hero.cpr-pulse{
+  transform-origin:center;
+  will-change:transform,filter,box-shadow,background;
+  animation:emergencyHeroPulse 545.45ms linear infinite !important;
+}
+
+
+@media(max-width:460px){
+  .emergency-main{padding-left:12px;padding-right:12px}
+  .hero{
+    grid-template-columns:52px 1fr 52px;
+    padding:18px 12px;
+    border-radius:22px;
+  }
+  .warning{width:50px;height:48px}
+  .step{
+    grid-template-columns:48px 1fr;
+    padding:16px 14px;
+    border-radius:18px;
+    gap:12px;
+  }
+  .num{width:46px;height:46px;font-size:27px}
+}
+</style>
+</head>
+<body>
+
+<section id="screen-start" class="screen active">
+  <main class="start-main">
+    <div class="start-header">⏱️ 発生状況</div>
+    <p class="lead">当てはまるものを選択してください。</p>
+
+    <label class="choice">
+      <input type="checkbox" class="emergency-check">
+      <span class="label-text">10カウントしても呼吸が確認できない</span>
+    </label>
+
+    <label class="choice">
+      <input type="checkbox" class="emergency-check">
+      <span class="label-text">10カウントしても胸やお腹が動かない</span>
+    </label>
+
+    <label class="choice">
+      <input id="not-emergency" type="checkbox">
+      <span class="label-text">
+        上記以外
+        <span class="subtext">（呼吸をしていて、胸やおなかが上下に動いている）</span>
+      </span>
+    </label>
+  </main>
+</section>
+
+<section id="screen-emergency" class="screen">
+  <main class="emergency-main">
+    <section id="emergencyHero" class="hero">
+      <div class="warning" aria-hidden="true">
+        <svg viewBox="0 0 64 58">
+          <path d="M32 2L62 55H2Z" fill="#FFD42A" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="29" y="17" width="6" height="22" rx="3" fill="#111"/>
+          <circle cx="32" cy="46" r="3.5" fill="#111"/>
+        </svg>
+      </div>
+      <h1>心臓マッサージを<br>行ってください</h1>
+      <div class="warning" aria-hidden="true">
+        <svg viewBox="0 0 64 58">
+          <path d="M32 2L62 55H2Z" fill="#FFD42A" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="29" y="17" width="6" height="22" rx="3" fill="#111"/>
+          <circle cx="32" cy="46" r="3.5" fill="#111"/>
+        </svg>
+      </div>
+    </section>
+
+    <p class="pulse-note">※この表示は、心臓マッサージのリズムに合わせて脈動します。</p>
+
+    <section class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <p>反応・呼吸を確認してください。</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <p><span class="red">心臓マッサージ</span>を始めてください。</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <p>周囲に助けを求めてください。</p>
+      </div>
+    </section>
+
+    <div class="call-row">
+      <a id="call119" class="call" href="tel:119" aria-label="119番へ電話">
+        ☎ 119番へ電話
+      </a>
+
+      <div class="aed-panel">
+        <div class="aed-title">⚡ AEDを<br>持ってきて</div>
+        <a class="aed-map" target="_blank"
+        href="https://aed-navi.jp/home.html">🔗 AEDマップ</a>
+      </div>
+    </div>
+
+    <button id="cprBox" class="cpr" type="button">
+      <h2>❤️ 心臓マッサージ</h2>
+      <div class="beat">ピッ・ピッ・ピッ・ピッ</div>
+      <div class="status-row">
+        <span id="badge" class="badge">🔊 音声案内中</span>
+        <span id="status">心臓マッサージを続けてください</span>
+      </div>
+      <div class="metro">メトロノーム：1分間に <b>110</b> 回</div>
+    </button>
+
+    <button id="stopBtn" class="stop" type="button">
+      ■ 音声・メトロノームを停止する
+    </button>
+
+    <button class="privacy-close" type="button" onclick="closePrivatePage()" aria-label="心肺蘇生画面を閉じます" style="text-align:center;flex-direction:column;">
+  <span style="display:block;text-align:center;">閉じる</span>
+  <span style="display:block;
+               margin-top:4px;
+               font-size:12px;
+               font-weight:bold;
+               line-height:1.4;
+               color:#000;
+               text-align:center;">
+    個人情報保護のためここを押して閉じてください
+  </span>
+</button>
+
+    <footer class="notice">
+      <div class="icon">📣</div>
+      <div>
+        このページは緊急時の行動を補助するものです。<br>
+        119番通報後は、通信指令員の指示を優先してください。
+      </div>
+    </footer>
+  </main>
+</section>
+
+
+<section id="screen-symptoms" class="screen">
+  <main class="sym-main">
+    <div class="sym-header">症状を選択してください</div>
+    <p class="sym-lead">当てはまるものをすべて選択してください。</p>
+
+    <div class="sym-onset">
+      <div class="sym-onset-title">⌚ 発生状況</div>
+      <div class="sym-onset-options">
+        <label><input type="checkbox" class="onset-choice" value="分からない">分からない</label>
+        <label><input type="checkbox" class="onset-choice" value="急に起こった">急に起こった</label>
+        <label><input type="checkbox" class="onset-choice" value="徐々に起こった">徐々に起こった</label>
+      </div>
+    </div>
+
+    <div class="sym-category-list">
+      <label class="sym-category"><input type="checkbox" value="eye">👁️ 目</label>
+      <label class="sym-category"><input type="checkbox" value="limbs">🦵 手・足</label>
+      <label class="sym-category"><input type="checkbox" value="face">🙂 顔</label>
+      <label class="sym-category"><input type="checkbox" value="head">😵 頭</label>
+      <label class="sym-category"><input type="checkbox" value="breath">😮‍💨 息</label>
+      <label class="sym-category"><input type="checkbox" value="body">🤢 お腹・体</label>
+      <label class="sym-category"><input type="checkbox" value="skin">🩹 皮膚</label>
+      <label class="sym-category"><input type="checkbox" value="other">❓ その他</label>
+    </div>
+
+    <div class="sym-actions">
+      <button id="sym-next-btn" class="sym-btn sym-btn-primary" type="button" disabled>次へ</button>
+    </div>
+  </main>
+</section>
+
+<section id="screen-results" class="screen">
+  <main class="sym-main">
+    <div class="sym-header">該当する症状を選択</div>
+    <p class="sym-results-intro">最初の画面で選択した項目だけを表示しています。</p>
+
+    <div id="sym-results"></div>
+
+    <div class="sym-sticky-actions sym-result-actions">
+      <button id="sym-detail-next-btn" class="sym-btn sym-btn-primary" type="button" disabled>次へ</button>
+      <button id="sym-back-btn" class="sym-btn sym-btn-secondary" type="button">選択し直す</button>
+    </div>
+  </main>
+</section>
+
+<section id="screen-summary" class="screen">
+  <main class="sym-main">
+    <div class="sym-header">選択結果</div>
+    <p id="sym-summary-intro" class="sym-results-intro"></p>
+
+    <div id="sym-summary"></div>
+
+    <div class="sym-sticky-actions sym-summary-back-actions">
+      <button id="sym-summary-back-btn" class="sym-btn sym-btn-secondary" type="button">症状を選び直す</button>
+    </div>
+  </main>
+</section>
+
+<script>
+const screens = document.querySelectorAll('.screen');
+
+let audioCtx = null;
+let metroTimer = null;
+let metroSource = null;
+let metroGain = null;
+let repeatTimer = null;
+let periodicTimer = null;
+let cueTimer = null;
+let oneMinuteTimer = null;
+let exchangeWarningTimer = null;
+let exchangeReadyTimer = null;
+let cueIndex = 0;
+let stopped = true;
+let guidanceRunning = false;
+let called119 = false;
+let metronomeVolume = 1.0;
+
+const interval = 60000 / 110;
+const badge = document.getElementById('badge');
+const status = document.getElementById('status');
+const stopBtn = document.getElementById('stopBtn');
+const cprBox = document.getElementById('cprBox');
+const call119 = document.getElementById('call119');
+const emergencyHero = document.getElementById('emergencyHero');
+
+function showScreen(id){
+  screens.forEach(screen => screen.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function sleep(ms){
+  return new Promise(resolve => setTimeout(resolve,ms));
+}
+
+function getCtx(){
+  if(!audioCtx){
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if(!Ctx) return null;
+    audioCtx = new Ctx();
+  }
+  return audioCtx;
+}
+
+function speakText(text, options = {}){
+  return new Promise(resolve => {
+    if(stopped || !('speechSynthesis' in window)){
+      resolve();
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ja-JP';
+    utterance.rate = options.rate ?? 0.88;
+    utterance.pitch = options.pitch ?? 1;
+    utterance.volume = options.volume ?? 1;
+
+    let finished = false;
+    const finish = () => {
+      if(finished) return;
+      finished = true;
+      clearTimeout(timeoutId);
+      resolve();
+    };
+
+    utterance.onend = finish;
+    utterance.onerror = finish;
+
+    /* Some mobile browsers occasionally fail to fire onend/onerror. */
+    const timeoutId = setTimeout(finish,12000);
+
+    try{
+      speechSynthesis.speak(utterance);
+    }catch(error){
+      finish();
+    }
+  });
+}
+
+function beep(){
+  if(stopped) return;
+
+  const ctx = getCtx();
+  if(!ctx || ctx.state !== 'running') return;
+
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'sine';
+  osc.frequency.value = 880;
+  gain.gain.setValueAtTime(0.20 * metronomeVolume,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime + 0.07);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.08);
+}
+
+function playEmergencyWarningTone(durationMs = 2500){
+  return new Promise(resolve => {
+    let finished = false;
+    const finish = () => {
+      if(finished) return;
+      finished = true;
+      resolve();
+    };
+
+    /* 万一Web Audioが使えなくても、案内全体を停止させない */
+    const safetyTimer = setTimeout(finish, durationMs + 500);
+
+    try{
+      const ctx = getCtx();
+      if(!ctx){
+        clearTimeout(safetyTimer);
+        finish();
+        return;
+      }
+
+      const begin = () => {
+        try{
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const now = ctx.currentTime;
+          const endTime = now + durationMs / 1000;
+
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(760, now);
+
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(0.30, now + 0.03);
+          gain.gain.setValueAtTime(0.30, Math.max(now + 0.04, endTime - 0.08));
+          gain.gain.exponentialRampToValueAtTime(0.0001, endTime);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.onended = () => {
+            clearTimeout(safetyTimer);
+            finish();
+          };
+
+          osc.start(now);
+          osc.stop(endTime);
+        }catch(error){
+          clearTimeout(safetyTimer);
+          finish();
+        }
+      };
+
+      if(ctx.state === 'running'){
+        begin();
+      }else{
+        ctx.resume().then(begin).catch(() => {
+          clearTimeout(safetyTimer);
+          finish();
+        });
+      }
+    }catch(error){
+      clearTimeout(safetyTimer);
+      finish();
+    }
+  });
+}
+
+function startMetronome(){
+  const ctx = getCtx();
+  if(!ctx) return;
+
+  if(metroTimer){
+    clearInterval(metroTimer);
+    metroTimer = null;
+  }
+
+  if(metroSource){
+    try{ metroSource.stop(); }catch(error){}
+    try{ metroSource.disconnect(); }catch(error){}
+    metroSource = null;
+  }
+
+  if(metroGain){
+    try{ metroGain.disconnect(); }catch(error){}
+    metroGain = null;
+  }
+
+  const begin = () => {
+    if(stopped) return;
+
+    /*
+      JavaScriptのsetIntervalは、AEDマップなど別画面を開くと
+      ブラウザにより約1秒間隔へ遅くされることがあります。
+      Web Audioのループ音源にすることで110回/分を維持します。
+    */
+    const beatSeconds = 60 / 110;
+    const sampleRate = ctx.sampleRate;
+    const frameCount = Math.max(1, Math.round(sampleRate * beatSeconds));
+    const buffer = ctx.createBuffer(1, frameCount, sampleRate);
+    const data = buffer.getChannelData(0);
+    const clickLength = Math.min(frameCount, Math.round(sampleRate * 0.08));
+
+    for(let i = 0; i < clickLength; i++){
+      const t = i / sampleRate;
+      const envelope = Math.exp(-42 * t);
+      data[i] = Math.sin(2 * Math.PI * 880 * t) * envelope * 0.20;
+    }
+
+    metroSource = ctx.createBufferSource();
+    metroGain = ctx.createGain();
+    metroGain.gain.setValueAtTime(metronomeVolume, ctx.currentTime);
+
+    metroSource.buffer = buffer;
+    metroSource.loop = true;
+    metroSource.connect(metroGain);
+    metroGain.connect(ctx.destination);
+    metroSource.start();
+  };
+
+  if(ctx.state === 'running'){
+    begin();
+  }else{
+    ctx.resume().then(begin).catch(() => {});
+  }
+}
+
+function unlockMobileAudio(){
+  const ctx = getCtx();
+
+  if(ctx && ctx.state !== 'running'){
+    ctx.resume().catch(() => {});
+  }
+
+  if('speechSynthesis' in window){
+    try{
+      speechSynthesis.getVoices();
+      speechSynthesis.resume();
+    }catch(error){}
+  }
+}
+
+function primeMobileSpeech(){
+  if(!('speechSynthesis' in window)) return;
+
+  try{
+    speechSynthesis.cancel();
+    speechSynthesis.resume();
+    speechSynthesis.getVoices();
+
+    /* iPhone/Safari向け：利用者の操作中に音声合成を一度起動しておく */
+    const primer = new SpeechSynthesisUtterance(' ');
+    primer.lang = 'ja-JP';
+    primer.volume = 0;
+    primer.rate = 1;
+    speechSynthesis.speak(primer);
+  }catch(error){}
+}
+
+function setMetronomeVolume(value){
+  metronomeVolume = Math.max(0, Math.min(1, value));
+  if(metroGain && audioCtx){
+    try{
+      metroGain.gain.setTargetAtTime(metronomeVolume, audioCtx.currentTime, 0.02);
+    }catch(error){}
+  }
+}
+
+const compressionCues = [
+  '強く！',
+  '乾電池1本分沈むまで！',
+  '速く！',
+  '絶え間なく！',
+  'メトロノームに合わせて押してください。',
+  'AEDが届いたら、すぐに使用してください。',
+  'AEDの準備をしている間も、心臓マッサージを続けてください。'
+];
+
+function startCompressionCues(){
+  if(cueTimer) clearInterval(cueTimer);
+  cueIndex = 0;
+  status.textContent = compressionCues[cueIndex];
+
+  cueTimer = setInterval(async () => {
+    if(stopped || guidanceRunning) return;
+
+    guidanceRunning = true;
+    setMetronomeVolume(0.6);
+    badge.textContent = '🔊 音声案内中';
+
+    const message = compressionCues[cueIndex];
+    status.textContent = message;
+    await speakText(message,{rate:0.95});
+
+    cueIndex = (cueIndex + 1) % compressionCues.length;
+    setMetronomeVolume(1.0);
+    guidanceRunning = false;
+
+    if(!stopped){
+      badge.textContent = '🔊 メトロノーム作動中';
+    }
+  },25000);
+}
+
+function scheduleRepeatGuidance(){
+  if(repeatTimer) clearInterval(repeatTimer);
+  if(periodicTimer) clearInterval(periodicTimer);
+  if(oneMinuteTimer) clearTimeout(oneMinuteTimer);
+  if(exchangeWarningTimer) clearTimeout(exchangeWarningTimer);
+  if(exchangeReadyTimer) clearTimeout(exchangeReadyTimer);
+
+  oneMinuteTimer = setTimeout(async () => {
+    if(stopped || guidanceRunning || called119) return;
+
+    guidanceRunning = true;
+    setMetronomeVolume(0.6);
+    badge.textContent = '🔊 音声案内中';
+    status.textContent = 'どなたか119番に電話してください';
+    await speakText('どなたか119番に電話してください。');
+    setMetronomeVolume(1.0);
+    guidanceRunning = false;
+
+    if(!stopped){
+      badge.textContent = '🔊 メトロノーム作動中';
+    }
+  },60000);
+
+  exchangeWarningTimer = setTimeout(async () => {
+    if(stopped || guidanceRunning) return;
+
+    guidanceRunning = true;
+    setMetronomeVolume(0.6);
+    badge.textContent = '🔊 音声案内中';
+    status.textContent = '疲れる前に交代しましょう';
+    await speakText('疲れる前に交代しましょう。');
+    setMetronomeVolume(1.0);
+    guidanceRunning = false;
+
+    if(!stopped){
+      badge.textContent = '🔊 メトロノーム作動中';
+    }
+  },90000);
+
+  exchangeReadyTimer = setTimeout(async () => {
+    if(stopped || guidanceRunning) return;
+
+    guidanceRunning = true;
+    setMetronomeVolume(0.6);
+    badge.textContent = '🔊 音声案内中';
+    status.textContent = '交代できる方は準備してください';
+    await speakText('交代できるかたは準備してください。');
+    setMetronomeVolume(1.0);
+    guidanceRunning = false;
+
+    if(!stopped){
+      badge.textContent = '🔊 メトロノーム作動中';
+    }
+  },110000);
+
+  repeatTimer = setInterval(repeatGuidance,120000);
+}
+
+async function periodicGuidance(){
+  return;
+}
+
+async function repeatGuidance(){
+  if(stopped || guidanceRunning) return;
+
+  guidanceRunning = true;
+  setMetronomeVolume(0.6);
+  badge.textContent = '🔊 音声案内中';
+
+  const messages = [
+    {display:'交代できる方がいましたらお願いします。',audio:'交代できるかたがいましたらお願いします。'},
+    {display:'3カウントで交代します。',audio:'スリーカウントで交代します。'},
+    {pause:2000},
+    {display:'行きます！',audio:'行きます！'},
+    {pause:500},
+    {display:'1、2、3！',audio:'1。'},
+    {pause:545},
+    {display:'1、2、3！',audio:'2。'},
+    {pause:545},
+    {display:'1、2、3！',audio:'3。'},
+    '交代してください。'
+  ];
+
+  for(const message of messages){
+    if(message.pause){
+      await new Promise(r=>setTimeout(r,message.pause));
+      continue;
+    }
+    if(stopped) break;
+    if(typeof message==='string'){
+      status.textContent = message;
+      await speakText(message);
+    }else{
+      status.textContent = message.display;
+      await speakText(message.audio);
+    }
+  }
+
+  setMetronomeVolume(1.0);
+  guidanceRunning = false;
+
+  if(!stopped){
+    badge.textContent = '🔊 メトロノーム作動中';
+  }
+}
+
+async function startGuidance(){
+  stopAll(false);
+
+  stopped = false;
+  guidanceRunning = true;
+  setMetronomeVolume(1.0);
+  badge.textContent = '🚨 緊急警告中';
+  status.textContent = '音声案内を開始します';
+  stopBtn.textContent = '■ 音声・メトロノームを停止する';
+
+  unlockMobileAudio();
+
+  if('speechSynthesis' in window){
+    speechSynthesis.resume();
+    speechSynthesis.getVoices();
+  }
+
+  if(emergencyHero){
+    emergencyHero.classList.remove('cpr-pulse');
+    void emergencyHero.offsetWidth;
+    emergencyHero.classList.add('cpr-pulse');
+  }
+
+  await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+  try{
+    await playEmergencyWarningTone(2500);
+  }catch(error){
+    console.warn('警告音を再生できませんでしたが、音声案内を続けます。', error);
+  }
+  if(stopped) return;
+
+  const openingMessages = [
+    {
+      display:'心臓が止まっている可能性があります。',
+      audio:'しんぞうが、とまっているかのうせいがあります。'
+    },
+    {
+      display:'電話をスピーカーにして音量は最大にしてください。',
+      audio:'電話をスピーカーにして音量は最大にしてください。'
+    },
+    {
+      display:'119番に電話してください。',
+      audio:'119番に電話してください。'
+    },
+    {
+      display:'心臓マッサージを行ってください。',
+      audio:'心臓マッサージを、おこなってください。'
+    },
+    {
+      display:'胸の真ん中に両手を重ね、乾電池1本分沈むように強く押し込みます。',
+      audio:'胸の真ん中に両手を重ね、乾電池1本分沈むように強く押しこみます。'
+    },
+    {
+      display:'どなたか、AEDを持ってきてください。',
+      audio:'どなたか、AEDを持ってきてください。'
+    }
+  ];
+
+  badge.textContent = '🔊 音声案内中';
+
+  for(const message of openingMessages){
+    if(stopped) return;
+    status.textContent = message.display;
+    await speakText(message.audio);
+
+    if(message.display === '119番に電話してください。'){
+      startMetronome();
+      setMetronomeVolume(1.0);
+    }
+  }
+
+  if(stopped) return;
+
+  guidanceRunning = false;
+  badge.textContent = '🔊 メトロノーム作動中';
+
+  startCompressionCues();
+  scheduleRepeatGuidance();
+}
+
+function stopAll(updateDisplay = true){
+  stopped = true;
+  emergencyHero?.classList.remove('cpr-pulse');
+  guidanceRunning = false;
+  setMetronomeVolume(1.0);
+
+  if('speechSynthesis' in window){
+    speechSynthesis.cancel();
+  }
+
+  if(metroTimer){
+    clearInterval(metroTimer);
+    metroTimer = null;
+  }
+
+  if(metroSource){
+    try{ metroSource.stop(); }catch(error){}
+    try{ metroSource.disconnect(); }catch(error){}
+    metroSource = null;
+  }
+
+  if(metroGain){
+    try{ metroGain.disconnect(); }catch(error){}
+    metroGain = null;
+  }
+
+  if(repeatTimer){
+    clearInterval(repeatTimer);
+    repeatTimer = null;
+  }
+
+  if(periodicTimer){
+    clearInterval(periodicTimer);
+    periodicTimer = null;
+  }
+
+  if(cueTimer){
+    clearInterval(cueTimer);
+    cueTimer = null;
+  }
+
+  if(oneMinuteTimer){
+    clearTimeout(oneMinuteTimer);
+    oneMinuteTimer = null;
+  }
+
+  if(exchangeWarningTimer){
+    clearTimeout(exchangeWarningTimer);
+    exchangeWarningTimer = null;
+  }
+
+  if(exchangeReadyTimer){
+    clearTimeout(exchangeReadyTimer);
+    exchangeReadyTimer = null;
+  }
+
+  if(updateDisplay){
+    badge.textContent = '🔇 停止中';
+    status.textContent = '音声・メトロノームを停止しました';
+    stopBtn.textContent = '停止しました';
+  }
+}
+
+function activateEmergency(){
+  /* This function is called directly by the user's checkbox tap. */
+  unlockMobileAudio();
+  primeMobileSpeech();
+  showScreen('screen-emergency');
+  called119 = false;
+  call119.textContent = '☎ 119番へ電話';
+  startGuidance();
+}
+
+document.querySelectorAll('.emergency-check').forEach(box => {
+  box.addEventListener('change', () => {
+    if(box.checked){
+      activateEmergency();
+    }
+  });
+});
+
+document.getElementById('not-emergency').addEventListener('change', event => {
+  if(event.target.checked){
+    stopAll(false);
+    showScreen('screen-symptoms');
+  }
+});
+
+call119.addEventListener('click', () => {
+  called119 = true;
+  call119.textContent = '✅ 119番通報済';
+  status.textContent = '119番へ発信しました。心臓マッサージを続けてください';
+});
+
+stopBtn.addEventListener('click', async () => {
+  await finishWithThanks(false);
+});
+
+cprBox.addEventListener('click', event => {
+  if(event.target.closest('input, button, a, label')) return;
+
+  if(stopped || (!metroSource && !guidanceRunning)){
+    unlockMobileAudio();
+    primeMobileSpeech();
+    startGuidance();
+  }else{
+    stopAll(true);
+  }
+});
+
+window.addEventListener('focus', () => {
+  if(!stopped && audioCtx && audioCtx.state !== 'running'){
+    audioCtx.resume().catch(() => {});
+  }
+});
+
+document.addEventListener('visibilitychange', () => {
+  if(!document.hidden && !stopped && audioCtx){
+    audioCtx.resume().catch(() => {});
+  }
+});
+
+/* 症状選択 */
+const symptomData = {
+  eye:{
+    title:'👁️ 目',
+    rows:[
+      {person:['見えない'],observer:['動けない','手探りで動いている','何かにつかまろうとしている','助けを求めている','物にぶつかる','人にぶつかる']},
+      {person:['ぼやけて見える'],observer:['顔を近づけて見ている','目を細めている']},
+      {person:['視野がいつもより狭い'],observer:['横から来た人や物にぶつかる']},
+      {person:['目が痛い','目の奥が痛い'],observer:['目を押さえている','顔をしかめている']},
+      {person:['涙が止まらない'],observer:['涙が出続けている']},
+      {person:['目が開けられない'],observer:['目を閉じたまま']},
+      {person:['まぶしい'],observer:['手で目を覆っている','顔を背けている','暗い場所へ移動しようとしている']}
+    ]
+  },
+  limbs:{
+    title:'🦵 手・足',
+    rows:[
+      {person:['左半身の感覚がない'],observer:['左側を触られても気づかない','左側をぶつけても気づかない']},
+      {person:['左手が動かしにくい'],observer:['左手がだらんとしている','物を落とす']},
+      {person:['歩きにくい'],observer:['長時間立てていない']},
+      {person:['立てない'],observer:['支えがあっても立てない']},
+      {person:['左手足にしびれがある'],observer:['力が入っていないように見える']}
+    ]
+  },
+  face:{
+    title:'🙂 顔',
+    rows:[
+      {person:['左側の顔がしびれる'],observer:['口元が動きにくい','顔の左右差がある']}
+    ]
+  },
+  head:{
+    title:'😵 頭',
+    rows:[
+      {person:['頭が痛い','突然の激しい頭痛'],observer:['頭を押さえている']},
+      {person:['頭を打った'],observer:['頭に出血や大きなたんこぶがある']},
+      {person:[{label:'応急処置',group:true}],observer:['痛み止めの服用']},
+      {person:['めまいがする'],observer:['ふらついている']},
+      {person:['集中できない'],observer:['反応が遅い']},
+      {person:['無反応'],observer:['声をかけても反応がない','肩をたたいても反応がない']}
+    ]
+  },
+  breath:{
+    title:'😮‍💨 息',
+    rows:[
+      {person:['のどに物が詰まった','飲み込みにくい'],observer:['声が出せない','苦しそうに首を押さえている','水や食べ物が飲み込めない','むせている']},
+      {person:['咳が出る'],observer:['咳き込んでいる']},
+      {person:['息苦しい'],observer:['呼吸が苦しそう']}
+    ]
+  },
+  body:{
+    title:'🤢 お腹・体',
+    rows:[
+      {person:['発熱がある','悪寒がする'],observer:['体が熱い']},
+      {person:['のどが痛い'],observer:[]},
+      {person:['吐き気','吐き気が非常に強い','何度も吐いている'],observer:['気分が悪そう','短時間に何度も吐いている']},
+      {person:[{label:'応急処置',group:true}],observer:['エチケット袋・水の提供']},
+      {person:['下痢をしている'],observer:[]},
+      {person:['水分が飲めない','強いのどの渇き'],observer:['水分が飲めていない']},
+      {person:['筋肉痛・関節痛がある'],observer:[]},
+      {person:['突然の強い胸痛・腹痛'],observer:['胸を押さえている','お腹を押さえている']},
+      {person:['血を吐いた','血便・黒い便が出た'],observer:['吐いた物に血が混じっている','赤い便や黒い便が出ている']},
+      {person:['体がだるい'],observer:['動けなくなる','休んでいる','冷や汗']},
+      {person:[],observer:['汗が異常に多い','暑いのに汗が出ていない']}
+    ]
+  },
+  skin:{
+    title:'🩹 皮膚',
+    rows:[
+      {person:['皮膚がかゆい'],observer:['皮膚をかいている','赤みがある']},
+      {person:['発疹がある'],observer:['発疹がある']},
+      {person:['マダニに刺された'],observer:['マダニが付いている']},
+      {person:['顔や唇が急に腫れた'],observer:['顔や唇が大きく腫れている']}
+    ]
+  },
+  other:{
+    title:'❓ その他',
+    rows:[
+      {person:['強い痛みがある'],observer:['腕・手を押さえている','足を押さえている','腰・背中を押さえている']},
+      {person:[{label:'応急処置',group:true}],observer:['痛み止めを使用したと話している']},
+      {person:['けいれんしている'],observer:['意識がある','意識がない','全身がけいれんしている','手足だけがけいれんしている','けいれんが止まらない','けいれん後も意識が戻らない']},
+      {person:['出血している'],observer:['ティッシュで押さえられる程度','タオルが血で濡れる程度','出血は止まった','圧迫しても出血が止まらない']},
+      {person:[{label:'応急処置',group:true}],observer:['止血中','止血して止まった']},
+      {person:['やけどをした'],observer:['赤くなっている','水ぶくれができている','皮膚が白色・黒色になっている','広い範囲のやけど']},
+      {person:[{label:'応急処置',group:true}],observer:['冷やした']},
+      {person:['骨折したかもしれない'],observer:['手足が不自然に曲がっている','腫れている','動かせない']},
+      {person:[{label:'応急処置',group:true}],observer:['動かさないようにしている','寝かせている','座らせている']},
+      {person:['薬を飲みすぎた・間違えて飲んだ'],observer:['薬の空き容器や散らばった薬がある']},
+      {person:['洗剤・薬品を飲んだ'],observer:['洗剤・薬品の容器が近くにある']},
+      {person:['ガスや煙を吸った'],observer:['同じ場所にいる人も具合が悪い']},
+      {person:['感電した'],observer:['電気製品や電線に触れたあと倒れた']},
+      {person:['交通事故にあった'],observer:['車・バイク・自転車との事故']},
+      {person:['高い所から落ちた'],observer:['高所から転落した']},
+      {person:['溺れた'],observer:['水の中から救助された']}
+    ]
+  }
+};
+
+const symNextBtn = document.getElementById('sym-next-btn');
+const symDetailNextBtn = document.getElementById('sym-detail-next-btn');
+const symBackBtn = document.getElementById('sym-back-btn');
+const symSummaryBackBtn = document.getElementById('sym-summary-back-btn');
+const symResults = document.getElementById('sym-results');
+const symSummary = document.getElementById('sym-summary');
+const symSummaryIntro = document.getElementById('sym-summary-intro');
+const symptomCategoryBoxes = [...document.querySelectorAll('.sym-category input')];
+const onsetChoices = [...document.querySelectorAll('.onset-choice')];
+
+function selectedSymptomCategories(){
+  return symptomCategoryBoxes
+    .filter(box => box.checked)
+    .map(box => box.value);
+}
+
+function updateSymptomNextButton(){
+  const hasCategory = selectedSymptomCategories().length > 0;
+  const hasOnset = onsetChoices.some(box => box.checked);
+  symNextBtn.disabled = !(hasCategory || hasOnset);
+}
+
+function escapeHtml(value){
+  return String(value)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
+}
+
+function symptomOptionHtml(item,key,side,prefix=''){
+  if(typeof item === 'object' && item.group){
+    return `<span class="sym-group-label">${escapeHtml(item.label)}</span>`;
+  }
+
+  const text = escapeHtml(item);
+  const safePrefix = escapeHtml(prefix);
+
+  return `<label class="sym-option">
+    <input
+      type="checkbox"
+      name="${key}-${side}"
+      value="${text}"
+      data-category="${key}"
+      data-side="${side}"
+      data-prefix="${safePrefix}">
+    <span>${text}</span>
+  </label>`;
+}
+
+function calculateAge(birthYear,birthMonth,birthDay){
+  const today = new Date();
+  let age = today.getFullYear() - birthYear;
+
+  const birthdayThisYear = new Date(
+    today.getFullYear(),
+    birthMonth - 1,
+    birthDay
+  );
+
+  if(today < birthdayThisYear){
+    age -= 1;
+  }
+
+  return age;
+}
+
+function patientInfoSection(){
+  const age = calculateAge(1974,1,26);
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">👤 基本情報</h2>
+    <div class="patient-info-grid">
+      <div class="patient-info-item">
+        <span class="patient-info-label">年齢</span>
+        ${age}歳
+      </div>
+      <div class="patient-info-item">
+        <span class="patient-info-label">血液型</span>
+        AB型
+      </div>
+    </div>
+  </section>`;
+}
+
+function selectedOnsetValues(){
+  return onsetChoices
+    .filter(box => box.checked)
+    .map(box => box.value);
+}
+
+function onsetResultSection(){
+  const selectedOnset = selectedOnsetValues();
+
+  if(selectedOnset.length === 0) return '';
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">⌚ 発生状況</h2>
+    <div class="sym-onset-result">
+      ${selectedOnset.map(text =>
+        `<div class="sym-onset-bullet">・${escapeHtml(text)}</div>`
+      ).join('')}
+    </div>
+  </section>`;
+}
+
+function symptomResultSection(key,item){
+  const rowsHtml = item.rows.map(row => {
+    const isGroupRow = row.person.some(
+      value => typeof value === 'object' && value.group
+    );
+
+    const groupItem = row.person.find(
+      value => typeof value === 'object' && value.group
+    );
+    const groupLabel = groupItem ? groupItem.label : '';
+
+    return `<div class="sym-row${isGroupRow ? ' sym-group-row' : ''}">
+      <div class="sym-cell">
+        ${row.person.map(value => symptomOptionHtml(value,key,'person')).join('')}
+      </div>
+      <div class="sym-cell">
+        ${row.observer.map(value =>
+          symptomOptionHtml(value,key,'observer',groupLabel)
+        ).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">${item.title}</h2>
+    <div class="sym-column-heads">
+      <div class="sym-column-head">本人の訴え</div>
+      <div class="sym-column-head">周囲の判断</div>
+    </div>
+    ${rowsHtml}
+  </section>`;
+}
+
+function updateDetailNextButton(){
+  const symptomChecks = [
+    ...symResults.querySelectorAll('input[type="checkbox"]')
+  ];
+  const hasCheckedSymptom = symptomChecks.some(box => box.checked);
+  const hasNoSymptomChecks = symptomChecks.length === 0;
+  const hasOnset = selectedOnsetValues().length > 0;
+
+  symDetailNextBtn.disabled =
+    !(hasCheckedSymptom || (hasNoSymptomChecks && hasOnset));
+}
+
+function showSymptomResults(){
+  const keys = selectedSymptomCategories();
+  const onsetHtml = onsetResultSection();
+
+  if(keys.length === 0 && onsetHtml === '') return;
+
+  symResults.innerHTML =
+    onsetHtml +
+    keys.map(key =>
+      symptomResultSection(key,symptomData[key])
+    ).join('');
+
+  symResults
+    .querySelectorAll('input[type="checkbox"]')
+    .forEach(box => box.addEventListener('change',updateDetailNextButton));
+
+  updateDetailNextButton();
+  showScreen('screen-results');
+}
+
+symptomCategoryBoxes.forEach(box => {
+  box.addEventListener('change',updateSymptomNextButton);
+});
+
+onsetChoices.forEach(box => {
+  box.addEventListener('change',updateSymptomNextButton);
+});
+
+function summaryListHtml(items){
+  if(items.length === 0){
+    return '<div class="sym-summary-empty"></div>';
+  }
+
+  return `<ul class="sym-summary-list">
+    ${items.map(text => `<li>${escapeHtml(text)}</li>`).join('')}
+  </ul>`;
+}
+
+const emergencySymptoms = new Set([
+  '無反応',
+  '声をかけても反応がない',
+  '肩をたたいても反応がない',
+  '突然の激しい頭痛',
+  '息苦しい',
+  '呼吸が苦しそう',
+  '突然の強い胸痛・腹痛',
+  '意識がない',
+  'けいれんが止まらない',
+  'けいれん後も意識が戻らない',
+  'タオルが血で濡れる程度',
+  '圧迫しても出血が止まらない',
+  '皮膚が白色・黒色になっている',
+  '広い範囲のやけど'
+]);
+
+function determineTriage(selectedValues){
+  const values = new Set(selectedValues);
+  const reasons = [];
+
+  emergencySymptoms.forEach(symptom => {
+    if(values.has(symptom)){
+      reasons.push(symptom);
+    }
+  });
+
+  if(
+    values.has('吐き気が非常に強い') &&
+    values.has('冷や汗')
+  ){
+    reasons.push('吐き気が非常に強い＋冷や汗');
+  }
+
+  if(
+    values.has('冷や汗') &&
+    (
+      values.has('胸を押さえている') ||
+      values.has('お腹を押さえている')
+    )
+  ){
+    reasons.push('胸またはお腹を押さえている＋冷や汗');
+  }
+
+  return {
+    emergency:reasons.length > 0,
+    reasons:[...new Set(reasons)]
+  };
+}
+
+function triageCardHtml(triage){
+  const purposeNote = `
+    <p class="triage-purpose-note">
+      このページは、119番と#7119の判断の目安として作成しています。
+    </p>`;
+
+  if(triage.emergency){
+    return `<section class="triage-card emergency">
+      <p class="triage-label">選択内容から</p>
+      <p class="triage-number">119番</p>
+      <p class="triage-message">救急車を呼んでください</p>
+      <a class="triage-call" href="tel:119">☎ 119番へ電話</a>
+      ${purposeNote}
+      <div class="triage-reasons">
+        ${triage.reasons.map(reason =>
+          `<div>${escapeHtml(reason)}</div>`
+        ).join('')}
+      </div>
+    </section>
+    <h2 class="operator-heading-only">オペレーターに伝えること</h2>`;
+  }
+
+  return `<section class="triage-card consult">
+    <p class="triage-label">選択内容から</p>
+    <p class="triage-number">#7119</p>
+    <p class="triage-message">救急安心センターへ相談してください</p>
+
+    <div class="triage-consult-list">
+      <p class="triage-consult-list-title">こんなことを相談できます</p>
+      <ul>
+        <li>救急車を呼んだ方がいい？</li>
+        <li>今受診できる病院を知りたい</li>
+        <li>自宅で様子を見ても大丈夫？</li>
+        <li>応急処置の方法を知りたい</li>
+      </ul>
+    </div>
+
+    <a class="triage-call" href="tel:%237119">☎ #7119へ電話</a>
+    ${purposeNote}
+  </section>
+  <h2 class="operator-heading-only">オペレーターに伝えること</h2>`;
+}
+
+
+function clearGuidanceTimersForThanks(){
+  if(repeatTimer){
+    clearInterval(repeatTimer);
+    repeatTimer = null;
+  }
+
+  if(periodicTimer){
+    clearInterval(periodicTimer);
+    periodicTimer = null;
+  }
+
+  if(cueTimer){
+    clearInterval(cueTimer);
+    cueTimer = null;
+  }
+
+  if(oneMinuteTimer){
+    clearTimeout(oneMinuteTimer);
+    oneMinuteTimer = null;
+  }
+
+  if(exchangeWarningTimer){
+    clearTimeout(exchangeWarningTimer);
+    exchangeWarningTimer = null;
+  }
+
+  if(exchangeReadyTimer){
+    clearTimeout(exchangeReadyTimer);
+    exchangeReadyTimer = null;
+  }
+}
+
+async function finishWithThanks(closeAfter){
+  // 現在の案内だけを止め、メトロノームはお礼の音声が終わるまで継続します。
+  stopped = true;
+  guidanceRunning = false;
+  clearGuidanceTimersForThanks();
+
+  if('speechSynthesis' in window){
+    speechSynthesis.cancel();
+  }
+
+  // 中断した案内処理が終了する時間を確保します。
+  await new Promise(resolve => setTimeout(resolve, 120));
+
+  stopped = false;
+  await speakText('ご協力ありがとうございました。');
+
+  // お礼の音声終了後にメトロノームと残りの処理を停止します。
+  stopAll(!closeAfter);
+
+  if(!closeAfter) return;
+
+  // 個人情報をすぐ画面から消してから、ブラウザのタブを閉じます。
+  document.body.innerHTML = '';
+  document.documentElement.style.background = '#fff';
+
+  try{
+    window.open('', '_self');
+    window.close();
+  }catch(error){}
+
+  // ブラウザの制限で閉じられない場合も、個人情報は残しません。
+  setTimeout(() => {
+    try{
+      location.replace('about:blank');
+    }catch(error){}
+  }, 120);
+}
+
+async function closePrivatePage(){
+  await finishWithThanks(true);
+}
+
+
+function resultCloseSectionHtml(position = 'top'){
+  const positionClass = position === 'bottom' ? ' bottom' : '';
+
+  return `<section class="result-close-area${positionClass}">
+    <button
+      class="result-close-button"
+      type="button"
+      onclick="closePrivatePage()"
+      aria-label="この画面を閉じます">
+      閉じる
+    </button>
+    <p class="result-close-note">※ 個人情報保護のため必ず「閉じる」をクリックしてください</p>
+  </section>`;
+}
+
+function locationSectionHtml(forConsult = false){
+  const note = forConsult
+    ? '※ 119番へ切り替わった場合に利用します。スマートフォンが通信可能で、位置情報の利用が許可されている場合に自動取得します。'
+    : '※ スマートフォンが通信可能で、位置情報の利用が許可されている場合に自動取得します。';
+
+  return `<section class="sym-section" id="current-location-section">
+    <h2 class="sym-section-title">📍 現在地</h2>
+    <table class="location-table">
+      <tbody>
+        <tr>
+          <th scope="row">住所</th>
+          <td id="current-address" class="location-status">取得中…</td>
+        </tr>
+        <tr>
+          <th scope="row">建物名</th>
+          <td id="current-building" class="location-status">取得中…</td>
+        </tr>
+        <tr>
+          <th scope="row">周辺の目印</th>
+          <td id="current-landmarks" class="location-status">取得中…</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="location-note">${note}</p>
+  </section>`;
+}
+
+function medicalInfoSection(){
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">ℹ️ 医療情報</h2>
+    <table class="medical-info-table">
+      <tbody>
+        <tr>
+          <th scope="row">医療情報</th>
+          <td>ヘルプマークのハートにスマホをかざすと詳細な医療情報を取得できます。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>`;
+}
+
+function setLocationText(id,textValue){
+  const element = document.getElementById(id);
+  if(!element) return;
+  element.textContent = textValue;
+  element.classList.toggle('location-status', textValue.includes('取得') || textValue.includes('許可') || textValue.includes('通信'));
+}
+
+function distanceMeters(lat1,lon1,lat2,lon2){
+  const toRad = value => value * Math.PI / 180;
+  const earthRadius = 6371000;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) *
+    Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) ** 2;
+
+  return earthRadius * 2 * Math.atan2(Math.sqrt(a),Math.sqrt(1 - a));
+}
+
+function buildJapaneseAddress(address){
+  if(!address) return '';
+
+  const parts = [
+    address.province || address.state,
+    address.city || address.town || address.village || address.municipality,
+    address.city_district || address.suburb || address.quarter || address.neighbourhood,
+    address.road,
+    address.house_number
+  ].filter(Boolean);
+
+  return [...new Set(parts)].join('');
+}
+
+async function reverseGeocodeCurrentPosition(latitude,longitude){
+  const url =
+    'https://nominatim.openstreetmap.org/reverse' +
+    `?format=jsonv2&lat=${encodeURIComponent(latitude)}` +
+    `&lon=${encodeURIComponent(longitude)}` +
+    '&zoom=18&addressdetails=1&namedetails=1&accept-language=ja';
+
+  const response = await fetch(url,{
+    headers:{'Accept':'application/json'}
+  });
+
+  if(!response.ok){
+    throw new Error('住所取得に失敗しました');
+  }
+
+  return response.json();
+}
+
+async function fetchNearbyLandmarks(latitude,longitude){
+  const query = `
+    [out:json][timeout:12];
+    (
+      nwr(around:500,${latitude},${longitude})["name"]["amenity"];
+      nwr(around:500,${latitude},${longitude})["name"]["shop"];
+      nwr(around:500,${latitude},${longitude})["name"]["tourism"];
+      nwr(around:500,${latitude},${longitude})["name"]["leisure"];
+      nwr(around:500,${latitude},${longitude})["name"]["railway"="station"];
+      nwr(around:500,${latitude},${longitude})["name"]["public_transport"="station"];
+    );
+    out center 20;
+  `;
+
+  const url =
+    'https://overpass-api.de/api/interpreter?data=' +
+    encodeURIComponent(query);
+
+  const response = await fetch(url);
+  if(!response.ok){
+    throw new Error('目印取得に失敗しました');
+  }
+
+  const data = await response.json();
+
+  const landmarks = (data.elements || [])
+    .map(item => {
+      const lat = item.lat ?? item.center?.lat;
+      const lon = item.lon ?? item.center?.lon;
+      const name = item.tags?.name;
+      if(!name || lat == null || lon == null) return null;
+
+      return {
+        name,
+        distance:distanceMeters(latitude,longitude,lat,lon)
+      };
+    })
+    .filter(Boolean)
+    .sort((a,b) => a.distance - b.distance);
+
+  const uniqueNames = [];
+  for(const item of landmarks){
+    if(!uniqueNames.includes(item.name)){
+      uniqueNames.push(item.name);
+    }
+    if(uniqueNames.length === 3) break;
+  }
+
+  return uniqueNames;
+}
+
+async function updateCurrentLocation(){
+  if(!document.getElementById('current-location-section')) return;
+
+  if(!navigator.onLine){
+    setLocationText('current-address','通信できないため取得できません');
+    setLocationText('current-building','通信できないため取得できません');
+    setLocationText('current-landmarks','通信できないため取得できません');
+    return;
+  }
+
+  if(!('geolocation' in navigator)){
+    setLocationText('current-address','現在地を取得できません');
+    setLocationText('current-building','現在地を取得できません');
+    setLocationText('current-landmarks','現在地を取得できません');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(async position => {
+    const {latitude,longitude} = position.coords;
+
+    try{
+      const place = await reverseGeocodeCurrentPosition(latitude,longitude);
+      const address = buildJapaneseAddress(place.address) || place.display_name || '住所を取得できません';
+
+      const possibleBuilding =
+        place.address?.building ||
+        place.namedetails?.name ||
+        place.name ||
+        '';
+
+      setLocationText('current-address',address);
+      setLocationText(
+        'current-building',
+        possibleBuilding && !address.includes(possibleBuilding)
+          ? possibleBuilding
+          : '建物名を取得できません'
+      );
+    }catch(error){
+      setLocationText('current-address','住所を取得できません');
+      setLocationText('current-building','建物名を取得できません');
+    }
+
+    try{
+      const landmarks = await fetchNearbyLandmarks(latitude,longitude);
+      setLocationText(
+        'current-landmarks',
+        landmarks.length
+          ? landmarks.join('、')
+          : '周辺の目印を取得できません'
+      );
+    }catch(error){
+      setLocationText('current-landmarks','周辺の目印を取得できません');
+    }
+  }, error => {
+    const message = error.code === 1
+      ? '位置情報の利用が許可されていません'
+      : '現在地を取得できません';
+
+    setLocationText('current-address',message);
+    setLocationText('current-building',message);
+    setLocationText('current-landmarks',message);
+  },{
+    enableHighAccuracy:true,
+    timeout:15000,
+    maximumAge:60000
+  });
+}
+
+function showFinalSummary(){
+  const onsetValues = selectedOnsetValues();
+  const checkedSymptoms = [
+    ...symResults.querySelectorAll('input[type="checkbox"]:checked')
+  ];
+  const selectedValues = checkedSymptoms.map(box => box.value);
+  const triage = determineTriage(selectedValues);
+
+  const grouped = {};
+
+  checkedSymptoms.forEach(box => {
+    const key = box.dataset.category;
+    const side = box.dataset.side;
+    const prefix = box.dataset.prefix;
+    const value = prefix ? `${prefix}：${box.value}` : box.value;
+
+    if(!grouped[key]){
+      grouped[key] = {
+        person:[],
+        observer:[]
+      };
+    }
+
+    grouped[key][side].push(value);
+  });
+
+  const onsetHtml = onsetValues.length
+    ? `<section class="sym-section">
+        <h2 class="sym-section-title">⌚ 発生状況</h2>
+        <div class="sym-onset-result">
+          ${onsetValues.map(text =>
+            `<div class="sym-onset-bullet">・${escapeHtml(text)}</div>`
+          ).join('')}
+        </div>
+      </section>`
+    : '';
+
+  const categoryHtml = selectedSymptomCategories()
+    .filter(key => grouped[key])
+    .map(key => `
+      <section class="sym-section">
+        <h2 class="sym-section-title">${symptomData[key].title}</h2>
+        <div class="sym-column-heads">
+          <div class="sym-column-head">本人の訴え</div>
+          <div class="sym-column-head">周囲の判断</div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-cell">
+            ${summaryListHtml(grouped[key].person)}
+          </div>
+          <div class="sym-cell">
+            ${summaryListHtml(grouped[key].observer)}
+          </div>
+        </div>
+      </section>
+    `).join('');
+
+  symSummaryIntro.innerHTML = triage.emergency
+    ? 'ご協力ありがとうございます。'
+    : 'ご協力ありがとうございます。<br>チェックした症状を表示しました。<br>オペレーターに症状を伝え近隣の病院を聞いてください。';
+
+  const detailsHtml =
+    patientInfoSection() +
+    onsetHtml +
+    categoryHtml;
+
+  symSummary.innerHTML = triage.emergency
+    ? (
+        resultCloseSectionHtml('top') +
+        triageCardHtml(triage) +
+        locationSectionHtml(false) +
+        detailsHtml +
+        medicalInfoSection() +
+        resultCloseSectionHtml('bottom')
+      )
+    : (
+        resultCloseSectionHtml('top') +
+        triageCardHtml(triage) +
+        detailsHtml +
+        locationSectionHtml(true) +
+        resultCloseSectionHtml('bottom')
+      );
+
+  showScreen('screen-summary');
+  updateCurrentLocation();
+}
+
+symNextBtn.addEventListener('click',showSymptomResults);
+symDetailNextBtn.addEventListener('click',showFinalSummary);
+
+symBackBtn.addEventListener('click',() => {
+  showScreen('screen-symptoms');
+});
+
+symSummaryBackBtn.addEventListener('click',() => {
+  showScreen('screen-results');
+});
+</script>
+</body>
+</html>
