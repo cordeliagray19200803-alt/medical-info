@@ -80,6 +80,441 @@ body{
   font-weight:500;
 }
 
+
+/* 初期分岐・交通事故・呼吸確認 */
+.start-flow-btn{
+  display:block;
+  width:100%;
+  margin:0 0 16px;
+  padding:20px 18px;
+  border:3px solid #222;
+  border-radius:18px;
+  background:#fff;
+  color:#111;
+  text-align:left;
+  cursor:pointer;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+}
+.start-flow-btn:active,
+.flow-btn:active,
+.flow-back-btn:active{
+  transform:translateY(1px);
+}
+.start-flow-emergency{
+  border-color:#c90000;
+  background:#fff3f3;
+}
+.start-flow-traffic{
+  border-color:#163a63;
+  background:#f1f6fb;
+}
+.start-flow-other{
+  border-color:#333;
+}
+.start-flow-title{
+  display:block;
+  font-size:clamp(22px,5.7vw,30px);
+  font-weight:950;
+  line-height:1.45;
+}
+.start-flow-lines{
+  display:block;
+  margin-top:10px;
+  font-size:clamp(18px,4.7vw,23px);
+  font-weight:750;
+  line-height:1.65;
+}
+
+.flow-main{
+  width:min(100%,720px);
+  margin:0 auto;
+  padding:20px 18px 36px;
+}
+.flow-header{
+  margin-bottom:18px;
+  padding:16px;
+  border-radius:14px;
+  color:#fff;
+  text-align:center;
+  font-size:clamp(27px,7vw,34px);
+  font-weight:900;
+  line-height:1.35;
+}
+.flow-header-emergency{background:#c90000}
+.flow-header-traffic{background:#163a63}
+
+.flow-card{
+  padding:20px 18px;
+  border:3px solid #222;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:0 5px 14px rgba(0,0,0,.08);
+}
+.flow-card h1{
+  margin:0 0 16px;
+  text-align:center;
+  font-size:clamp(25px,6.5vw,36px);
+  line-height:1.45;
+  font-weight:950;
+}
+.flow-explanation{
+  margin:0 0 18px;
+  text-align:center;
+  font-size:clamp(18px,4.8vw,23px);
+  line-height:1.65;
+  font-weight:750;
+}
+.breathing-count{
+  display:grid;
+  place-items:center;
+  width:min(58vw,250px);
+  aspect-ratio:1;
+  margin:20px auto 24px;
+  border:8px solid #c90000;
+  border-radius:50%;
+  color:#c90000;
+  background:#fff8f8;
+  font-size:clamp(80px,25vw,150px);
+  line-height:1;
+  font-weight:950;
+}
+.flow-actions{
+  display:grid;
+  gap:14px;
+}
+.flow-btn{
+  width:100%;
+  min-height:78px;
+  padding:16px 14px;
+  border:3px solid #222;
+  border-radius:16px;
+  background:#fff;
+  color:#111;
+  font-size:clamp(20px,5.2vw,27px);
+  line-height:1.45;
+  font-weight:900;
+  cursor:pointer;
+}
+.flow-btn-emergency{
+  border-color:#c90000;
+  background:#fff0f0;
+  color:#9f0000;
+}
+.flow-btn-normal{
+  border-color:#08723f;
+  background:#f0fff7;
+  color:#075f36;
+}
+.flow-btn-consult{
+  border-color:#08723f;
+  background:#f0fff7;
+  color:#075f36;
+}
+.flow-btn-medical{
+  border-color:#1d568e;
+  background:#f1f7fd;
+  color:#154a7c;
+}
+.flow-btn-police{
+  border-color:#163a63;
+  background:#f1f6fb;
+  color:#163a63;
+}
+.flow-btn-note{
+  display:block;
+  margin-top:7px;
+  font-size:clamp(15px,3.8vw,18px);
+  line-height:1.5;
+  font-weight:700;
+}
+.flow-back-btn{
+  width:100%;
+  min-height:58px;
+  margin-top:18px;
+  border:2px solid #555;
+  border-radius:14px;
+  background:#fff;
+  color:#222;
+  font-size:clamp(17px,4.3vw,21px);
+  font-weight:850;
+  cursor:pointer;
+}
+
+.direct-result-card{
+  padding:20px 18px;
+  border:4px solid #222;
+  border-radius:22px;
+  background:#fff;
+  box-shadow:0 6px 16px rgba(0,0,0,.1);
+}
+.direct-result-card.emergency-result{border-color:#c90000}
+.direct-result-card.consult-result{border-color:#08723f}
+.direct-result-card.medical-result{border-color:#1d568e}
+.direct-result-card.police-result{border-color:#163a63}
+.direct-result-label{
+  margin:0 0 8px;
+  text-align:center;
+  font-size:clamp(18px,4.7vw,22px);
+  font-weight:850;
+}
+.direct-result-number{
+  margin:0;
+  text-align:center;
+  font-size:clamp(40px,11vw,62px);
+  line-height:1.25;
+  font-weight:950;
+}
+.direct-result-message{
+  margin:10px 0 18px;
+  text-align:center;
+  font-size:clamp(20px,5.2vw,27px);
+  line-height:1.55;
+  font-weight:900;
+}
+.direct-call-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.direct-call-grid.single{
+  grid-template-columns:1fr;
+}
+.direct-call-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:72px;
+  padding:12px 8px;
+  border-radius:15px;
+  color:#fff;
+  text-decoration:none;
+  text-align:center;
+  font-size:clamp(20px,5vw,27px);
+  line-height:1.35;
+  font-weight:950;
+}
+.direct-call-119{background:#c90000}
+.direct-call-110{background:#163a63}
+.direct-call-7119{background:#08723f}
+.direct-medical-box{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:72px;
+  padding:12px;
+  border-radius:15px;
+  background:#1d568e;
+  color:#fff;
+  text-align:center;
+  font-size:clamp(20px,5vw,27px);
+  line-height:1.35;
+  font-weight:950;
+}
+.result-warning{
+  margin:18px 0 0;
+  padding:15px;
+  border:3px solid #c90000;
+  border-radius:15px;
+  background:#fff5f5;
+  color:#111;
+  font-size:clamp(17px,4.4vw,21px);
+  line-height:1.65;
+  font-weight:800;
+}
+.result-note{
+  margin:18px 0 0;
+  padding:15px;
+  border:2px solid #555;
+  border-radius:15px;
+  background:#f8f8f8;
+  font-size:clamp(17px,4.4vw,21px);
+  line-height:1.65;
+  font-weight:750;
+}
+
+
+.traffic-symptom-guide{
+  margin:0 0 16px;
+  padding:15px 16px;
+  border:3px solid #163a63;
+  border-radius:15px;
+  background:#f1f6fb;
+  color:#111;
+  font-size:clamp(18px,4.7vw,23px);
+  line-height:1.65;
+  font-weight:850;
+}
+.traffic-result-heading{
+  margin:18px 0 10px;
+  padding:12px 14px;
+  border-radius:13px;
+  background:#163a63;
+  color:#fff;
+  font-size:clamp(21px,5.4vw,27px);
+  line-height:1.4;
+  font-weight:950;
+}
+.traffic-result-note{
+  margin:0 0 14px;
+  padding:12px 14px;
+  border:2px solid #163a63;
+  border-radius:13px;
+  background:#f1f6fb;
+  color:#111;
+  font-size:clamp(17px,4.3vw,21px);
+  line-height:1.6;
+  font-weight:800;
+}
+
+.supplemental-details-panel{
+  margin-top:16px;
+}
+.temperature-inline-panel{
+  margin-top:0;
+  margin-bottom:18px;
+}
+.supplemental-radio-list,
+.supplemental-check-list{
+  display:grid;
+  gap:10px;
+}
+.supplemental-radio-list label,
+.supplemental-check-list label{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:12px;
+  border:2px solid #555;
+  border-radius:12px;
+  background:#fff;
+  font-size:clamp(17px,4.4vw,21px);
+  line-height:1.5;
+  font-weight:800;
+}
+.supplemental-radio-list input,
+.supplemental-check-list input{
+  width:24px;
+  height:24px;
+  margin-top:2px;
+  flex:0 0 auto;
+}
+.supplemental-field{
+  display:block;
+  margin-top:14px;
+}
+.supplemental-field span{
+  display:block;
+  margin-bottom:6px;
+  font-size:clamp(17px,4.4vw,21px);
+  font-weight:900;
+}
+.supplemental-field input{
+  width:100%;
+  min-height:52px;
+  padding:10px 12px;
+  border:2px solid #555;
+  border-radius:11px;
+  background:#fff;
+  color:#111;
+  font-size:clamp(17px,4.4vw,21px);
+}
+.supplemental-note{
+  margin:12px 0 0;
+  padding:12px;
+  border-radius:11px;
+  background:#f4f4f4;
+  font-size:clamp(16px,4.1vw,20px);
+  line-height:1.6;
+  font-weight:750;
+}
+.medication-summary-table{
+  width:100%;
+  border-collapse:collapse;
+}
+.medication-summary-table th,
+.medication-summary-table td{
+  padding:10px;
+  border:1px solid #bbb;
+  text-align:left;
+  vertical-align:top;
+  font-size:clamp(16px,4.1vw,20px);
+  line-height:1.55;
+}
+.medication-summary-table th{
+  width:34%;
+  background:#f2f2f2;
+}
+.poison-call-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+.poison-call-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:68px;
+  padding:10px;
+  border-radius:13px;
+  background:#5b2c83;
+  color:#fff;
+  text-align:center;
+  text-decoration:none;
+  font-size:clamp(17px,4.2vw,21px);
+  line-height:1.4;
+  font-weight:900;
+}
+.poison-warning{
+  margin:14px 0 0;
+  padding:12px;
+  border:3px solid #c90000;
+  border-radius:12px;
+  background:#fff5f5;
+  font-size:clamp(16px,4.1vw,20px);
+  line-height:1.6;
+  font-weight:800;
+}
+@media(max-width:460px){
+  .poison-call-grid{grid-template-columns:1fr}
+}
+
+/* 心臓マッサージ画面：交通事故時だけ110番を119番の隣に表示 */
+.call-row.traffic-mode{
+  grid-template-columns:1fr 1fr 1fr;
+}
+.call-row.traffic-mode .call{
+  padding:8px;
+  font-size:clamp(19px,4.8vw,31px);
+}
+.call-police{
+  background:linear-gradient(#244f7c,#163a63);
+}
+
+.triage-worsening-note{
+  margin:16px 0 0;
+  padding:14px;
+  border:3px solid #c90000;
+  border-radius:14px;
+  background:#fff5f5;
+  color:#111;
+  font-size:clamp(16px,4vw,20px);
+  line-height:1.6;
+  font-weight:800;
+}
+
+@media(max-width:460px){
+  .direct-call-grid{
+    grid-template-columns:1fr 1fr;
+  }
+  .call-row.traffic-mode{
+    grid-template-columns:1fr 1fr;
+  }
+  .call-row.traffic-mode .aed-panel{
+    grid-column:1 / -1;
+  }
+}
+
 /* 心臓マッサージ */
 #screen-emergency{background:var(--soft-green)}
 .emergency-main{
@@ -315,17 +750,25 @@ body{
   accent-color:#d32f2f;
 }
 .sym-category-list{
-  border-top:2px solid #d32f2f;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:10px;
+  width:100%;
+  max-width:100%;
 }
 .sym-category{
   display:flex;
   align-items:center;
-  gap:14px;
+  min-width:0;
   min-height:62px;
-  padding:14px 4px;
-  border-bottom:2px solid #d32f2f;
+  gap:8px;
+  padding:12px 9px;
+  border:2px solid #d32f2f;
+  border-radius:14px;
   cursor:pointer;
-  font-size:clamp(19px,5vw,25px);
+  overflow-wrap:anywhere;
+  font-size:clamp(17px,4.3vw,22px);
+  line-height:1.3;
   font-weight:800;
 }
 .sym-category input,
@@ -333,7 +776,13 @@ body{
   flex:0 0 auto;
   width:27px;
   height:27px;
+  max-width:27px;
   accent-color:#d32f2f;
+}
+.sym-category input{
+  width:24px;
+  height:24px;
+  max-width:24px;
 }
 .sym-actions{
   display:grid;
@@ -516,6 +965,56 @@ body{
 .triage-card.consult{
   background:linear-gradient(#168e58,#08723f);
 }
+.triage-card.clinic{
+  background:linear-gradient(#2d73b9,#1d568e);
+}
+.triage-card.clinic .triage-call{
+  color:#1d568e;
+}
+.traffic-accident-card{
+  margin:0 0 22px;
+  padding:18px;
+  border:3px solid #1f2937;
+  border-radius:20px;
+  background:#fff;
+  color:#111;
+  box-shadow:0 6px 16px rgba(0,0,0,.12);
+}
+.traffic-accident-title{
+  margin:0 0 8px;
+  color:#b00020;
+  text-align:center;
+  font-size:clamp(23px,5.8vw,32px);
+  line-height:1.35;
+  font-weight:950;
+}
+.traffic-accident-message{
+  margin:0 0 14px;
+  font-size:clamp(16px,4.2vw,21px);
+  line-height:1.65;
+  font-weight:850;
+}
+.traffic-call-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.traffic-call{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:58px;
+  border-radius:14px;
+  color:#fff;
+  text-decoration:none;
+  font-size:clamp(20px,5vw,27px);
+  font-weight:950;
+}
+.traffic-call-119{background:#c90000}
+.traffic-call-110{background:#163a63}
+@media(max-width:460px){
+  .traffic-call-row{grid-template-columns:1fr}
+}
 .triage-label{
   margin:0 0 5px;
   font-size:clamp(16px,4.2vw,21px);
@@ -550,6 +1049,24 @@ body{
 }
 .triage-card.consult .triage-call{
   color:#08723f;
+}
+.triage-emergency-call-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.triage-call-110{
+  color:#163a63 !important;
+}
+@media(max-width:460px){
+  .triage-emergency-call-row{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .triage-emergency-call-row .triage-call{
+    padding:8px 5px;
+    font-size:clamp(16px,4.2vw,22px);
+  }
 }
 .privacy-close{
   display:flex;
@@ -800,32 +1317,159 @@ body{
   }
   .num{width:46px;height:46px;font-size:27px}
 }
+
+
+.location-map-wrap{margin-top:14px;border:1px solid #dedede;border-radius:14px;overflow:hidden;background:#fff}
+.location-map-title{padding:10px 12px;background:#f8f9fa;border-bottom:1px solid #dedede;font-weight:900}
+.location-map{height:240px}
+.location-info{padding:12px}
+.location-info-row{display:grid;grid-template-columns:90px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid #dedede}
+.location-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px 12px}
+.location-btn{min-height:48px;border-radius:12px;border:2px solid #135da5;background:#fff;color:#135da5;font-weight:900}
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 
 <section id="screen-start" class="screen active">
   <main class="start-main">
-    <div class="start-header">⏱️ 発生状況</div>
-    <p class="lead">当てはまるものを選択してください。</p>
+    <div class="start-header">今の状態を選んでください</div>
 
-    <label class="choice">
-      <input type="checkbox" class="emergency-check">
-      <span class="label-text">10カウントしても呼吸が確認できない</span>
-    </label>
-
-    <label class="choice">
-      <input type="checkbox" class="emergency-check">
-      <span class="label-text">10カウントしても胸やお腹が動かない</span>
-    </label>
-
-    <label class="choice">
-      <input id="not-emergency" type="checkbox">
-      <span class="label-text">
-        上記以外
-        <span class="subtext">（呼吸をしていて、胸やおなかが上下に動いている）</span>
+    <button id="start-emergency-btn"
+            class="start-flow-btn start-flow-emergency"
+            type="button">
+      <span class="start-flow-title">🚨 意識・呼吸がない・分からない</span>
+      <span class="start-flow-lines">
+        ・声かけに反応しない<br>
+        ・胸やお腹が動かない<br>
+        ・呼吸していない・弱い・分からない
       </span>
-    </label>
+    </button>
+
+    <button id="start-traffic-btn"
+            class="start-flow-btn start-flow-traffic"
+            type="button">
+      <span class="start-flow-title">🚗 交通事故に遭った・目撃した</span>
+    </button>
+
+    <button id="start-other-btn"
+            class="start-flow-btn start-flow-other"
+            type="button">
+      <span class="start-flow-title">上記以外</span>
+      <span class="start-flow-lines">
+        意識があり、普段どおり呼吸している
+      </span>
+    </button>
+  </main>
+</section>
+
+<section id="screen-breathing-check" class="screen">
+  <main class="flow-main">
+    <div class="flow-header flow-header-emergency">呼吸を確認してください</div>
+
+    <section class="flow-card">
+      <h1>10数える間、<br>胸やお腹の動きを確認</h1>
+      <p class="flow-explanation">
+        胸やお腹が、普段どおり動いているか確認してください。
+      </p>
+
+      <div id="breathing-count"
+           class="breathing-count"
+           aria-live="assertive"
+           aria-label="呼吸確認のカウント">10</div>
+
+      <div id="breathing-result-actions"
+           class="flow-actions"
+           hidden>
+        <button id="breathing-abnormal-btn"
+                class="flow-btn flow-btn-emergency"
+                type="button">
+          普段どおりの呼吸がない<br>
+          弱い・分からない
+        </button>
+
+        <button id="breathing-normal-btn"
+                class="flow-btn flow-btn-normal"
+                type="button">
+          普段どおりの呼吸がある
+        </button>
+      </div>
+    </section>
+
+    <button id="breathing-back-btn"
+            class="flow-back-btn"
+            type="button">前の画面へ戻る</button>
+  </main>
+</section>
+
+<section id="screen-traffic-consciousness" class="screen">
+  <main class="flow-main">
+    <div class="flow-header flow-header-traffic">🚗 交通事故</div>
+
+    <section class="flow-card">
+      <h1>本人に意識はありますか？</h1>
+
+      <div class="flow-actions">
+        <button id="traffic-conscious-btn"
+                class="flow-btn flow-btn-normal"
+                type="button">
+          意識がある<br>
+          受け答えができる
+        </button>
+
+        <button id="traffic-unconscious-btn"
+                class="flow-btn flow-btn-emergency"
+                type="button">
+          意識がない<br>
+          反応がない・分からない
+        </button>
+      </div>
+    </section>
+
+    <button id="traffic-consciousness-back-btn"
+            class="flow-back-btn"
+            type="button">最初の画面へ戻る</button>
+  </main>
+</section>
+
+<section id="screen-traffic-state" class="screen">
+  <main class="flow-main">
+    <div class="flow-header flow-header-traffic">🚗 交通事故</div>
+
+    <section class="flow-card">
+      <h1>けが・痛み・体調不良がありますか？</h1>
+
+      <div class="flow-actions">
+        <button id="traffic-has-symptom-btn"
+                class="flow-btn flow-btn-consult"
+                type="button">
+          ある・分からない
+          <span class="flow-btn-note">症状を確認する</span>
+        </button>
+
+        <button id="traffic-no-symptom-branch-btn"
+                class="flow-btn flow-btn-police"
+                type="button">
+          ない
+          <span class="flow-btn-note">110番へ</span>
+        </button>
+      </div>
+    </section>
+
+    <button id="traffic-state-back-btn"
+            class="flow-back-btn"
+            type="button">前の画面へ戻る</button>
+  </main>
+</section>
+
+<section id="screen-direct-result" class="screen">
+  <main class="flow-main">
+    <div id="direct-result-content"></div>
+
+    <button id="direct-result-home-btn"
+            class="flow-back-btn"
+            type="button">最初の画面へ戻る</button>
   </main>
 </section>
 
@@ -866,9 +1510,17 @@ body{
       </div>
     </section>
 
-    <div class="call-row">
+    <div id="emergency-call-row" class="call-row">
       <a id="call119" class="call" href="tel:119" aria-label="119番へ電話">
         ☎ 119番へ電話
+      </a>
+
+      <a id="call110-emergency"
+         class="call call-police"
+         href="tel:110"
+         aria-label="110番へ電話"
+         hidden>
+        ☎ 110番へ電話
       </a>
 
       <div class="aed-panel">
@@ -918,17 +1570,37 @@ body{
 
 <section id="screen-symptoms" class="screen">
   <main class="sym-main">
-    <div class="sym-header">症状を選択してください</div>
-    <p class="sym-lead">当てはまるものをすべて選択してください。</p>
+    <div id="sym-screen-header" class="sym-header">症状を選択してください</div>
+    <p id="sym-screen-lead" class="sym-lead">当てはまるものをすべて選択してください。</p>
+
+    <div id="traffic-symptom-guide"
+         class="traffic-symptom-guide"
+         hidden>
+      本人が入力するか、本人に聞いて周囲の方がチェックしてください。
+    </div>
 
     <div class="sym-onset">
-      <div class="sym-onset-title">⌚ 発生状況</div>
+      <div class="sym-onset-title">⌚ 発生状況・症状の変化</div>
       <div class="sym-onset-options">
-        <label><input type="checkbox" class="onset-choice" value="分からない">分からない</label>
-        <label><input type="checkbox" class="onset-choice" value="急に起こった">急に起こった</label>
-        <label><input type="checkbox" class="onset-choice" value="徐々に起こった">徐々に起こった</label>
+        <label><input type="radio" name="condition-choice" class="condition-choice" value="急に起こった・急に悪化した">急に起こった・急に悪化した</label>
+        <label><input type="radio" name="condition-choice" class="condition-choice" value="徐々に起こった・徐々に悪化した">徐々に起こった・徐々に悪化した</label>
+        <label><input type="radio" name="condition-choice" class="condition-choice" value="普段からある症状と同じ">普段からある症状と同じ</label>
+        <label><input type="radio" name="condition-choice" class="condition-choice" value="分からない">分からない</label>
       </div>
     </div>
+
+    <section id="temperature-details-panel"
+             class="sym-section supplemental-details-panel temperature-inline-panel">
+      <h2 class="sym-section-title">🌡️ 体温・体の熱さ</h2>
+      <div class="supplemental-radio-list">
+        <label><input type="radio" name="temperature-choice" value="測っていない・熱さは分からない">測っていない・熱さは分からない</label>
+        <label><input type="radio" name="temperature-choice" value="おでこや首を触ると異常に熱い">おでこや首を触ると異常に熱い</label>
+        <label><input type="radio" name="temperature-choice" value="37.5～37.9℃">37.5～37.9℃</label>
+        <label><input type="radio" name="temperature-choice" value="38.0～39.9℃">38.0～39.9℃</label>
+        <label><input type="radio" name="temperature-choice" value="40.0℃以上">40.0℃以上</label>
+      </div>
+      <p class="supplemental-note">体温を測れない場合も、体の熱さや意識・反応・呼吸・水分が飲めるかで判定します。</p>
+    </section>
 
     <div class="sym-category-list">
       <label class="sym-category"><input type="checkbox" value="eye">👁️ 目</label>
@@ -953,6 +1625,39 @@ body{
     <p class="sym-results-intro">最初の画面で選択した項目だけを表示しています。</p>
 
     <div id="sym-results"></div>
+
+    <section id="medication-details-panel"
+             class="sym-section supplemental-details-panel"
+             hidden>
+      <h2 class="sym-section-title">💊 薬の名前・空き瓶・お薬手帳</h2>
+
+      <div class="supplemental-radio-list">
+        <label><input type="radio" name="medicine-known" value="薬の名前が分かる">薬の名前が分かる</label>
+        <label><input type="radio" name="medicine-known" value="何を飲んだか分からない">何を飲んだか分からない</label>
+      </div>
+
+      <label class="supplemental-field">
+        <span>薬の名前</span>
+        <input id="medicine-name-input" type="text" autocomplete="off" placeholder="容器・箱・薬のシートで確認">
+      </label>
+
+      <label class="supplemental-field">
+        <span>飲んだ量</span>
+        <input id="medicine-amount-input" type="text" autocomplete="off" placeholder="例：3錠／分からない">
+      </label>
+
+      <label class="supplemental-field">
+        <span>飲んだ時刻</span>
+        <input id="medicine-time-input" type="text" autocomplete="off" placeholder="例：14時ごろ／分からない">
+      </label>
+
+      <div class="supplemental-check-list">
+        <label><input id="medicine-container-check" type="checkbox">空き瓶・空き箱・薬のシートがある</label>
+        <label><input id="medicine-notebook-check" type="checkbox">お薬手帳がある</label>
+        <label><input id="medicine-multiple-check" type="checkbox">複数の薬を飲んだ可能性がある</label>
+        <label><input id="medicine-alcohol-check" type="checkbox">酒と一緒に飲んだ可能性がある</label>
+      </div>
+    </section>
 
     <div class="sym-sticky-actions sym-result-actions">
       <button id="sym-detail-next-btn" class="sym-btn sym-btn-primary" type="button" disabled>次へ</button>
@@ -999,7 +1704,66 @@ const status = document.getElementById('status');
 const stopBtn = document.getElementById('stopBtn');
 const cprBox = document.getElementById('cprBox');
 const call119 = document.getElementById('call119');
+const call110Emergency = document.getElementById('call110-emergency');
+const emergencyCallRow = document.getElementById('emergency-call-row');
 const emergencyHero = document.getElementById('emergencyHero');
+
+const startEmergencyBtn = document.getElementById('start-emergency-btn');
+const startTrafficBtn = document.getElementById('start-traffic-btn');
+const startOtherBtn = document.getElementById('start-other-btn');
+
+const breathingCount = document.getElementById('breathing-count');
+const breathingResultActions =
+  document.getElementById('breathing-result-actions');
+const breathingAbnormalBtn =
+  document.getElementById('breathing-abnormal-btn');
+const breathingNormalBtn =
+  document.getElementById('breathing-normal-btn');
+const breathingBackBtn =
+  document.getElementById('breathing-back-btn');
+
+const trafficConsciousBtn =
+  document.getElementById('traffic-conscious-btn');
+const trafficUnconsciousBtn =
+  document.getElementById('traffic-unconscious-btn');
+const trafficConsciousnessBackBtn =
+  document.getElementById('traffic-consciousness-back-btn');
+const trafficStateBackBtn =
+  document.getElementById('traffic-state-back-btn');
+
+const directResultContent =
+  document.getElementById('direct-result-content');
+const directResultHomeBtn =
+  document.getElementById('direct-result-home-btn');
+
+const symScreenHeader =
+  document.getElementById('sym-screen-header');
+const symScreenLead =
+  document.getElementById('sym-screen-lead');
+const trafficSymptomGuide =
+  document.getElementById('traffic-symptom-guide');
+const temperatureDetailsPanel =
+  document.getElementById('temperature-details-panel');
+const medicationDetailsPanel =
+  document.getElementById('medication-details-panel');
+const medicineNameInput =
+  document.getElementById('medicine-name-input');
+const medicineAmountInput =
+  document.getElementById('medicine-amount-input');
+const medicineTimeInput =
+  document.getElementById('medicine-time-input');
+const medicineContainerCheck =
+  document.getElementById('medicine-container-check');
+const medicineNotebookCheck =
+  document.getElementById('medicine-notebook-check');
+const medicineMultipleCheck =
+  document.getElementById('medicine-multiple-check');
+const medicineAlcoholCheck =
+  document.getElementById('medicine-alcohol-check');
+
+let breathingCheckContext = 'general';
+let breathingCountdownTimer = null;
+let symptomFlowContext = 'general';
 
 function showScreen(id){
   screens.forEach(screen => screen.classList.remove('active'));
@@ -1527,29 +2291,316 @@ function stopAll(updateDisplay = true){
   }
 }
 
-function activateEmergency(){
-  /* This function is called directly by the user's checkbox tap. */
+function activateEmergency(isTrafficAccident = false){
+  /* This function is called directly by the user's button tap. */
   unlockMobileAudio();
   primeMobileSpeech();
+
+  emergencyCallRow.classList.toggle(
+    'traffic-mode',
+    isTrafficAccident
+  );
+  call110Emergency.hidden = !isTrafficAccident;
+
   showScreen('screen-emergency');
   called119 = false;
   call119.textContent = '☎ 119番へ電話';
   startGuidance();
 }
 
-document.querySelectorAll('.emergency-check').forEach(box => {
-  box.addEventListener('change', () => {
-    if(box.checked){
-      activateEmergency();
+function clearBreathingCountdown(){
+  if(breathingCountdownTimer){
+    clearInterval(breathingCountdownTimer);
+    breathingCountdownTimer = null;
+  }
+}
+
+function startBreathingCheck(context){
+  breathingCheckContext = context;
+  clearBreathingCountdown();
+
+  breathingResultActions.hidden = true;
+  breathingCount.textContent = '10';
+  breathingCount.setAttribute(
+    'aria-label',
+    '呼吸確認、10秒'
+  );
+
+  showScreen('screen-breathing-check');
+
+  let count = 10;
+
+  breathingCountdownTimer = setInterval(() => {
+    count -= 1;
+
+    if(count > 0){
+      breathingCount.textContent = String(count);
+      breathingCount.setAttribute(
+        'aria-label',
+        `呼吸確認、残り${count}秒`
+      );
+      return;
     }
-  });
+
+    clearBreathingCountdown();
+    breathingCount.textContent = '確認';
+    breathingCount.setAttribute(
+      'aria-label',
+      '呼吸確認が終わりました'
+    );
+    breathingResultActions.hidden = false;
+  },1000);
+}
+
+function directCallButton(number,label,className){
+  const href = number === '#7119'
+    ? 'tel:%237119'
+    : `tel:${number}`;
+
+  return `<a class="direct-call-btn ${className}"
+             href="${href}">
+    ☎ ${label}
+  </a>`;
+}
+
+function showDirectResult(type){
+  let html = '';
+
+  if(type === 'unconscious-breathing'){
+    html = `<section class="direct-result-card emergency-result">
+      <p class="direct-result-label">意識が確認できません</p>
+      <p class="direct-result-number">119番</p>
+      <p class="direct-result-message">
+        救急車を呼んでください
+      </p>
+      <div class="direct-call-grid single">
+        ${directCallButton(
+          '119',
+          '119番へ電話',
+          'direct-call-119'
+        )}
+      </div>
+      <div class="result-note">
+        呼吸を確認し続けながら、救急隊を待ってください。
+      </div>
+    </section>`;
+  }
+
+  if(type === 'traffic-unconscious-breathing'){
+    html = `<section class="direct-result-card emergency-result">
+      <p class="direct-result-label">
+        交通事故・意識が確認できません
+      </p>
+      <p class="direct-result-number">119番・110番</p>
+      <p class="direct-result-message">
+        救急と警察へ通報してください
+      </p>
+      <div class="direct-call-grid">
+        ${directCallButton(
+          '119',
+          '119番へ電話',
+          'direct-call-119'
+        )}
+        ${directCallButton(
+          '110',
+          '110番へ電話',
+          'direct-call-110'
+        )}
+      </div>
+      <div class="result-note">
+        呼吸を確認し続けながら、救急隊を待ってください。
+      </div>
+    </section>`;
+  }
+
+  if(type === 'traffic-emergency'){
+    html = `<section class="direct-result-card emergency-result">
+      <p class="direct-result-label">交通事故・重い症状</p>
+      <p class="direct-result-number">119番・110番</p>
+      <p class="direct-result-message">
+        救急と警察へ通報してください
+      </p>
+      <div class="direct-call-grid">
+        ${directCallButton(
+          '119',
+          '119番へ電話',
+          'direct-call-119'
+        )}
+        ${directCallButton(
+          '110',
+          '110番へ電話',
+          'direct-call-110'
+        )}
+      </div>
+    </section>`;
+  }
+
+  if(type === 'traffic-consult'){
+    html = `<section class="direct-result-card consult-result">
+      <p class="direct-result-label">
+        救急車が必要か分からない
+      </p>
+      <p class="direct-result-number">#7119・110番</p>
+      <p class="direct-result-message">
+        救急相談と警察へ連絡してください
+      </p>
+      <div class="direct-call-grid">
+        ${directCallButton(
+          '#7119',
+          '#7119へ相談',
+          'direct-call-7119'
+        )}
+        ${directCallButton(
+          '110',
+          '110番へ電話',
+          'direct-call-110'
+        )}
+      </div>
+      <div class="result-warning">
+        ⚠️ 症状が悪化した場合<br>
+        すぐに医療機関を受診してください。<br>
+        急激な悪化や緊急性の高い症状がある場合は、
+        119番へ通報してください。
+      </div>
+    </section>`;
+  }
+
+  if(type === 'traffic-medical'){
+    html = `<section class="direct-result-card medical-result">
+      <p class="direct-result-label">自力で受診できる状態</p>
+      <p class="direct-result-number">医療機関・110番</p>
+      <p class="direct-result-message">
+        医療機関を受診し、警察へ通報してください
+      </p>
+      <div class="direct-call-grid">
+        <div class="direct-medical-box">
+          🏥 医療機関を受診
+        </div>
+        ${directCallButton(
+          '110',
+          '110番へ電話',
+          'direct-call-110'
+        )}
+      </div>
+      <div class="result-warning">
+        事故に遭った本人は運転せず、
+        家族・知人・タクシーなどで受診してください。
+      </div>
+    </section>`;
+  }
+
+  if(type === 'traffic-police'){
+    html = `<section class="direct-result-card police-result">
+      <p class="direct-result-label">
+        けが・痛み・体調不良がない
+      </p>
+      <p class="direct-result-number">110番</p>
+      <p class="direct-result-message">
+        交通事故として警察へ通報してください
+      </p>
+      <div class="direct-call-grid single">
+        ${directCallButton(
+          '110',
+          '110番へ電話',
+          'direct-call-110'
+        )}
+      </div>
+      <div class="result-warning">
+        後から痛みや体調の変化が出た場合は、
+        医療機関または#7119へ相談してください。<br>
+        急激に悪化した場合は、119番へ通報してください。
+      </div>
+    </section>`;
+  }
+
+  if(type.startsWith('traffic-')){
+    html += locationSectionHtml(
+      type !== 'traffic-emergency' &&
+      type !== 'traffic-unconscious-breathing'
+    );
+    html += patientInfoSection();
+  }
+
+  directResultContent.innerHTML = html;
+  showScreen('screen-direct-result');
+
+  if(type.startsWith('traffic-')){
+    updateCurrentLocation();
+  }
+}
+
+startEmergencyBtn.addEventListener('click',() => {
+  stopAll(false);
+  startBreathingCheck('general');
 });
 
-document.getElementById('not-emergency').addEventListener('change', event => {
-  if(event.target.checked){
-    stopAll(false);
-    showScreen('screen-symptoms');
+startTrafficBtn.addEventListener('click',() => {
+  stopAll(false);
+  showScreen('screen-traffic-consciousness');
+});
+
+startOtherBtn.addEventListener('click',() => {
+  stopAll(false);
+  configureSymptomFlow('general');
+  showScreen('screen-symptoms');
+});
+
+trafficConsciousBtn.addEventListener('click',() => {
+  showScreen('screen-traffic-state');
+});
+
+trafficUnconsciousBtn.addEventListener('click',() => {
+  startBreathingCheck('traffic');
+});
+
+breathingAbnormalBtn.addEventListener('click',() => {
+  clearBreathingCountdown();
+  activateEmergency(breathingCheckContext === 'traffic');
+});
+
+breathingNormalBtn.addEventListener('click',() => {
+  clearBreathingCountdown();
+
+  if(breathingCheckContext === 'traffic'){
+    showDirectResult('traffic-unconscious-breathing');
+    return;
   }
+
+  showDirectResult('unconscious-breathing');
+});
+
+breathingBackBtn.addEventListener('click',() => {
+  clearBreathingCountdown();
+
+  if(breathingCheckContext === 'traffic'){
+    showScreen('screen-traffic-consciousness');
+    return;
+  }
+
+  showScreen('screen-start');
+});
+
+trafficConsciousnessBackBtn.addEventListener('click',() => {
+  showScreen('screen-start');
+});
+
+trafficStateBackBtn.addEventListener('click',() => {
+  showScreen('screen-traffic-consciousness');
+});
+
+document.getElementById('traffic-has-symptom-btn')
+  .addEventListener('click',() => {
+    configureSymptomFlow('traffic');
+    showScreen('screen-symptoms');
+  });
+
+document.getElementById('traffic-no-symptom-branch-btn')
+  .addEventListener('click',() => {
+    showDirectResult('traffic-police');
+  });
+
+directResultHomeBtn.addEventListener('click',() => {
+  showScreen('screen-start');
 });
 
 call119.addEventListener('click', () => {
@@ -1605,7 +2656,7 @@ const symptomData = {
     rows:[
       {person:['左半身の感覚がない'],observer:['左側を触られても気づかない','左側をぶつけても気づかない']},
       {person:['左手が動かしにくい'],observer:['左手がだらんとしている','物を落とす']},
-      {person:['歩きにくい'],observer:['長時間立てていない']},
+      {person:['歩きにくい','歩けない','自力で安全に移動できない'],observer:['長時間立てていない']},
       {person:['立てない'],observer:['支えがあっても立てない']},
       {person:['左手足にしびれがある'],observer:['力が入っていないように見える']}
     ]
@@ -1613,42 +2664,40 @@ const symptomData = {
   face:{
     title:'🙂 顔',
     rows:[
-      {person:['左側の顔がしびれる'],observer:['口元が動きにくい','顔の左右差がある']}
+      {person:['左右どちらかの顔が痺れている','言葉が出にくい','ろれつが回らない'],observer:['口元が動きにくい','顔の左右差がある','話し方がおかしい','言葉が聞き取りにくい']}
     ]
   },
   head:{
     title:'😵 頭',
     rows:[
       {person:['頭が痛い','突然の激しい頭痛'],observer:['頭を押さえている']},
+      {person:[{label:'服用状況',group:true}],observer:['痛み止めを服用した']},
       {person:['頭を打った'],observer:['頭に出血や大きなたんこぶがある']},
-      {person:[{label:'応急処置',group:true}],observer:['痛み止めの服用']},
       {person:['めまいがする'],observer:['ふらついている']},
-      {person:['集中できない'],observer:['反応が遅い']},
-      {person:['無反応'],observer:['声をかけても反応がない','肩をたたいても反応がない']}
+      {person:['ぼーっとする','意識がもうろうとする'],observer:['反応が鈍い','返事がおかしい','ぐったりしている']}
     ]
   },
   breath:{
     title:'😮‍💨 息',
     rows:[
       {person:['のどに物が詰まった','飲み込みにくい'],observer:['声が出せない','苦しそうに首を押さえている','水や食べ物が飲み込めない','むせている']},
-      {person:['咳が出る'],observer:['咳き込んでいる']},
-      {person:['息苦しい'],observer:['呼吸が苦しそう']}
+      {person:['咳が出る','咳が止まらない'],observer:['咳き込んでいる','激しく咳き込んでいる']},
+      {person:['息苦しい','ゼーゼー・ヒューヒューする'],observer:['呼吸が苦しそう','呼吸時にゼーゼー・ヒューヒュー音がする']}
     ]
   },
   body:{
     title:'🤢 お腹・体',
     rows:[
-      {person:['発熱がある','悪寒がする'],observer:['体が熱い']},
-      {person:['のどが痛い'],observer:[]},
+      {person:['熱がある・熱っぽい','悪寒がする'],observer:['体が熱い']},
+      {person:['のどが痛い'],observer:['声がかすれている','つばが飲み込みにくそう']},
       {person:['吐き気','吐き気が非常に強い','何度も吐いている'],observer:['気分が悪そう','短時間に何度も吐いている']},
       {person:[{label:'応急処置',group:true}],observer:['エチケット袋・水の提供']},
       {person:['下痢をしている'],observer:[]},
-      {person:['水分が飲めない','強いのどの渇き'],observer:['水分が飲めていない']},
+      {person:['水分が飲めない','強いのどの渇き'],observer:['水分が飲めていない','口や唇が乾いている','尿が少ない・分からない','自力で水分を飲めない']},
       {person:['筋肉痛・関節痛がある'],observer:[]},
       {person:['突然の強い胸痛・腹痛'],observer:['胸を押さえている','お腹を押さえている']},
       {person:['血を吐いた','血便・黒い便が出た'],observer:['吐いた物に血が混じっている','赤い便や黒い便が出ている']},
-      {person:['体がだるい'],observer:['動けなくなる','休んでいる','冷や汗']},
-      {person:[],observer:['汗が異常に多い','暑いのに汗が出ていない']}
+      {person:['体がだるい'],observer:['動けなくなる','休んでいる','冷や汗','汗が異常に多い','暑いのに汗が出ていない']}
     ]
   },
   skin:{
@@ -1664,19 +2713,17 @@ const symptomData = {
     title:'❓ その他',
     rows:[
       {person:['強い痛みがある'],observer:['腕・手を押さえている','足を押さえている','腰・背中を押さえている']},
-      {person:[{label:'応急処置',group:true}],observer:['痛み止めを使用したと話している']},
-      {person:['けいれんしている'],observer:['意識がある','意識がない','全身がけいれんしている','手足だけがけいれんしている','けいれんが止まらない','けいれん後も意識が戻らない']},
+      {person:['けいれんしている'],observer:['けいれん中に意識がある','けいれん中に意識がない','全身がけいれんしている','手足だけがけいれんしている','けいれんが止まらない','けいれん後も意識が戻らない']},
       {person:['出血している'],observer:['ティッシュで押さえられる程度','タオルが血で濡れる程度','出血は止まった','圧迫しても出血が止まらない']},
       {person:[{label:'応急処置',group:true}],observer:['止血中','止血して止まった']},
       {person:['やけどをした'],observer:['赤くなっている','水ぶくれができている','皮膚が白色・黒色になっている','広い範囲のやけど']},
       {person:[{label:'応急処置',group:true}],observer:['冷やした']},
-      {person:['骨折したかもしれない'],observer:['手足が不自然に曲がっている','腫れている','動かせない']},
+      {person:['骨折したかもしれない'],observer:['手足が不自然に曲がっている','腫れている','患部を動かせない','骨が見えている','出血している']},
       {person:[{label:'応急処置',group:true}],observer:['動かさないようにしている','寝かせている','座らせている']},
-      {person:['薬を飲みすぎた・間違えて飲んだ'],observer:['薬の空き容器や散らばった薬がある']},
+      {person:['薬を飲みすぎた・間違えて飲んだ'],observer:['空き瓶・空き箱・薬のシート・散らばった薬がある']},
       {person:['洗剤・薬品を飲んだ'],observer:['洗剤・薬品の容器が近くにある']},
       {person:['ガスや煙を吸った'],observer:['同じ場所にいる人も具合が悪い']},
       {person:['感電した'],observer:['電気製品や電線に触れたあと倒れた']},
-      {person:['交通事故にあった'],observer:['車・バイク・自転車との事故']},
       {person:['高い所から落ちた'],observer:['高所から転落した']},
       {person:['溺れた'],observer:['水の中から救助された']}
     ]
@@ -1691,7 +2738,166 @@ const symResults = document.getElementById('sym-results');
 const symSummary = document.getElementById('sym-summary');
 const symSummaryIntro = document.getElementById('sym-summary-intro');
 const symptomCategoryBoxes = [...document.querySelectorAll('.sym-category input')];
-const onsetChoices = [...document.querySelectorAll('.onset-choice')];
+const conditionChoices = [...document.querySelectorAll('.condition-choice')];
+
+function clearSupplementalDetails(){
+  document.querySelectorAll('input[name="temperature-choice"]').forEach(input => {
+    input.checked = false;
+  });
+  document.querySelectorAll('input[name="medicine-known"]').forEach(input => {
+    input.checked = false;
+  });
+
+  medicineNameInput.value = '';
+  medicineAmountInput.value = '';
+  medicineTimeInput.value = '';
+  medicineContainerCheck.checked = false;
+  medicineNotebookCheck.checked = false;
+  medicineMultipleCheck.checked = false;
+  medicineAlcoholCheck.checked = false;
+
+  temperatureDetailsPanel.hidden = false;
+  medicationDetailsPanel.hidden = true;
+}
+
+function clearSymptomSelections(){
+  symptomCategoryBoxes.forEach(box => {
+    box.checked = false;
+  });
+
+  conditionChoices.forEach(box => {
+    box.checked = false;
+  });
+
+  clearSupplementalDetails();
+  symResults.innerHTML = '';
+  symSummary.innerHTML = '';
+  symNextBtn.disabled = true;
+  symDetailNextBtn.disabled = true;
+}
+
+function configureSymptomFlow(context){
+  symptomFlowContext = context;
+  clearSymptomSelections();
+
+  const trafficMode = context === 'traffic';
+
+  symScreenHeader.textContent = trafficMode
+    ? '交通事故の症状を選択'
+    : '症状を選択してください';
+
+  symScreenLead.textContent = trafficMode
+    ? '当てはまる場所と症状をすべて選択してください。'
+    : '当てはまるものをすべて選択してください。';
+
+  trafficSymptomGuide.hidden = !trafficMode;
+}
+
+function selectedTemperatureValue(){
+  const selected = document.querySelector(
+    'input[name="temperature-choice"]:checked'
+  );
+  return selected ? selected.value : '';
+}
+
+function medicationOverdoseSelected(){
+  return [...symResults.querySelectorAll('.sym-option input[type="checkbox"]:checked')]
+    .some(box =>
+      box.value === '薬を飲みすぎた・間違えて飲んだ' ||
+      box.value === '空き瓶・空き箱・薬のシート・散らばった薬がある'
+    );
+}
+
+function placeSupplementalPanelsInline(){
+  const medicineOption = symResults.querySelector(
+    '.sym-option input[value="薬を飲みすぎた・間違えて飲んだ"]'
+  );
+  const medicineRow = medicineOption
+    ? medicineOption.closest('.sym-row')
+    : null;
+
+  if(medicineRow){
+    medicineRow.insertAdjacentElement(
+      'afterend',
+      medicationDetailsPanel
+    );
+  }
+}
+
+function updateSupplementalPanelsVisibility(){
+  medicationDetailsPanel.hidden = !medicationOverdoseSelected();
+}
+
+function medicationDetailsHtml(showPoisonContact){
+  if(!medicationOverdoseSelected()) return '';
+
+  const known = document.querySelector(
+    'input[name="medicine-known"]:checked'
+  );
+
+  const evidence = [];
+  if(medicineContainerCheck.checked){
+    evidence.push('空き瓶・空き箱・薬のシートがある');
+  }
+  if(medicineNotebookCheck.checked){
+    evidence.push('お薬手帳がある');
+  }
+  if(medicineMultipleCheck.checked){
+    evidence.push('複数の薬を飲んだ可能性がある');
+  }
+  if(medicineAlcoholCheck.checked){
+    evidence.push('酒と一緒に飲んだ可能性がある');
+  }
+
+  const medicineName = medicineNameInput.value.trim() || '未入力・分からない';
+  const amount = medicineAmountInput.value.trim() || '未入力・分からない';
+  const time = medicineTimeInput.value.trim() || '未入力・分からない';
+  const knownValue = known ? known.value : '未選択';
+  const evidenceValue = evidence.length ? evidence.join('／') : '未選択';
+
+  const poisonContact = showPoisonContact
+    ? `<div class="poison-call-grid">
+        <a class="poison-call-btn" href="tel:0727272499">
+          大阪中毒110番<br>072-727-2499
+        </a>
+        <a class="poison-call-btn" href="tel:0298529999">
+          つくば中毒110番<br>029-852-9999
+        </a>
+      </div>
+      <p class="supplemental-note">
+        ※中毒110番は、警察の110番とは別の急性中毒相談窓口です。
+      </p>`
+    : '';
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">💊 飲んだ薬の情報</h2>
+    <table class="medication-summary-table"><tbody>
+      <tr><th scope="row">名前の確認</th><td>${escapeHtml(knownValue)}</td></tr>
+      <tr><th scope="row">薬の名前</th><td>${escapeHtml(medicineName)}</td></tr>
+      <tr><th scope="row">飲んだ量</th><td>${escapeHtml(amount)}</td></tr>
+      <tr><th scope="row">飲んだ時刻</th><td>${escapeHtml(time)}</td></tr>
+      <tr><th scope="row">確認できる物</th><td>${escapeHtml(evidenceValue)}</td></tr>
+    </tbody></table>
+    <div class="poison-warning">
+      意識・呼吸に異常がある場合は119番を優先してください。<br>
+      薬の容器・箱・シート・お薬手帳を救急隊または医療機関に見せてください。<br>
+      家庭で無理に吐かせないでください。
+    </div>
+    ${poisonContact}
+  </section>`;
+}
+
+function temperatureDetailsHtml(){
+  const value = selectedTemperatureValue();
+  if(!value) return '';
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">🌡️ 体温</h2>
+    <div class="sym-onset-result">
+      <div class="sym-onset-bullet">・${escapeHtml(value)}</div>
+    </div>
+  </section>`;
+}
 
 function selectedSymptomCategories(){
   return symptomCategoryBoxes
@@ -1701,8 +2907,9 @@ function selectedSymptomCategories(){
 
 function updateSymptomNextButton(){
   const hasCategory = selectedSymptomCategories().length > 0;
-  const hasOnset = onsetChoices.some(box => box.checked);
-  symNextBtn.disabled = !(hasCategory || hasOnset);
+  const hasCondition = conditionChoices.some(box => box.checked);
+
+  symNextBtn.disabled = !(hasCategory && hasCondition);
 }
 
 function escapeHtml(value){
@@ -1769,23 +2976,20 @@ function patientInfoSection(){
   </section>`;
 }
 
-function selectedOnsetValues(){
-  return onsetChoices
-    .filter(box => box.checked)
-    .map(box => box.value);
+function selectedConditionValue(){
+  const selected = conditionChoices.find(box => box.checked);
+  return selected ? selected.value : '';
 }
 
-function onsetResultSection(){
-  const selectedOnset = selectedOnsetValues();
+function conditionResultSection(){
+  const selectedCondition = selectedConditionValue();
 
-  if(selectedOnset.length === 0) return '';
+  if(!selectedCondition) return '';
 
   return `<section class="sym-section">
-    <h2 class="sym-section-title">⌚ 発生状況</h2>
+    <h2 class="sym-section-title">⌚ 発生状況・症状の変化</h2>
     <div class="sym-onset-result">
-      ${selectedOnset.map(text =>
-        `<div class="sym-onset-bullet">・${escapeHtml(text)}</div>`
-      ).join('')}
+      <div class="sym-onset-bullet">・${escapeHtml(selectedCondition)}</div>
     </div>
   </section>`;
 }
@@ -1825,32 +3029,38 @@ function symptomResultSection(key,item){
 
 function updateDetailNextButton(){
   const symptomChecks = [
-    ...symResults.querySelectorAll('input[type="checkbox"]')
+    ...symResults.querySelectorAll('.sym-option input[type="checkbox"]')
   ];
   const hasCheckedSymptom = symptomChecks.some(box => box.checked);
   const hasNoSymptomChecks = symptomChecks.length === 0;
-  const hasOnset = selectedOnsetValues().length > 0;
+  const hasCondition = selectedConditionValue() !== '';
 
   symDetailNextBtn.disabled =
-    !(hasCheckedSymptom || (hasNoSymptomChecks && hasOnset));
+    !(hasCheckedSymptom || (hasNoSymptomChecks && hasCondition));
 }
 
 function showSymptomResults(){
   const keys = selectedSymptomCategories();
-  const onsetHtml = onsetResultSection();
+  const conditionHtml = conditionResultSection();
 
-  if(keys.length === 0 && onsetHtml === '') return;
+  if(keys.length === 0 || conditionHtml === '') return;
 
   symResults.innerHTML =
-    onsetHtml +
+    conditionHtml +
     keys.map(key =>
       symptomResultSection(key,symptomData[key])
     ).join('');
 
-  symResults
-    .querySelectorAll('input[type="checkbox"]')
-    .forEach(box => box.addEventListener('change',updateDetailNextButton));
+  placeSupplementalPanelsInline();
 
+  symResults
+    .querySelectorAll('.sym-option input[type="checkbox"]')
+    .forEach(box => box.addEventListener('change',() => {
+      updateDetailNextButton();
+      updateSupplementalPanelsVisibility();
+    }));
+
+  updateSupplementalPanelsVisibility();
   updateDetailNextButton();
   showScreen('screen-results');
 }
@@ -1859,7 +3069,7 @@ symptomCategoryBoxes.forEach(box => {
   box.addEventListener('change',updateSymptomNextButton);
 });
 
-onsetChoices.forEach(box => {
+conditionChoices.forEach(box => {
   box.addEventListener('change',updateSymptomNextButton);
 });
 
@@ -1874,23 +3084,68 @@ function summaryListHtml(items){
 }
 
 const emergencySymptoms = new Set([
-  '無反応',
-  '声をかけても反応がない',
-  '肩をたたいても反応がない',
   '突然の激しい頭痛',
-  '息苦しい',
   '呼吸が苦しそう',
   '突然の強い胸痛・腹痛',
-  '意識がない',
+  '意識がもうろうとする',
+  '反応が鈍い',
+  '返事がおかしい',
+  '自力で水分を飲めない',
+  '歩けない',
+  '自力で安全に移動できない',
+  '骨が見えている',
+  'けいれん中に意識がない',
   'けいれんが止まらない',
   'けいれん後も意識が戻らない',
   'タオルが血で濡れる程度',
   '圧迫しても出血が止まらない',
   '皮膚が白色・黒色になっている',
-  '広い範囲のやけど'
+  '広い範囲のやけど',
+  '血を吐いた',
+  '血便・黒い便が出た',
+  '吐いた物に血が混じっている',
+  '赤い便や黒い便が出ている',
+  '高い所から落ちた',
+  '高所から転落した',
+  '溺れた',
+  '水の中から救助された',
+  '感電した',
+  '電気製品や電線に触れたあと倒れた',
+  '洗剤・薬品を飲んだ',
+  '洗剤・薬品の容器が近くにある',
+  'ガスや煙を吸った',
+  '同じ場所にいる人も具合が悪い',
+  '顔や唇が急に腫れた',
+  '顔や唇が大きく腫れている'
 ]);
 
-function determineTriage(selectedValues){
+const suddenEmergencySymptoms = new Set([
+  '見えない',
+  '視野がいつもより狭い',
+  '左半身の感覚がない',
+  '左手が動かしにくい',
+  '左手足にしびれがある',
+  '左右どちらかの顔が痺れている',
+  '口元が動きにくい',
+  '顔の左右差がある',
+  '言葉が出にくい',
+  'ろれつが回らない',
+  '話し方がおかしい',
+  '言葉が聞き取りにくい',
+  '歩きにくい',
+  '立てない',
+  '支えがあっても立てない',
+  'めまいがする',
+  'ふらついている'
+]);
+
+const trafficAccidentSymptoms = new Set([
+  '交通事故にあった',
+  '車・バイク・自転車との事故',
+  '強い衝撃を受けた'
+]);
+
+function determineTriage(selectedValues,conditionValue){
   const values = new Set(selectedValues);
   const reasons = [];
 
@@ -1899,6 +3154,38 @@ function determineTriage(selectedValues){
       reasons.push(symptom);
     }
   });
+
+  const isUsual =
+    conditionValue === '普段からある症状と同じ';
+
+  if(
+    values.has('息苦しい') &&
+    !isUsual
+  ){
+    reasons.push('新しい・悪化した息苦しさ');
+  }
+
+  if(
+    conditionValue === '急に起こった・急に悪化した'
+  ){
+    suddenEmergencySymptoms.forEach(symptom => {
+      if(values.has(symptom)){
+        reasons.push(`急に起きた症状：${symptom}`);
+      }
+    });
+  }
+
+  if(
+    values.has('のどに物が詰まった') &&
+    (
+      values.has('声が出せない') ||
+      values.has('水や食べ物が飲み込めない') ||
+      values.has('呼吸が苦しそう') ||
+      values.has('息苦しい')
+    )
+  ){
+    reasons.push('のどの詰まりで呼吸・発声・飲み込みが困難');
+  }
 
   if(
     values.has('吐き気が非常に強い') &&
@@ -1917,24 +3204,121 @@ function determineTriage(selectedValues){
     reasons.push('胸またはお腹を押さえている＋冷や汗');
   }
 
+  if(
+    values.has('ゼーゼー・ヒューヒューする') &&
+    values.has('呼吸が苦しそう')
+  ){
+    reasons.push('ゼーゼー・ヒューヒュー＋呼吸が苦しそう');
+  }
+
+  if(
+    values.has('水分が飲めない') &&
+    (
+      values.has('体が熱い') ||
+      values.has('汗が異常に多い') ||
+      values.has('暑いのに汗が出ていない')
+    )
+  ){
+    reasons.push('暑い環境が疑われ、水分が飲めない');
+  }
+
+  if(
+    values.has('骨折したかもしれない') &&
+    (
+      values.has('歩けない') ||
+      values.has('立てない') ||
+      values.has('自力で安全に移動できない') ||
+      values.has('骨が見えている') ||
+      values.has('出血している')
+    )
+  ){
+    reasons.push('骨折が疑われ、安全に移動できない・重い外傷がある');
+  }
+
+  const poisoningSelected =
+    values.has('薬を飲みすぎた・間違えて飲んだ') ||
+    values.has('空き瓶・空き箱・薬のシート・散らばった薬がある');
+
+  if(poisoningSelected){
+    const poisoningEmergencySigns = [
+      '意識がもうろうとする',
+      '反応が鈍い',
+      '返事がおかしい',
+      '呼吸が苦しそう',
+      'けいれんしている',
+      'けいれん中に意識がない',
+      'けいれんが止まらない',
+      'けいれん後も意識が戻らない',
+      '立てない',
+      '歩けない',
+      '何度も吐いている',
+      '短時間に何度も吐いている'
+    ];
+
+    if(poisoningEmergencySigns.some(symptom => values.has(symptom))){
+      reasons.push('薬の過剰摂取後に重い症状がある');
+    }
+  }
+
+  if(values.has('強い衝撃を受けた')){
+    reasons.push('交通事故で強い衝撃を受けた');
+  }
+
+  const trafficAccident = [...trafficAccidentSymptoms]
+    .some(symptom => values.has(symptom));
+
+  const uniqueReasons = [...new Set(reasons)];
+
+  if(uniqueReasons.length > 0){
+    return {
+      level:'emergency',
+      emergency:true,
+      reasons:uniqueReasons,
+      trafficAccident
+    };
+  }
+
+  if(
+    trafficAccident ||
+    poisoningSelected ||
+    values.has('40.0℃以上') ||
+    conditionValue === '分からない' ||
+    conditionValue === '急に起こった・急に悪化した'
+  ){
+    return {
+      level:'consult',
+      emergency:false,
+      reasons:[],
+      trafficAccident
+    };
+  }
+
   return {
-    emergency:reasons.length > 0,
-    reasons:[...new Set(reasons)]
+    level:'clinic',
+    emergency:false,
+    reasons:[],
+    trafficAccident
   };
 }
 
 function triageCardHtml(triage){
   const purposeNote = `
     <p class="triage-purpose-note">
-      このページは、119番と#7119の判断の目安として作成しています。
+      このページは、119番・#7119・医療機関への相談を判断する目安として作成しています。
     </p>`;
 
-  if(triage.emergency){
+  if(triage.level === 'emergency'){
     return `<section class="triage-card emergency">
       <p class="triage-label">選択内容から</p>
       <p class="triage-number">119番</p>
       <p class="triage-message">救急車を呼んでください</p>
-      <a class="triage-call" href="tel:119">☎ 119番へ電話</a>
+      ${triage.trafficAccident
+        ? `<div class="triage-emergency-call-row">
+            <a class="triage-call" href="tel:119">☎ 119番へ電話</a>
+            <a class="triage-call triage-call-110" href="tel:110">☎ 110番へ電話</a>
+          </div>`
+        : `<a class="triage-call" href="tel:119">☎ 119番へ電話</a>`
+      }
       ${purposeNote}
       <div class="triage-reasons">
         ${triage.reasons.map(reason =>
@@ -1945,25 +3329,58 @@ function triageCardHtml(triage){
     <h2 class="operator-heading-only">オペレーターに伝えること</h2>`;
   }
 
-  return `<section class="triage-card consult">
+  if(triage.level === 'consult'){
+    return `<section class="triage-card consult">
+      <p class="triage-label">選択内容から</p>
+      <p class="triage-number">#7119</p>
+      <p class="triage-message">救急安心センターへ相談してください</p>
+
+      <div class="triage-consult-list">
+        <p class="triage-consult-list-title">こんなことを相談できます</p>
+        <ul>
+          <li>救急車を呼んだ方がいい？</li>
+          <li>今受診できる病院を知りたい</li>
+          <li>自宅で様子を見ても大丈夫？</li>
+          <li>応急処置の方法を知りたい</li>
+        </ul>
+      </div>
+
+      ${triage.trafficAccident
+        ? `<div class="triage-emergency-call-row">
+            <a class="triage-call" href="tel:%237119">☎ #7119へ電話</a>
+            <a class="triage-call triage-call-110" href="tel:110">☎ 110番へ電話</a>
+          </div>`
+        : `<a class="triage-call" href="tel:%237119">☎ #7119へ電話</a>`
+      }
+      <div class="triage-worsening-note">
+        ⚠️ 症状が悪化した場合<br>
+        すぐに医療機関を受診してください。<br>
+        急激な悪化や緊急性の高い症状がある場合は、
+        119番へ通報してください。
+      </div>
+      ${purposeNote}
+    </section>
+    <h2 class="operator-heading-only">オペレーターに伝えること</h2>`;
+  }
+
+  return `<section class="triage-card clinic">
     <p class="triage-label">選択内容から</p>
-    <p class="triage-number">#7119</p>
-    <p class="triage-message">救急安心センターへ相談してください</p>
-
-    <div class="triage-consult-list">
-      <p class="triage-consult-list-title">こんなことを相談できます</p>
-      <ul>
-        <li>救急車を呼んだ方がいい？</li>
-        <li>今受診できる病院を知りたい</li>
-        <li>自宅で様子を見ても大丈夫？</li>
-        <li>応急処置の方法を知りたい</li>
-      </ul>
-    </div>
-
-    <a class="triage-call" href="tel:%237119">☎ #7119へ電話</a>
+    <p class="triage-number">医療機関</p>
+    <p class="triage-message">かかりつけ医または近隣の医療機関へ相談してください</p>
+    ${triage.trafficAccident
+      ? `<div class="triage-emergency-call-row">
+          <div class="triage-call">🏥 医療機関へ相談</div>
+          <a class="triage-call triage-call-110" href="tel:110">☎ 110番へ電話</a>
+        </div>`
+      : `<div class="triage-call">🏥 医療機関へ相談</div>`
+    }
     ${purposeNote}
   </section>
-  <h2 class="operator-heading-only">オペレーターに伝えること</h2>`;
+  <h2 class="operator-heading-only">医療機関に伝えること</h2>`;
+}
+
+function trafficAccidentNoticeHtml(triage){
+  return '';
 }
 
 
@@ -2064,23 +3481,24 @@ function locationSectionHtml(forConsult = false){
 
   return `<section class="sym-section" id="current-location-section">
     <h2 class="sym-section-title">📍 現在地</h2>
-    <table class="location-table">
-      <tbody>
-        <tr>
-          <th scope="row">住所</th>
-          <td id="current-address" class="location-status">取得中…</td>
-        </tr>
-        <tr>
-          <th scope="row">建物名</th>
-          <td id="current-building" class="location-status">取得中…</td>
-        </tr>
-        <tr>
-          <th scope="row">周辺の目印</th>
-          <td id="current-landmarks" class="location-status">取得中…</td>
-        </tr>
-      </tbody>
-    </table>
+    <table class="location-table"><tbody>
+      <tr><th scope="row">住所</th><td id="current-address" class="location-status">取得中…</td></tr>
+      <tr><th scope="row">建物名</th><td id="current-building" class="location-status">取得中…</td></tr>
+      <tr><th scope="row">周辺の目印</th><td id="current-landmarks" class="location-status">取得中…</td></tr>
+    </tbody></table>
     <p class="location-note">${note}</p>
+    <div class="location-map-wrap">
+      <div class="location-map-title">現在地マップ</div>
+      <div id="location-map" class="location-map" aria-label="現在地マップ"></div>
+      <div class="location-info">
+        <div class="location-info-row"><b>緯度</b><span id="latitude-value">取得中</span></div>
+        <div class="location-info-row"><b>経度</b><span id="longitude-value">取得中</span></div>
+      </div>
+      <div class="location-buttons">
+        <button id="open-map-btn" class="location-btn" type="button" disabled>Google Mapsで開く</button>
+        <button id="copy-location-btn" class="location-btn" type="button" disabled>座標をコピー</button>
+      </div>
+    </div>
   </section>`;
 }
 
@@ -2202,8 +3620,29 @@ async function fetchNearbyLandmarks(latitude,longitude){
   return uniqueNames;
 }
 
+let map = null;
+let marker = null;
+let currentLatitude = null;
+let currentLongitude = null;
+function initMap(lat,lon){
+  const el=document.getElementById('location-map');
+  if(!el||typeof L==='undefined')return;
+  if(!map){
+    map=L.map(el).setView([lat,lon],16);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
+    marker=L.marker([lat,lon]).addTo(map).bindPopup('現在地');
+  }else{map.setView([lat,lon],16);if(marker)marker.setLatLng([lat,lon]);}
+  setTimeout(()=>map.invalidateSize(),100);
+}
+function setLocationActionButtons(enabled){
+  const open=document.getElementById('open-map-btn');
+  const copy=document.getElementById('copy-location-btn');
+  if(open){open.disabled=!enabled;open.onclick=()=>{if(currentLatitude!==null)window.open(`https://www.google.com/maps?q=${currentLatitude},${currentLongitude}`,'_blank');};}
+  if(copy){copy.disabled=!enabled;copy.onclick=async()=>{if(currentLatitude===null)return;const t=`${currentLatitude.toFixed(6)}, ${currentLongitude.toFixed(6)}`;try{await navigator.clipboard.writeText(t);copy.textContent='コピーしました';setTimeout(()=>copy.textContent='座標をコピー',1500);}catch(e){copy.textContent='コピーできませんでした';setTimeout(()=>copy.textContent='座標をコピー',1800);}};}
+}
 async function updateCurrentLocation(){
   if(!document.getElementById('current-location-section')) return;
+  setLocationActionButtons(false);
 
   if(!navigator.onLine){
     setLocationText('current-address','通信できないため取得できません');
@@ -2221,6 +3660,17 @@ async function updateCurrentLocation(){
 
   navigator.geolocation.getCurrentPosition(async position => {
     const {latitude,longitude} = position.coords;
+    currentLatitude = latitude;
+    currentLongitude = longitude;
+
+    const latitudeValue = document.getElementById('latitude-value');
+    const longitudeValue = document.getElementById('longitude-value');
+
+    if(latitudeValue) latitudeValue.textContent = latitude.toFixed(6);
+    if(longitudeValue) longitudeValue.textContent = longitude.toFixed(6);
+
+    setLocationActionButtons(true);
+    initMap(latitude,longitude);
 
     try{
       const place = await reverseGeocodeCurrentPosition(latitude,longitude);
@@ -2271,12 +3721,25 @@ async function updateCurrentLocation(){
 }
 
 function showFinalSummary(){
-  const onsetValues = selectedOnsetValues();
+  const conditionValue = selectedConditionValue();
   const checkedSymptoms = [
-    ...symResults.querySelectorAll('input[type="checkbox"]:checked')
+    ...symResults.querySelectorAll('.sym-option input[type="checkbox"]:checked')
   ];
   const selectedValues = checkedSymptoms.map(box => box.value);
-  const triage = determineTriage(selectedValues);
+  const temperatureValue = selectedTemperatureValue();
+
+  if(temperatureValue && temperatureValue !== '測っていない・分からない'){
+    selectedValues.push(temperatureValue);
+  }
+
+  const triage = determineTriage(
+    selectedValues,
+    conditionValue
+  );
+
+  if(symptomFlowContext === 'traffic'){
+    triage.trafficAccident = true;
+  }
 
   const grouped = {};
 
@@ -2296,13 +3759,11 @@ function showFinalSummary(){
     grouped[key][side].push(value);
   });
 
-  const onsetHtml = onsetValues.length
+  const conditionHtml = conditionValue
     ? `<section class="sym-section">
-        <h2 class="sym-section-title">⌚ 発生状況</h2>
+        <h2 class="sym-section-title">⌚ 発生状況・症状の変化</h2>
         <div class="sym-onset-result">
-          ${onsetValues.map(text =>
-            `<div class="sym-onset-bullet">・${escapeHtml(text)}</div>`
-          ).join('')}
+          <div class="sym-onset-bullet">・${escapeHtml(conditionValue)}</div>
         </div>
       </section>`
     : '';
@@ -2327,31 +3788,70 @@ function showFinalSummary(){
       </section>
     `).join('');
 
-  symSummaryIntro.innerHTML = triage.emergency
-    ? 'ご協力ありがとうございます。'
-    : 'ご協力ありがとうございます。<br>チェックした症状を表示しました。<br>オペレーターに症状を伝え近隣の病院を聞いてください。';
+  if(symptomFlowContext === 'traffic'){
+    symSummaryIntro.innerHTML =
+      '交通事故の症状と通報先を表示しました。';
+  }else if(triage.level === 'emergency'){
+    symSummaryIntro.innerHTML = 'ご協力ありがとうございます。';
+  }else if(triage.level === 'consult'){
+    symSummaryIntro.innerHTML =
+      'ご協力ありがとうございます。<br>チェックした症状を表示しました。<br>オペレーターに症状を伝え近隣の病院を聞いてください。';
+  }else{
+    symSummaryIntro.innerHTML =
+      'ご協力ありがとうございます。<br>チェックした症状を表示しました。<br>かかりつけ医または近隣の医療機関へ相談してください。';
+  }
+
+  const temperatureHtml = temperatureDetailsHtml();
+  const medicationHtml = medicationDetailsHtml(
+    triage.level !== 'emergency'
+  );
 
   const detailsHtml =
     patientInfoSection() +
-    onsetHtml +
-    categoryHtml;
+    conditionHtml +
+    temperatureHtml +
+    categoryHtml +
+    medicationHtml;
 
-  symSummary.innerHTML = triage.emergency
-    ? (
-        resultCloseSectionHtml('top') +
-        triageCardHtml(triage) +
-        locationSectionHtml(false) +
-        detailsHtml +
-        medicalInfoSection() +
-        resultCloseSectionHtml('bottom')
-      )
-    : (
-        resultCloseSectionHtml('top') +
-        triageCardHtml(triage) +
-        detailsHtml +
-        locationSectionHtml(true) +
-        resultCloseSectionHtml('bottom')
-      );
+  const trafficSymptomHtml =
+    `<h2 class="traffic-result-heading">選択した症状</h2>
+     <div class="traffic-result-note">
+       本人の入力、または本人に確認してチェックした内容です。
+     </div>` +
+    conditionHtml +
+    temperatureHtml +
+    categoryHtml +
+    medicationHtml;
+
+  if(symptomFlowContext === 'traffic'){
+    symSummary.innerHTML =
+      resultCloseSectionHtml('top') +
+      triageCardHtml(triage) +
+      trafficSymptomHtml +
+      locationSectionHtml(triage.level !== 'emergency') +
+      patientInfoSection() +
+      (triage.level === 'emergency' ? medicalInfoSection() : '') +
+      resultCloseSectionHtml('bottom');
+  }else{
+    symSummary.innerHTML = triage.level === 'emergency'
+      ? (
+          resultCloseSectionHtml('top') +
+          triageCardHtml(triage) +
+          trafficAccidentNoticeHtml(triage) +
+          locationSectionHtml(false) +
+          detailsHtml +
+          medicalInfoSection() +
+          resultCloseSectionHtml('bottom')
+        )
+      : (
+          resultCloseSectionHtml('top') +
+          triageCardHtml(triage) +
+          trafficAccidentNoticeHtml(triage) +
+          detailsHtml +
+          locationSectionHtml(true) +
+          resultCloseSectionHtml('bottom')
+        );
+  }
 
   showScreen('screen-summary');
   updateCurrentLocation();
