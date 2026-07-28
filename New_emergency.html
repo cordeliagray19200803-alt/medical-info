@@ -137,7 +137,7 @@
 
     .disability-tag .label{
       display:inline-block;
-      width:8.5em;
+      width:7.2em;
     }
 
     .disability-tag .grade{
@@ -534,7 +534,60 @@
 
 <script>
 function closePage() {
-window.location.replace("https://cordeliagray19200803-alt.github.io/New_Search/close.html");}
+  const overlay = document.createElement("div");
+  overlay.setAttribute("role", "status");
+  overlay.setAttribute("aria-live", "assertive");
+  overlay.innerHTML = "<strong>ご協力ありがとうございました。</strong>";
+  overlay.style.cssText = [
+    "position:fixed",
+    "inset:0",
+    "z-index:99999",
+    "display:flex",
+    "align-items:center",
+    "justify-content:center",
+    "padding:24px",
+    "background:#fff",
+    "color:#b00020",
+    "text-align:center",
+    "font-size:1.55rem",
+    "font-weight:900",
+    "line-height:1.5"
+  ].join(";");
+  document.body.appendChild(overlay);
+
+  const sound = new Audio(
+    "https://cordeliagray19200803-alt.github.io/New_Search/close.wav"
+  );
+  sound.preload = "auto";
+  sound.volume = 1.0;
+
+  try {
+    const playPromise = sound.play();
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(function(){});
+    }
+  } catch (error) {}
+
+  if ("speechSynthesis" in window) {
+    try {
+      speechSynthesis.cancel();
+      const message = new SpeechSynthesisUtterance(
+        "ご協力ありがとうございました。"
+      );
+      message.lang = "ja-JP";
+      message.rate = 0.95;
+      message.pitch = 1.0;
+      message.volume = 1.0;
+      speechSynthesis.speak(message);
+    } catch (error) {}
+  }
+
+  setTimeout(function() {
+    window.location.replace(
+      "https://cordeliagray19200803-alt.github.io/New_Search/close.html"
+    );
+  }, 1500);
+}
 </script>
 
 
