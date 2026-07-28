@@ -561,32 +561,33 @@ function closePage() {
   sound.preload = "auto";
   sound.volume = 1.0;
 
-  try {
-    const playPromise = sound.play();
-    if (playPromise && typeof playPromise.catch === "function") {
-      playPromise.catch(function(){});
-    }
-  } catch (error) {}
+  let moved = false;
 
-  if ("speechSynthesis" in window) {
-    try {
-      speechSynthesis.cancel();
-      const message = new SpeechSynthesisUtterance(
-        "ご協力ありがとうございました。"
-      );
-      message.lang = "ja-JP";
-      message.rate = 0.95;
-      message.pitch = 1.0;
-      message.volume = 1.0;
-      speechSynthesis.speak(message);
-    } catch (error) {}
-  }
-
-  setTimeout(function() {
+  function moveToClosePage() {
+    if (moved) return;
+    moved = true;
     window.location.replace(
       "https://cordeliagray19200803-alt.github.io/New_Search/close.html"
     );
-  }, 1500);
+  }
+
+  sound.addEventListener("ended", function() {
+    setTimeout(moveToClosePage, 250);
+  }, { once:true });
+
+  try {
+    const playPromise = sound.play();
+
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(function() {
+        setTimeout(moveToClosePage, 1500);
+      });
+    }
+  } catch (error) {
+    setTimeout(moveToClosePage, 1500);
+  }
+
+  setTimeout(moveToClosePage, 3000);
 }
 </script>
 
