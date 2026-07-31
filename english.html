@@ -1359,23 +1359,10 @@ function triageCardHtml(triage){
 
 
 function closePrivatePage(){
-  stopAll(false);
-
-  // 個人情報をすぐ画面から消してから、ブラウザのタブを閉じます。
-  document.body.innerHTML = '';
-  document.documentElement.style.background = '#fff';
-
   try{
-    window.open('', '_self');
-    window.close();
+    stopAll(false);
   }catch(error){}
-
-  // ブラウザの制限で閉じられない場合も、個人情報は残しません。
-  setTimeout(() => {
-    try{
-      location.replace('about:blank');
-    }catch(error){}
-  }, 120);
+  location.href = 'close.html';
 }
 
 function showFinalSummary(){

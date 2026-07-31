@@ -122,28 +122,6 @@
       display:inline-block;background:#f3f5f7;border:1px solid var(--line);
       border-radius:999px;padding:4px 10px;margin:3px 3px 3px 0;font-weight:700;
     }
-    .disability-tag{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      width:fit-content;
-      min-width:17em;
-      max-width:100%;
-      background:#eaf3ff;
-      border-color:#8fb3df;
-      color:#174a7e;
-      margin:6px 0;
-    }
-
-    .disability-tag .label{
-      display:inline-block;
-      width:7.2em;
-    }
-
-    .disability-tag .grade{
-      font-weight:bold;
-      white-space:nowrap;
-    }
     .danger-tag{
       background:#fff0f1;border-color:#efb4b8;color:#9e1117;font-weight:850;
     }
@@ -166,93 +144,6 @@
       display:flex;align-items:center;justify-content:center;background:var(--help-red);
       color:#fff;text-decoration:none;border-radius:50%;
       box-shadow:0 4px 12px rgba(0,0,0,.22);font-weight:bold
-    }
-
-    
-.privacy-warning{
-  background:#fff8d6;
-  border:2px solid #e6b800;
-  border-radius:12px;
-  padding:12px 16px;
-  margin:14px 0;
-  text-align:center;
-  color:#6b5500;
-  font-weight:800;
-  line-height:1.5;
-}
-.privacy-warning strong{
-  display:block;
-  margin-bottom:4px;
-  font-size:1.05rem;
-}
-
-
-    .watermark-layer{
-      position:fixed;
-      inset:0;
-      z-index:9990;
-      pointer-events:none;
-      overflow:hidden;
-      opacity:.055;
-    }
-    .watermark-layer::before{
-      content:"緊急時確認用・無断保存禁止";
-      position:absolute;
-      left:50%;
-      top:50%;
-      width:150vw;
-      transform:translate(-50%,-50%) rotate(-28deg);
-      text-align:center;
-      color:#b00020;
-      font-size:clamp(2rem,8vw,5rem);
-      font-weight:900;
-      letter-spacing:.15em;
-      white-space:nowrap;
-    }
-
-    .privacy-screen{
-      position:fixed;
-      inset:0;
-      z-index:10000;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
-      background:#fff;
-      color:#20242a;
-      text-align:center;
-    }
-    .privacy-screen.show{
-      display:flex;
-    }
-    .privacy-screen-inner{
-      width:100%;
-      max-width:420px;
-      border:2px solid #d71920;
-      border-radius:16px;
-      padding:24px 18px;
-      box-shadow:0 5px 18px rgba(0,0,0,.10);
-    }
-    .privacy-screen h2{
-      margin:0 0 12px;
-      color:#b00020;
-      font-size:1.35rem;
-    }
-    .privacy-screen p{
-      margin:0 0 18px;
-      line-height:1.7;
-      font-weight:700;
-    }
-    .privacy-screen button{
-      width:100%;
-      border:0;
-      border-radius:10px;
-      background:#111;
-      color:#fff;
-      font:inherit;
-      font-weight:900;
-      padding:13px 18px;
-      cursor:pointer;
     }
 
     .privacy-close{
@@ -294,23 +185,16 @@
       body{font-size:18px}
     }
     @media print{
-      body{display:none !important;}
+      body{background:#fff;font-size:12px}
+      .wrap{max-width:none;padding:0}
+      nav,.top{display:none}
+      details{break-inside:avoid}
+      details .content{display:block!important}
     }
   </style>
 
 </head>
-
 <body id="top">
-  <div class="watermark-layer" aria-hidden="true"></div>
-
-  <div id="privacyScreen" class="privacy-screen" role="dialog" aria-modal="true" aria-labelledby="privacyScreenTitle">
-    <div class="privacy-screen-inner">
-      <h2 id="privacyScreenTitle">画面を一時的に非表示にしています</h2>
-      <p>個人情報保護のため、内容を再表示するには下のボタンを押してください。</p>
-      <button type="button" id="resumeButton">再表示</button>
-    </div>
-  </div>
-
   <main class="wrap">
     <header>
       <div class="header-row">
@@ -321,11 +205,6 @@
         </div>
       </div>
     </header>
-    <div class="privacy-warning">
-      <strong>⚠️ 個人情報を含みます</strong><br>
-      緊急対応以外での画面撮影・保存・印刷・共有はお控えください。
-    </div>
-
 
     <div class="privacy-close">
       <p>
@@ -354,7 +233,7 @@
     </nav>
 
     <section id="basic">
-      <h2>基本情報・障害・既往歴</h2>
+      <h2>基本情報・既往歴</h2>
       <div class="content">
         <dl>
           <dt>氏名</dt>
@@ -362,31 +241,18 @@
 
           <dt>基本情報</dt>
           <dd>
-         <table>
-           <tr><td>生年月日</td><td>1974/1/26</td></tr>
-           <tr><td>年齢</td><td><span id="age"></span>歳</td></tr>
-          <tr><td>血液型</td><td>Rh(+) AB型</td></tr>
-         </table>
+            生年月日：1974年1月26日 ｜ 年齢：<span id="age"></span>歳 ｜ 血液型：Rh(+) AB型
           </dd>
 
-      <dt>身体障害者手帳 総合等級：1級</dd>
+          <dt>身体障害者手帳</dt>
+          <dd>1級</dd>
 
-     <dd>
-      <span class="tag disability-tag">
-      <span class="label">視力障害</span>
-      <span class="grade">1級</span>
-      </span>
-
-      <span class="tag disability-tag">
-      <span class="label">左上肢機能障害</span>
-      <span class="grade">2級</span>
-      </span>
-
-      <span class="tag disability-tag">
-      <span class="label">左下肢機能障害</span>
-      <span class="grade">3級</span>
-      </span>
-      </dd>
+          <dt>障害</dt>
+          <dd>
+            ・視覚障害　1級<br>
+            ・左上肢機能障害　2級<br>
+            ・左下肢機能障害　3級
+          </dd>
 
           <dt>既往歴</dt>
           <dd>
@@ -516,8 +382,6 @@
       このページは緊急時の情報確認を目的としています。<br>
       医療情報や連絡先に変更があった場合は、掲載内容を更新してください。<br>
       <span class="small">個人情報を含むため、公開範囲とURLの管理にご注意ください。</span>
-      <br>
-      <span class="small">緊急対応以外での画面撮影・保存・印刷・共有はお控えください。</span>
     </footer>
 
     <div class="privacy-close">
@@ -534,60 +398,7 @@
 
 <script>
 function closePage() {
-  const overlay = document.createElement("div");
-  overlay.setAttribute("role", "status");
-  overlay.setAttribute("aria-live", "assertive");
-  overlay.innerHTML = "<strong>ご協力ありがとうございました。</strong>";
-  overlay.style.cssText = [
-    "position:fixed",
-    "inset:0",
-    "z-index:99999",
-    "display:flex",
-    "align-items:center",
-    "justify-content:center",
-    "padding:24px",
-    "background:#fff",
-    "color:#b00020",
-    "text-align:center",
-    "font-size:1.55rem",
-    "font-weight:900",
-    "line-height:1.5"
-  ].join(";");
-  document.body.appendChild(overlay);
-
-  const sound = new Audio(
-    "https://cordeliagray19200803-alt.github.io/New_Search/close.wav"
-  );
-  sound.preload = "auto";
-  sound.volume = 1.0;
-
-  let moved = false;
-
-  function moveToClosePage() {
-    if (moved) return;
-    moved = true;
-    window.location.replace(
-      "https://cordeliagray19200803-alt.github.io/New_Search/close.html"
-    );
-  }
-
-  sound.addEventListener("ended", function() {
-    setTimeout(moveToClosePage, 250);
-  }, { once:true });
-
-  try {
-    const playPromise = sound.play();
-
-    if (playPromise && typeof playPromise.catch === "function") {
-      playPromise.catch(function() {
-        setTimeout(moveToClosePage, 1500);
-      });
-    }
-  } catch (error) {
-    setTimeout(moveToClosePage, 1500);
-  }
-
-  setTimeout(moveToClosePage, 3000);
+  window.location.replace("close.html");
 }
 </script>
 
@@ -604,41 +415,5 @@ function calculateAge(){
 }
 calculateAge();
 </script>
-
-<script>
-(function(){
-  const privacyScreen = document.getElementById("privacyScreen");
-  const resumeButton = document.getElementById("resumeButton");
-  let needsManualResume = false;
-
-  function hideMedicalInfo(){
-    needsManualResume = true;
-    privacyScreen.classList.add("show");
-    document.body.style.overflow = "hidden";
-  }
-
-  function showMedicalInfo(){
-    needsManualResume = false;
-    privacyScreen.classList.remove("show");
-    document.body.style.overflow = "";
-  }
-
-  document.addEventListener("visibilitychange", function(){
-    if (document.hidden) {
-      hideMedicalInfo();
-    } else if (needsManualResume) {
-      privacyScreen.classList.add("show");
-    }
-  });
-
-  window.addEventListener("pagehide", hideMedicalInfo);
-  window.addEventListener("blur", function(){
-    if (document.hidden) hideMedicalInfo();
-  });
-
-  resumeButton.addEventListener("click", showMedicalInfo);
-})();
-</script>
-
 </body>
 </html>

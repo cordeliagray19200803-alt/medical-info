@@ -1,0 +1,3351 @@
+<!doctype html>
+<html lang="en" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<meta name="google" content="notranslate">
+<title>Traffic Accident Guide</title>
+<style>
+:root{
+  --red:#d90000;
+  --red-dark:#c90000;
+  --green:#07862f;
+  --soft-green:#eef7e8;
+  --text:#111;
+  --line:#dedede;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;color:var(--text)}
+body{
+  background:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+.screen{display:none;min-height:100vh}
+.screen.active{display:block}
+
+/* Initial assessment */
+#screen-start{background:#fff}
+.start-main{
+  width:min(100%,720px);
+  margin:0 auto;
+  padding:20px 18px 36px;
+}
+.start-header{
+  margin-bottom:22px;
+  padding:16px;
+  border-radius:14px;
+  background:#d32f2f;
+  color:#fff;
+  text-align:center;
+  font-size:clamp(27px,7vw,34px);
+  font-weight:800;
+  line-height:1.3;
+}
+.lead{
+  margin:0 0 14px;
+  font-size:clamp(18px,4.8vw,22px);
+  font-weight:700;
+}
+.choice{
+  display:flex;
+  align-items:flex-start;
+  gap:13px;
+  width:100%;
+  padding:17px 2px;
+  border-bottom:2px solid #d32f2f;
+  cursor:pointer;
+}
+.choice:first-of-type{border-top:2px solid #d32f2f}
+.choice input{
+  flex:0 0 auto;
+  width:27px;
+  height:27px;
+  margin:2px 0 0;
+  accent-color:#d32f2f;
+}
+.label-text{
+  font-size:clamp(18px,4.8vw,22px);
+  font-weight:700;
+  line-height:1.5;
+}
+.subtext{
+  display:block;
+  margin-top:4px;
+  color:#555;
+  font-size:clamp(15px,4vw,18px);
+  font-weight:500;
+}
+
+/* CPR guidance */
+#screen-emergency{background:var(--soft-green)}
+.emergency-main{
+  width:min(100%,720px);
+  margin:auto;
+  padding:max(18px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom));
+}
+.hero{
+  display:grid;
+  grid-template-columns:74px 1fr 74px;
+  gap:12px;
+  align-items:center;
+  background:linear-gradient(#ea1111,#c90000);
+  color:#fff;
+  border-radius:28px;
+  padding:22px 18px;
+  margin-bottom:28px;
+}
+.hero h1{
+  margin:0;
+  text-align:center;
+  font-size:clamp(30px,7vw,51px);
+  line-height:1.2;
+  font-weight:900;
+}
+.warning{width:70px;height:64px}
+.warning svg{width:100%;height:100%;display:block}
+.steps{display:grid;gap:20px}
+.step{
+  background:#fff;
+  border:4px solid var(--red);
+  border-radius:22px;
+  padding:20px 24px;
+  display:grid;
+  grid-template-columns:64px 1fr;
+  gap:18px;
+  align-items:center;
+  box-shadow:0 4px 12px rgba(0,0,0,.05);
+}
+.num{
+  width:58px;height:58px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--red);color:#fff;
+  font-size:34px;font-weight:900;
+}
+.step p{
+  margin:0;
+  font-size:clamp(20px,4.9vw,32px);
+  line-height:1.4;
+  font-weight:800;
+}
+.red{color:var(--red)}
+.call{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  min-height:100px;
+  margin:24px 0;
+  border-radius:24px;
+  background:linear-gradient(#07943a,#067c2f);
+  color:#fff;
+  text-decoration:none;
+  text-align:center;
+  font-size:clamp(27px,6.5vw,45px);
+  font-weight:900;
+  box-shadow:0 6px 14px rgba(0,0,0,.12);
+}
+.call:active{transform:translateY(1px)}
+.cpr{
+  width:100%;
+  border:0;
+  border-radius:26px;
+  background:linear-gradient(#e51515,#c90000);
+  color:#fff;
+  padding:26px 20px 22px;
+  text-align:center;
+  box-shadow:0 6px 14px rgba(0,0,0,.12);
+}
+.cpr h2{
+  margin:0 0 20px;
+  font-size:clamp(32px,7.3vw,52px);
+  font-weight:900;
+}
+.beat{
+  background:#fff0f0;
+  color:var(--red);
+  border-radius:18px;
+  padding:18px 12px;
+  font-size:clamp(30px,7.5vw,52px);
+  font-weight:900;
+}
+.status-row{
+  margin-top:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  font-size:clamp(17px,4vw,26px);
+  font-weight:800;
+}
+.badge{
+  background:#fff;
+  color:var(--red);
+  border-radius:999px;
+  padding:9px 17px;
+}
+.metro{
+  border-top:2px dashed rgba(255,255,255,.8);
+  margin:18px 0 0;
+  padding-top:16px;
+  font-size:clamp(19px,4.7vw,29px);
+  font-weight:800;
+}
+.metro b{color:#ffe800;font-size:1.3em}
+.stop{
+  width:100%;
+  margin-top:20px;
+  min-height:82px;
+  border:2px solid #888;
+  border-radius:22px;
+  background:#f4f4f4;
+  color:var(--green);
+  font-size:clamp(21px,5vw,32px);
+  font-weight:900;
+}
+.notice{
+  border-top:2px solid #4b9b75;
+  margin-top:20px;
+  padding:16px 6px 0;
+  display:flex;
+  gap:12px;
+  color:#111;
+  font-size:clamp(15px,3.8vw,21px);
+  line-height:1.55;
+  font-weight:650;
+}
+.notice .icon{color:var(--green);font-size:28px}
+
+/* Symptom selection and results */
+#screen-symptoms,
+#screen-results,
+#screen-summary{background:#fff}
+.sym-main{
+  width:min(100%,820px);
+  margin:0 auto;
+  padding:max(18px,env(safe-area-inset-top)) 14px max(28px,env(safe-area-inset-bottom));
+}
+.sym-header{
+  background:#d32f2f;
+  color:#fff;
+  border-radius:18px;
+  padding:16px 18px;
+  text-align:center;
+  font-size:clamp(24px,6.3vw,35px);
+  line-height:1.3;
+  font-weight:900;
+}
+.sym-lead{
+  margin:18px 2px 12px;
+  font-size:clamp(17px,4.5vw,22px);
+  line-height:1.6;
+  font-weight:750;
+}
+.sym-onset{
+  margin:18px 0 22px;
+  padding:14px 16px 16px;
+  border:2px solid #d32f2f;
+  border-radius:16px;
+  background:#fff6f6;
+}
+.sym-onset-title{
+  margin:0 0 10px;
+  font-size:clamp(20px,5.2vw,27px);
+  font-weight:900;
+}
+.sym-onset-options{
+  display:grid;
+  gap:10px;
+  padding-left:18px;
+}
+.sym-onset-options label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:clamp(18px,4.7vw,23px);
+  font-weight:750;
+}
+.sym-onset-options input{
+  width:26px;
+  height:26px;
+  accent-color:#d32f2f;
+}
+.sym-category-list{border-top:2px solid #d32f2f}
+.sym-category{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-height:62px;
+  padding:14px 4px;
+  border-bottom:2px solid #d32f2f;
+  cursor:pointer;
+  font-size:clamp(19px,5vw,25px);
+  font-weight:800;
+}
+.sym-category input,
+.sym-option input{
+  flex:0 0 auto;
+  width:27px;
+  height:27px;
+  accent-color:#d32f2f;
+}
+.sym-actions{
+  display:grid;
+  gap:12px;
+  margin-top:22px;
+}
+.sym-btn{
+  width:100%;
+  min-height:60px;
+  border:0;
+  border-radius:15px;
+  padding:13px 18px;
+  font-size:clamp(20px,5vw,25px);
+  font-weight:900;
+  cursor:pointer;
+}
+.sym-btn-primary{background:#d32f2f;color:#fff}
+.sym-btn-primary:disabled{
+  background:#ccc;
+  color:#777;
+  cursor:not-allowed;
+}
+.sym-btn-secondary{
+  background:#fff;
+  color:#a91f1f;
+  border:2px solid #d32f2f;
+}
+.sym-results-intro{
+  margin:16px 2px 18px;
+  font-size:clamp(16px,4.1vw,21px);
+  font-weight:700;
+  line-height:1.55;
+}
+.sym-section{
+  margin:0 0 22px;
+  border:2px solid #d32f2f;
+  border-radius:18px;
+  background:#fff;
+  overflow:hidden;
+  box-shadow:0 4px 14px rgba(0,0,0,.06);
+}
+.sym-section-title{
+  margin:0;
+  padding:14px 16px;
+  background:#fff6f6;
+  border-bottom:2px solid #d32f2f;
+  font-size:clamp(22px,5.6vw,30px);
+  font-weight:900;
+}
+.sym-column-heads,
+.sym-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.sym-column-head{
+  padding:12px 8px;
+  background:#fafafa;
+  text-align:center;
+  font-size:clamp(15px,3.8vw,19px);
+  line-height:1.35;
+  font-weight:900;
+}
+.sym-column-head:first-child,
+.sym-cell:first-child{border-right:1px solid #dedede}
+.sym-row{border-top:1px solid #dedede}
+.sym-cell{
+  min-width:0;
+  padding:7px 9px 10px;
+}
+.sym-option{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  padding:8px 0;
+  font-size:clamp(15px,3.8vw,19px);
+  line-height:1.45;
+  font-weight:700;
+  cursor:pointer;
+}
+.sym-option input{
+  width:22px;
+  height:22px;
+  margin-top:1px;
+}
+.sym-group-label{
+  display:block;
+  padding:9px 8px 5px 0;
+  color:#a91f1f;
+  font-size:clamp(15px,3.9vw,19px);
+  font-weight:900;
+  text-align:right;
+}
+.sym-group-row .sym-cell:last-child{padding-left:34px}
+.sym-onset-result{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px 20px;
+  padding:14px 16px 16px;
+}
+.sym-onset-bullet{
+  font-size:clamp(17px,4.3vw,21px);
+  line-height:1.55;
+  font-weight:750;
+}
+.patient-info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:14px;
+}
+.patient-info-item{
+  padding:12px 10px;
+  border:2px solid #d8d8d8;
+  border-radius:12px;
+  background:#fff;
+  text-align:center;
+  font-size:clamp(17px,4.3vw,22px);
+  line-height:1.4;
+  font-weight:900;
+}
+.patient-info-label{
+  display:block;
+  margin-bottom:3px;
+  color:#555;
+  font-size:.78em;
+  font-weight:800;
+}
+.sym-result-actions{display:grid;gap:12px}
+.sym-summary-list{
+  margin:0;
+  padding:4px 0 4px 1.25em;
+  list-style:none;
+}
+.sym-summary-list li{
+  position:relative;
+  padding:6px 0;
+  font-size:clamp(15px,3.9vw,19px);
+  line-height:1.5;
+  font-weight:700;
+}
+.sym-summary-list li::before{
+  content:"•";
+  position:absolute;
+  left:-1.05em;
+  font-weight:900;
+}
+.sym-summary-empty{min-height:20px}
+.triage-card{
+  margin:0 0 22px;
+  padding:18px;
+  border-radius:20px;
+  color:#fff;
+  text-align:center;
+  box-shadow:0 6px 16px rgba(0,0,0,.14);
+}
+.triage-card.emergency{background:linear-gradient(#e51f25,#c90000)}
+.triage-card.consult{background:linear-gradient(#168e58,#08723f)}
+.triage-label{
+  margin:0 0 5px;
+  font-size:clamp(16px,4.2vw,21px);
+  font-weight:800;
+}
+.triage-number{
+  margin:0;
+  font-size:clamp(38px,10vw,64px);
+  line-height:1.1;
+  font-weight:950;
+}
+.triage-message{
+  margin:10px 0 15px;
+  font-size:clamp(18px,4.7vw,24px);
+  line-height:1.45;
+  font-weight:850;
+}
+.triage-call{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:62px;
+  border-radius:15px;
+  background:#fff;
+  text-decoration:none;
+  font-size:clamp(20px,5vw,28px);
+  font-weight:950;
+}
+.triage-card.emergency .triage-call{color:#c90000}
+.triage-card.consult .triage-call{color:#08723f}
+.privacy-close{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:58px;
+  margin-top:14px;
+  border:3px solid #fff;
+  border-radius:15px;
+  background:rgba(0,0,0,.22);
+  color:#fff;
+  font-size:clamp(20px,5vw,27px);
+  font-weight:950;
+  cursor:pointer;
+}
+.privacy-close:active{transform:translateY(1px)}
+
+.triage-operator-guide{
+  margin:-6px 0 22px;
+  padding:18px;
+  border:3px solid #c90000;
+  border-radius:16px;
+  background:#fff;
+  color:#111;
+  text-align:left;
+  font-size:clamp(17px,4.4vw,22px);
+  line-height:1.65;
+  font-weight:800;
+  box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+.triage-operator-guide-title{
+  margin:0 0 10px;
+  color:#c90000;
+  font-size:clamp(19px,4.8vw,24px);
+  font-weight:950;
+  text-align:center;
+}
+.triage-operator-guide-quote{
+  display:block;
+  margin:10px 0;
+  padding:12px;
+  border-radius:10px;
+  background:#f5f5f5;
+  color:#000;
+  font-weight:900;
+}
+.triage-reasons{
+  margin:13px 0 0;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.16);
+  text-align:left;
+  font-size:clamp(14px,3.7vw,18px);
+  line-height:1.5;
+  font-weight:750;
+}
+.triage-reasons div::before{content:"• "}
+.sym-sticky-actions{
+  position:sticky;
+  bottom:0;
+  padding:13px 0 max(5px,env(safe-area-inset-bottom));
+  background:linear-gradient(to bottom,rgba(255,255,255,0),#fff 28%);
+}
+.sym-summary-back-actions{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+}
+#sym-summary-back-btn{
+  width:auto;
+  min-height:42px;
+  padding:8px 13px;
+  border-radius:11px;
+  font-size:clamp(14px,3.5vw,17px);
+  font-weight:800;
+}
+@media(max-width:460px){
+  .sym-main{padding-left:10px;padding-right:10px}
+  .sym-cell{padding-left:6px;padding-right:6px}
+  .sym-option{gap:5px}
+  .sym-option input{width:20px;height:20px}
+  .sym-column-head{padding-left:4px;padding-right:4px}
+  .emergency-main{padding-left:12px;padding-right:12px}
+  .hero{
+    grid-template-columns:52px 1fr 52px;
+    padding:18px 12px;
+    border-radius:22px;
+  }
+  .warning{width:50px;height:48px}
+  .step{
+    grid-template-columns:48px 1fr;
+    padding:16px 14px;
+    border-radius:18px;
+    gap:12px;
+  }
+  .num{width:46px;height:46px;font-size:27px}
+}
+
+/* Traffic accident flow */
+.page-close-link{
+  position:fixed;
+  top:max(8px,env(safe-area-inset-top));
+  right:10px;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:78px;
+  min-height:44px;
+  padding:8px 12px;
+  border:2px solid #555;
+  border-radius:12px;
+  background:#fff;
+  color:#222;
+  text-decoration:none;
+  font-size:17px;
+  font-weight:900;
+  box-shadow:0 3px 10px rgba(0,0,0,.15);
+}
+.flow-main{
+  width:min(100%,720px);
+  margin:0 auto;
+  padding:20px 18px 36px;
+}
+.flow-header{
+  margin-bottom:18px;
+  padding:16px;
+  border-radius:14px;
+  background:#163a63;
+  color:#fff;
+  text-align:center;
+  font-size:clamp(27px,7vw,34px);
+  font-weight:900;
+  line-height:1.35;
+}
+.flow-card{
+  padding:20px 18px;
+  border:3px solid #222;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:0 5px 14px rgba(0,0,0,.08);
+}
+.flow-card h1{
+  margin:0 0 16px;
+  text-align:center;
+  font-size:clamp(25px,6.5vw,36px);
+  line-height:1.4;
+  font-weight:950;
+}
+.flow-explanation{
+  margin:0 0 18px;
+  text-align:center;
+  font-size:clamp(18px,4.8vw,23px);
+  line-height:1.6;
+  font-weight:750;
+}
+.flow-actions{display:grid;gap:14px}
+.flow-btn{
+  width:100%;
+  min-height:78px;
+  padding:16px 14px;
+  border:3px solid #222;
+  border-radius:16px;
+  background:#fff;
+  color:#111;
+  font-size:clamp(20px,5.2vw,27px);
+  line-height:1.4;
+  font-weight:900;
+  cursor:pointer;
+}
+.flow-btn-emergency{
+  border-color:#c90000;
+  background:#fff0f0;
+  color:#9f0000;
+}
+.flow-btn-normal,
+.flow-btn-consult{
+  border-color:#08723f;
+  background:#f0fff7;
+  color:#075f36;
+}
+.flow-btn-police{
+  border-color:#163a63;
+  background:#f1f6fb;
+  color:#163a63;
+}
+.flow-btn-note{
+  display:block;
+  margin-top:7px;
+  font-size:clamp(15px,3.8vw,18px);
+  line-height:1.45;
+  font-weight:700;
+}
+.flow-back-btn{
+  width:100%;
+  min-height:58px;
+  margin-top:18px;
+  border:2px solid #555;
+  border-radius:14px;
+  background:#fff;
+  color:#222;
+  font-size:clamp(17px,4.3vw,21px);
+  font-weight:850;
+  cursor:pointer;
+}
+.breathing-count{
+  display:grid;
+  place-items:center;
+  width:min(58vw,250px);
+  aspect-ratio:1;
+  margin:20px auto 24px;
+  border:8px solid #c90000;
+  border-radius:50%;
+  color:#c90000;
+  background:#fff8f8;
+  font-size:clamp(80px,25vw,150px);
+  line-height:1;
+  font-weight:950;
+}
+.direct-result-card{
+  padding:20px 18px;
+  border:4px solid #222;
+  border-radius:22px;
+  background:#fff;
+  box-shadow:0 6px 16px rgba(0,0,0,.1);
+}
+.direct-result-card.emergency-result{border-color:#c90000}
+.direct-result-card.police-result{border-color:#163a63}
+.direct-result-label{
+  margin:0 0 8px;
+  text-align:center;
+  font-size:clamp(18px,4.7vw,22px);
+  font-weight:850;
+}
+.direct-result-number{
+  margin:0;
+  text-align:center;
+  font-size:clamp(40px,11vw,62px);
+  line-height:1.25;
+  font-weight:950;
+}
+.direct-result-message{
+  margin:10px 0 18px;
+  text-align:center;
+  font-size:clamp(20px,5.2vw,27px);
+  line-height:1.5;
+  font-weight:900;
+}
+.direct-call-grid,
+.traffic-call-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:10px;
+}
+.direct-call-grid.single{grid-template-columns:1fr}
+.direct-call-btn,
+.traffic-call-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:70px;
+  padding:12px 7px;
+  border-radius:15px;
+  color:#fff;
+  text-decoration:none;
+  text-align:center;
+  font-size:clamp(18px,4.8vw,25px);
+  line-height:1.35;
+  font-weight:950;
+}
+.direct-call-119{background:#c90000}
+.direct-call-110{background:#163a63}
+.direct-call-7119{background:#08723f}
+.result-warning{
+  margin:18px 0 0;
+  padding:15px;
+  border:3px solid #c90000;
+  border-radius:15px;
+  background:#fff5f5;
+  color:#111;
+  font-size:clamp(17px,4.4vw,21px);
+  line-height:1.6;
+  font-weight:800;
+}
+.call-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:10px;
+  margin:24px 0;
+}
+.call-row .call{
+  min-height:92px;
+  margin:0;
+  padding:12px 8px;
+  font-size:clamp(21px,5.5vw,34px);
+}
+.call-police{background:linear-gradient(#244f7c,#163a63)}
+.traffic-symptom-guide{
+  margin:0 0 15px;
+  padding:14px;
+  border:3px solid #163a63;
+  border-radius:14px;
+  background:#f1f6fb;
+  font-size:clamp(17px,4.4vw,21px);
+  line-height:1.6;
+  font-weight:800;
+}
+.location-table{
+  width:100%;
+  border-collapse:collapse;
+}
+.location-table th,
+.location-table td{
+  padding:12px 10px;
+  border:1px solid #dedede;
+  text-align:left;
+  vertical-align:top;
+  font-size:clamp(16px,4vw,20px);
+  line-height:1.5;
+}
+.location-table th{width:105px;background:#f8f9fa}
+.location-note{
+  margin:10px 0 0;
+  font-size:clamp(14px,3.6vw,17px);
+  line-height:1.55;
+}
+.location-map-wrap{
+  margin-top:14px;
+  border:1px solid #dedede;
+  border-radius:14px;
+  overflow:hidden;
+  background:#fff;
+}
+.location-map-title{
+  padding:10px 12px;
+  background:#f8f9fa;
+  border-bottom:1px solid #dedede;
+  font-weight:900;
+}
+.location-map{height:240px}
+.location-info{padding:12px}
+.location-info-row{
+  display:grid;
+  grid-template-columns:90px 1fr;
+  gap:8px;
+  padding:8px 0;
+  border-bottom:1px solid #dedede;
+}
+.location-buttons{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:10px;
+  padding:0 12px 12px;
+}
+.location-btn{
+  min-height:48px;
+  border-radius:12px;
+  border:2px solid #135da5;
+  background:#fff;
+  color:#135da5;
+  font-weight:900;
+}
+@media(max-width:390px){
+  .flow-main{padding-left:12px;padding-right:12px}
+  .direct-call-btn,.traffic-call-btn{font-size:17px}
+}
+
+/* Traffic accident: urgency, vehicle and people count */
+/* Calm green interface with deep red reserved for critical actions */
+#screen-traffic-role,
+#screen-traffic-consciousness,
+#screen-traffic-vehicles,
+#screen-traffic-details,
+#screen-traffic-state{
+  background:#eef4f0;
+}
+#screen-traffic-role .flow-main,
+#screen-traffic-consciousness .flow-main,
+#screen-traffic-vehicles .flow-main,
+#screen-traffic-details .flow-main,
+#screen-traffic-state .flow-main{
+  min-height:100vh;
+}
+#screen-traffic-role .flow-header,
+#screen-traffic-consciousness .flow-header,
+#screen-traffic-vehicles .flow-header,
+#screen-traffic-details .flow-header,
+#screen-traffic-state .flow-header{
+  background:#315c50;
+}
+#screen-traffic-role .flow-card,
+#screen-traffic-consciousness .flow-card,
+#screen-traffic-vehicles .flow-card,
+#screen-traffic-details .flow-card,
+#screen-traffic-state .flow-card{
+  border-color:#315c50;
+  background:#f8fbf9;
+}
+#screen-traffic-role .flow-back-btn,
+#screen-traffic-consciousness .flow-back-btn,
+#screen-traffic-vehicles .flow-back-btn,
+#screen-traffic-details .flow-back-btn,
+#screen-traffic-state .flow-back-btn{
+  border-color:#55756b;
+  background:#f8fbf9;
+  color:#23483e;
+}
+#screen-traffic-role .flow-btn-consult,
+#screen-traffic-role .flow-btn-police{
+  border-color:#315c50;
+  background:#46766b;
+  color:#fff;
+}
+.traffic-action-button{
+  min-height:132px;
+  padding:17px 16px;
+  border-width:3px;
+  color:#fff;
+  text-align:left;
+  box-shadow:0 4px 0 rgba(40,50,45,.18);
+}
+.traffic-action-button:active{
+  transform:translateY(3px);
+  box-shadow:0 1px 0 rgba(40,50,45,.18);
+}
+.traffic-action-breathing{
+  border-color:#772d2d;
+  background:#9f3838;
+}
+.traffic-action-call{
+  border-color:#83352d;
+  background:#a84b3f;
+}
+.traffic-action-safe{
+  border-color:#315c50;
+  background:#3f7074;
+}
+.traffic-action-title{
+  display:block;
+  text-align:center;
+  font-size:clamp(21px,5.2vw,27px);
+  line-height:1.35;
+  font-weight:950;
+}
+.traffic-action-items{
+  display:block;
+  margin-top:11px;
+  padding-top:10px;
+  border-top:1px solid rgba(255,255,255,.5);
+}
+.traffic-action-item{
+  display:block;
+  position:relative;
+  padding-left:1.25em;
+  font-size:clamp(16px,4vw,20px);
+  line-height:1.55;
+  font-weight:780;
+}
+.traffic-action-item::before{
+  content:"•";
+  position:absolute;
+  left:0;
+  top:0;
+  font-weight:950;
+}
+.traffic-action-next{
+  display:block;
+  margin-top:10px;
+  text-align:center;
+  font-size:clamp(15px,3.7vw,18px);
+  line-height:1.45;
+  font-weight:750;
+}
+.traffic-vehicle-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:10px;
+}
+.traffic-vehicle-option{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  min-height:82px;
+  padding:12px 8px;
+  border:3px solid #315c50;
+  border-radius:15px;
+  background:#f8fbf9;
+  color:#23483e;
+  text-align:center;
+  cursor:pointer;
+  font-size:clamp(16px,4.1vw,21px);
+  line-height:1.35;
+  font-weight:900;
+}
+.traffic-vehicle-option input{
+  width:24px;
+  height:24px;
+  margin:0 8px 0 0;
+  flex:0 0 auto;
+  accent-color:#315c50;
+}
+.traffic-detail-stack{display:grid;gap:15px}
+.traffic-detail-card{
+  padding:15px;
+  border:3px solid #55756b;
+  border-radius:16px;
+  background:#f4f8f5;
+}
+.traffic-detail-title{
+  margin:0 0 12px;
+  text-align:center;
+  font-size:clamp(21px,5.3vw,27px);
+  line-height:1.35;
+  font-weight:950;
+}
+.traffic-count-question{
+  margin:14px 0 7px;
+  font-size:clamp(17px,4.2vw,21px);
+  line-height:1.5;
+  font-weight:900;
+}
+.traffic-count-options{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:8px;
+}
+.traffic-count-options label{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:52px;
+  padding:8px 6px;
+  border:2px solid #555;
+  border-radius:11px;
+  background:#fff;
+  text-align:center;
+  cursor:pointer;
+  font-size:clamp(15px,3.8vw,19px);
+  line-height:1.35;
+  font-weight:850;
+}
+.traffic-count-options input{
+  width:22px;
+  height:22px;
+  margin:0 7px 0 0;
+  flex:0 0 auto;
+}
+.traffic-inline-error{
+  margin:13px 0 0;
+  padding:11px;
+  border:2px solid #c90000;
+  border-radius:11px;
+  background:#fff4f4;
+  color:#990000;
+  font-size:clamp(16px,4vw,19px);
+  line-height:1.5;
+  font-weight:850;
+}
+.traffic-emergency-shortcut{
+  width:100%;
+  min-height:60px;
+  margin-top:13px;
+  border:3px solid #c90000;
+  border-radius:14px;
+  background:#fff;
+  color:#b00000;
+  font-size:clamp(17px,4.2vw,21px);
+  font-weight:950;
+  cursor:pointer;
+}
+.traffic-situation-table{
+  width:100%;
+  border-collapse:collapse;
+}
+.traffic-situation-table th,
+.traffic-situation-table td{
+  padding:10px;
+  border:1px solid #bbb;
+  text-align:left;
+  vertical-align:top;
+  font-size:clamp(15px,3.8vw,19px);
+  line-height:1.5;
+}
+.traffic-situation-table th{
+  width:34%;
+  background:#f2f2f2;
+}
+
+
+/* Traffic-accident colors based on the Help Mark red */
+
+/* TOP：背景とタイトルは元のまま */
+#screen-traffic-role{
+  background:#fff;
+  color:#111;
+}
+
+#screen-traffic-role .flow-header{
+  background:#163a63;
+  color:#fff;
+}
+
+#screen-traffic-role .flow-card{
+  border-color:#222;
+  background:#fff;
+  color:#111;
+}
+
+#screen-traffic-role .flow-card h1,
+#screen-traffic-role .flow-explanation{
+  color:#111;
+}
+
+/* 当事者：ヘルプマークより少し暗い赤 */
+#traffic-role-involved-btn{
+  border-color:#8f0028 !important;
+  background:#b60032 !important;
+  color:#fff !important;
+  font-weight:950 !important;
+}
+
+/* 目撃者：少し明るめの緑 */
+#traffic-role-witness-btn{
+  border-color:#477e58 !important;
+  background:#5e9e70 !important;
+  color:#fff !important;
+  font-weight:950 !important;
+}
+
+/* 次のページ：背景とタイトルは元のまま */
+#screen-traffic-consciousness{
+  background:#fff;
+  color:#111;
+}
+
+#screen-traffic-consciousness .flow-header{
+  background:#163a63;
+  color:#fff;
+}
+
+#screen-traffic-consciousness .flow-card{
+  border-color:#222;
+  background:#fff;
+  color:#111;
+}
+
+#screen-traffic-consciousness .flow-card h1,
+#screen-traffic-consciousness .flow-explanation{
+  color:#111;
+}
+
+/* 緊急：ヘルプマークより少しはっきりした赤 */
+#traffic-unconscious-btn,
+#traffic-multiple-emergency-btn{
+  border-color:#b90031 !important;
+  background:#e5003d !important;
+  color:#fff !important;
+  font-weight:950 !important;
+}
+
+/* 緊急以外：淡い印象の緑 */
+#traffic-conscious-btn{
+  border-color:#4f7f5b !important;
+  background:#6e9f79 !important;
+  color:#fff !important;
+  font-weight:950 !important;
+}
+
+/* ボタン内の文字は白・太字を維持 */
+#traffic-role-involved-btn .flow-btn-note,
+#traffic-role-witness-btn .flow-btn-note,
+#traffic-unconscious-btn .traffic-action-title,
+#traffic-unconscious-btn .traffic-action-item,
+#traffic-multiple-emergency-btn .traffic-action-title,
+#traffic-multiple-emergency-btn .traffic-action-item,
+#traffic-conscious-btn .traffic-action-title,
+#traffic-conscious-btn .traffic-action-item,
+#traffic-conscious-btn .traffic-action-next{
+  color:#fff !important;
+  font-weight:950 !important;
+}
+
+
+/* Apply only the color palette from the attached traffic.html */
+
+/* 画面背景・タイトル・カード */
+#screen-traffic-role,
+#screen-traffic-consciousness,
+#screen-traffic-vehicles,
+#screen-traffic-details,
+#screen-traffic-state{
+  background:#fff !important;
+  color:#111 !important;
+}
+
+#screen-traffic-role .flow-header,
+#screen-traffic-consciousness .flow-header,
+#screen-traffic-vehicles .flow-header,
+#screen-traffic-details .flow-header,
+#screen-traffic-state .flow-header{
+  background:#163a63 !important;
+  color:#fff !important;
+  border-color:#163a63 !important;
+}
+
+#screen-traffic-role .flow-card,
+#screen-traffic-consciousness .flow-card,
+#screen-traffic-vehicles .flow-card,
+#screen-traffic-details .flow-card,
+#screen-traffic-state .flow-card{
+  3px solid #222 !important;
+  background:#fff !important;
+  color:#111 !important;
+}
+
+#screen-traffic-role .flow-card h1,
+#screen-traffic-consciousness .flow-card h1,
+#screen-traffic-vehicles .flow-card h1,
+#screen-traffic-details .flow-card h1,
+#screen-traffic-state .flow-card h1,
+#screen-traffic-role .flow-explanation,
+#screen-traffic-consciousness .flow-explanation,
+#screen-traffic-vehicles .flow-explanation,
+#screen-traffic-details .flow-explanation,
+#screen-traffic-state .flow-explanation{
+  color:#111 !important;
+}
+
+/* 当事者・緊急：添付版の緊急ボタン色 */
+#traffic-role-involved-btn,
+#traffic-unconscious-btn,
+#traffic-multiple-emergency-btn{
+  border-color:#c90000 !important;
+  background:#fff0f0 !important;
+  color:#c90000 !important;
+  font-weight:950 !important;
+}
+
+/* 目撃者・緊急以外：添付版の通常ボタン色 */
+#traffic-role-witness-btn,
+#traffic-conscious-btn,
+#screen-traffic-vehicles .flow-btn-normal,
+#screen-traffic-details .flow-btn-normal,
+#screen-traffic-state .flow-btn-consult{
+  border-color:#08723f !important;
+  background:#f0fff7 !important;
+  color:#08723f !important;
+  font-weight:950 !important;
+}
+
+/* 110番へ進む選択：添付版の警察ボタン色 */
+#screen-traffic-state .flow-btn-police{
+  border-color:#163a63 !important;
+  background:#f1f6fb !important;
+  color:#163a63 !important;
+  font-weight:950 !important;
+}
+
+/* ボタン内の見出し・箇条書きも添付版の文字色 */
+#traffic-role-involved-btn .flow-btn-note,
+#traffic-unconscious-btn .traffic-action-title,
+#traffic-unconscious-btn .traffic-action-item,
+#traffic-multiple-emergency-btn .traffic-action-title,
+#traffic-multiple-emergency-btn .traffic-action-item{
+  color:#c90000 !important;
+}
+
+#traffic-role-witness-btn .flow-btn-note,
+#traffic-conscious-btn .traffic-action-title,
+#traffic-conscious-btn .traffic-action-item,
+#traffic-conscious-btn .traffic-action-next{
+  color:#08723f !important;
+}
+
+.traffic-action-items{
+  border-top-color:currentColor !important;
+  opacity:1 !important;
+}
+
+/* 乗り物・人数入力も添付版の青系へ戻す */
+.traffic-vehicle-option{
+  border-color:#163a63 !important;
+  background:#fff !important;
+  color:#163a63 !important;
+}
+
+.traffic-vehicle-option input,
+.traffic-count-options input{
+  accent-color:#163a63 !important;
+}
+
+.traffic-detail-card{
+  border-color:#163a63 !important;
+  background:#f1f6fb !important;
+  color:#111 !important;
+}
+
+.traffic-detail-title,
+.traffic-count-question{
+  color:#111 !important;
+}
+
+.traffic-count-options label{
+  border-color:#555 !important;
+  background:#fff !important;
+  color:#111 !important;
+}
+
+/* 緊急ショートカット */
+.traffic-emergency-shortcut{
+  border-color:#c90000 !important;
+  background:#fff0f0 !important;
+  color:#c90000 !important;
+  font-weight:950 !important;
+}
+
+/* 戻るボタン */
+#screen-traffic-role .flow-back-btn,
+#screen-traffic-consciousness .flow-back-btn,
+#screen-traffic-vehicles .flow-back-btn,
+#screen-traffic-details .flow-back-btn,
+#screen-traffic-state .flow-back-btn{
+  border-color:#555 !important;
+  background:#fff !important;
+  color:#222 !important;
+}
+
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body class="notranslate" translate="no">
+<a class="page-close-link" href="close.html" aria-label="Close">Close</a>
+
+<section id="screen-start" class="screen">
+  <main class="start-main">
+    <div class="start-header">⏱️ Current Condition</div>
+    <p class="lead">Select the option that applies.</p>
+
+    <label class="choice">
+      <input type="checkbox" class="emergency-check">
+      <span class="label-text">Not breathing</span>
+    </label>
+
+    <label class="choice">
+      <input type="checkbox" class="emergency-check">
+      <span class="label-text">The chest is not moving up and down</span>
+    </label>
+
+    <label class="choice">
+      <input type="checkbox" class="emergency-check">
+      <span class="label-text">The abdomen does not move up and down when a hand is placed on it</span>
+    </label>
+
+    <label class="choice">
+      <input id="not-emergency" type="checkbox">
+      <span class="label-text">
+        None of the above
+        <span class="subtext">(The person is breathing, and the chest or abdomen is moving up and down.)</span>
+      </span>
+    </label>
+  </main>
+</section>
+
+
+<section id="screen-breathing-check" class="screen">
+  <main class="flow-main">
+    <div class="flow-header">Check Breathing</div>
+
+    <section class="flow-card">
+      <h1>Check for breathing for 10 seconds</h1>
+
+      <p class="flow-explanation">
+        Gently place the palm of your hand on the abdomen over the clothing,
+        and also watch the chest and abdomen for movement.
+      </p>
+
+      <p class="flow-explanation" style="font-weight:850">
+        If they are moving normally, press the green button.
+      </p>
+
+      <div id="breathing-count"
+           class="breathing-count"
+           aria-live="assertive"
+           aria-label="Breathing-check voice instructions will start in 0.5 seconds">Get Ready</div>
+
+      <div id="breathing-result-actions" class="flow-actions">
+        <button id="breathing-abnormal-btn"
+                class="flow-btn flow-btn-emergency"
+                type="button"
+                hidden>
+          No normal breathing<br>
+          Weak breathing or not sure
+        </button>
+
+        <button id="breathing-normal-btn"
+                class="flow-btn flow-btn-normal"
+                type="button">
+          Breathing normally
+        </button>
+      </div>
+
+      <p class="flow-explanation" style="margin-top:16px;font-weight:850">
+        If there is no movement, the movement is intermittent or weak,
+        or you are not sure, do not press the button.<br>
+        If the button is not pressed, chest-compression guidance will
+        start automatically after the count.
+      </p>
+    </section>
+
+    <button id="breathing-back-btn"
+            class="flow-back-btn"
+            type="button">Back</button>
+  </main>
+</section>
+
+<section id="screen-traffic-role" class="screen active">
+  <main class="flow-main">
+    <div class="flow-header">🚗 Traffic Accident</div>
+
+    <section class="flow-card">
+      <h1>Which best describes you?</h1>
+      <p class="flow-explanation">
+        After you choose, the next step checks immediately for a life-threatening emergency.
+      </p>
+
+      <div class="flow-actions">
+        <button id="traffic-role-involved-btn"
+                class="flow-btn flow-btn-consult"
+                type="button">
+          I was involved in the accident
+          <span class="flow-btn-note">
+            Driver, passenger, pedestrian, cyclist, etc.
+          </span>
+        </button>
+
+        <button id="traffic-role-witness-btn"
+                class="flow-btn flow-btn-police"
+                type="button">
+          I witnessed the accident or am nearby
+          <span class="flow-btn-note">
+            Witness or bystander
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <button id="traffic-role-back-btn"
+            class="flow-back-btn"
+            type="button">Back to the Main Menu</button>
+  </main>
+</section>
+
+<section id="screen-traffic-consciousness" class="screen">
+  <main class="flow-main">
+    <div class="flow-header">🚗 Traffic Accident</div>
+
+    <section class="flow-card">
+      <h1 id="traffic-consciousness-question" hidden></h1>
+      <p id="traffic-consciousness-guide" class="flow-explanation">
+        Check yourself, passengers, people in the other vehicle, pedestrians and anyone else involved.
+      </p>
+
+      <div class="flow-actions">
+        <button id="traffic-unconscious-btn"
+                class="flow-btn traffic-action-button traffic-action-breathing"
+                type="button">
+          <span class="traffic-action-title">Check Breathing Immediately</span>
+          <span class="traffic-action-items">
+            <span class="traffic-action-item">Unconscious or unresponsive</span>
+            <span class="traffic-action-item">Not breathing, breathing weakly, or not sure</span>
+          </span>
+        </button>
+
+        <button id="traffic-multiple-emergency-btn"
+                class="flow-btn traffic-action-button traffic-action-call"
+                type="button">
+          <span class="traffic-action-title">Call 119 Without Further Questions</span>
+          <span class="traffic-action-items">
+            <span class="traffic-action-item">Heavy bleeding or someone trapped in or under a vehicle</span>
+            <span class="traffic-action-item">Two or more injured people, or the number is unknown</span>
+            <span class="traffic-action-item">Fire, smoke, or leaking fuel</span>
+          </span>
+        </button>
+
+        <button id="traffic-conscious-btn"
+                class="flow-btn traffic-action-button traffic-action-safe"
+                type="button">
+          <span class="traffic-action-title">None of the Above</span>
+          <span class="traffic-action-items">
+            <span class="traffic-action-item">Everyone is conscious and able to respond</span>
+            <span class="traffic-action-item">No immediate danger is apparent</span>
+          </span>
+          <span class="traffic-action-next">Continue to vehicles and number of people</span>
+        </button>
+      </div>
+    </section>
+
+    <button id="traffic-consciousness-back-btn"
+            class="flow-back-btn"
+            type="button">Back</button>
+  </main>
+</section>
+
+<section id="screen-traffic-vehicles" class="screen">
+  <main class="flow-main">
+    <div class="flow-header">🚗 Vehicles and People Involved</div>
+
+    <section class="flow-card">
+      <h1>Select the vehicles, pedestrians, and others involved in the accident</h1>
+      <p class="flow-explanation">(You may select more than one.)</p>
+
+      <div class="traffic-vehicle-grid">
+        <label class="traffic-vehicle-option">
+          <input type="checkbox" class="traffic-vehicle-check" value="car">
+          🚗 Car
+        </label>
+        <label class="traffic-vehicle-option">
+          <input type="checkbox" class="traffic-vehicle-check" value="large">
+          🚌 Bus, truck or<br>large vehicle
+        </label>
+        <label class="traffic-vehicle-option">
+          <input type="checkbox" class="traffic-vehicle-check" value="motorcycle">
+          🏍️ Motorcycle<br>or scooter
+        </label>
+        <label class="traffic-vehicle-option">
+          <input type="checkbox" class="traffic-vehicle-check" value="bicycle">
+          🚲 Bicycle
+        </label>
+        <label class="traffic-vehicle-option">
+          <input type="checkbox" class="traffic-vehicle-check" value="kickboard">
+          🛴 Electric<br>kick scooter
+        </label>
+        <label class="traffic-vehicle-option">
+          <input type="checkbox" class="traffic-vehicle-check" value="pedestrian">
+          🚶 Pedestrian
+        </label>
+        <label class="traffic-vehicle-option" style="grid-column:1 / -1">
+          <input type="checkbox" class="traffic-vehicle-check" value="other">
+          ❓ Other or not sure
+        </label>
+      </div>
+
+      <p id="traffic-vehicle-error" class="traffic-inline-error" hidden>
+        Select at least one option.
+      </p>
+
+      <button id="traffic-vehicle-next-btn"
+              class="flow-btn flow-btn-normal"
+              type="button"
+              style="margin-top:16px">Next</button>
+
+      <button class="traffic-emergency-shortcut traffic-direct-emergency-btn"
+              type="button">
+        🚨 Call 119 if the situation becomes urgent
+      </button>
+    </section>
+
+    <button id="traffic-vehicle-back-btn"
+            class="flow-back-btn"
+            type="button">Back</button>
+  </main>
+</section>
+
+<section id="screen-traffic-details" class="screen">
+  <main class="flow-main">
+    <div class="flow-header">🚗 Vehicle and People Count</div>
+
+    <section class="flow-card">
+      <h1>Answer as far as you can</h1>
+      <div id="traffic-detail-container" class="traffic-detail-stack"></div>
+
+      <p id="traffic-detail-error" class="traffic-inline-error" hidden>
+        Answer each question. Select “Not sure” when the information is unavailable.
+      </p>
+
+      <button id="traffic-detail-next-btn"
+              class="flow-btn flow-btn-normal"
+              type="button"
+              style="margin-top:16px">Next</button>
+
+      <button class="traffic-emergency-shortcut traffic-direct-emergency-btn"
+              type="button">
+        🚨 Call 119 if the situation becomes urgent
+      </button>
+    </section>
+
+    <button id="traffic-detail-back-btn"
+            class="flow-back-btn"
+            type="button">Back</button>
+  </main>
+</section>
+
+<section id="screen-traffic-state" class="screen">
+  <main class="flow-main">
+    <div class="flow-header">🚗 Injured People</div>
+
+    <section class="flow-card">
+      <h1>How many people have an injury, pain, or other symptoms?</h1>
+
+      <div class="flow-actions">
+        <button id="traffic-one-injured-btn"
+                class="flow-btn flow-btn-consult"
+                type="button">
+          One person
+          <span class="flow-btn-note">Check the symptoms</span>
+        </button>
+
+        <button id="traffic-multiple-injured-btn"
+                class="flow-btn flow-btn-emergency"
+                type="button">
+          Two or more people, or not sure
+          <span class="flow-btn-note">Call 119 without completing the detailed questions</span>
+        </button>
+
+        <button id="traffic-no-symptom-btn"
+                class="flow-btn flow-btn-police"
+                type="button">
+          No one
+          <span class="flow-btn-note">Call 110</span>
+        </button>
+      </div>
+    </section>
+
+    <button id="traffic-state-back-btn"
+            class="flow-back-btn"
+            type="button">Back</button>
+  </main>
+</section>
+
+<section id="screen-direct-result" class="screen">
+  <main class="flow-main">
+    <div id="direct-result-content"></div>
+    <button id="direct-result-home-btn"
+            class="flow-back-btn"
+            type="button">Back to the Main Menu</button>
+  </main>
+</section>
+
+<section id="screen-emergency" class="screen">
+  <main class="emergency-main">
+    <section class="hero">
+      <div class="warning" aria-hidden="true">
+        <svg viewBox="0 0 64 58">
+          <path d="M32 2L62 55H2Z" fill="#FFD42A" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="29" y="17" width="6" height="22" rx="3" fill="#111"/>
+          <circle cx="32" cy="46" r="3.5" fill="#111"/>
+        </svg>
+      </div>
+      <h1>Start Chest<br>Compressions</h1>
+      <div class="warning" aria-hidden="true">
+        <svg viewBox="0 0 64 58">
+          <path d="M32 2L62 55H2Z" fill="#FFD42A" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="29" y="17" width="6" height="22" rx="3" fill="#111"/>
+          <circle cx="32" cy="46" r="3.5" fill="#111"/>
+        </svg>
+      </div>
+    </section>
+
+    <section class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <p>Call <span class="red">119</span> immediately.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <p>Put the phone on speaker and turn the volume to <span class="red">maximum</span>.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <p>Begin <span class="red">chest compressions</span>.</p>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <p>Ask people nearby for help.</p>
+      </div>
+    </section>
+
+    <div class="call-row">
+      <a id="call119" class="call" href="tel:119" aria-label="Call 119 for an ambulance">
+        ☎ Call 119
+      </a>
+      <a id="call110-emergency"
+         class="call call-police"
+         href="tel:110"
+         aria-label="Call 110 for the police">
+        ☎ Call 110
+      </a>
+    </div>
+
+    <button id="cprBox" class="cpr" type="button">
+      <h2>❤️ Chest Compressions</h2>
+      <div class="beat">BEEP • BEEP • BEEP • BEEP</div>
+      <div class="status-row">
+        <span id="badge" class="badge">🔊 Voice guidance on</span>
+        <span id="status">Continue chest compressions</span>
+      </div>
+      <div class="metro">Metronome: <b>110</b> beats per minute</div>
+    </button>
+
+    <button id="stopBtn" class="stop" type="button">
+      ■ Stop voice guidance and metronome
+    </button>
+
+    <button class="privacy-close" type="button" onclick="location.href='close.html'" aria-label="Close the CPR screen">Close</button>
+
+    <footer class="notice">
+      <div class="icon">📣</div>
+      <div>
+        This page provides emergency guidance.<br>
+        After calling 119, follow the dispatcher's instructions.
+      </div>
+    </footer>
+  </main>
+</section>
+
+<section id="screen-symptoms" class="screen">
+  <main class="sym-main">
+    <div class="sym-header">Select Symptoms</div>
+    <p class="sym-lead">Select all options that apply.</p>
+    <div class="traffic-symptom-guide">
+      The injured person can enter the information, or someone nearby can ask and select the answers.
+    </div>
+
+    <div class="sym-onset">
+      <div class="sym-onset-title">⌚ Onset</div>
+      <div class="sym-onset-options">
+        <label><input type="checkbox" class="onset-choice" value="Unknown">Unknown</label>
+        <label><input type="checkbox" class="onset-choice" value="Started suddenly">Started suddenly</label>
+        <label><input type="checkbox" class="onset-choice" value="Developed gradually">Developed gradually</label>
+      </div>
+    </div>
+
+    <div class="sym-category-list">
+      <label class="sym-category"><input type="checkbox" value="eye">👁️ Eyes</label>
+      <label class="sym-category"><input type="checkbox" value="limbs">🦵 Arms and Legs</label>
+      <label class="sym-category"><input type="checkbox" value="face">🙂 Face</label>
+      <label class="sym-category"><input type="checkbox" value="head">😵 Head</label>
+      <label class="sym-category"><input type="checkbox" value="breath">😮‍💨 Breathing</label>
+      <label class="sym-category"><input type="checkbox" value="body">🤢 Chest, Abdomen, and Body</label>
+      <label class="sym-category"><input type="checkbox" value="skin">🩹 Skin</label>
+      <label class="sym-category"><input type="checkbox" value="other">❓ Other</label>
+    </div>
+
+    <div class="sym-actions">
+      <button id="sym-next-btn" class="sym-btn sym-btn-primary" type="button" disabled>Next</button>
+    </div>
+  </main>
+</section>
+
+<section id="screen-results" class="screen">
+  <main class="sym-main">
+    <div class="sym-header">Select the Symptoms That Apply</div>
+    <p class="sym-results-intro">Only the categories selected on the previous screen are shown.</p>
+
+    <div id="sym-results"></div>
+
+    <div class="sym-sticky-actions sym-result-actions">
+      <button id="sym-detail-next-btn" class="sym-btn sym-btn-primary" type="button" disabled>Next</button>
+      <button id="sym-back-btn" class="sym-btn sym-btn-secondary" type="button">Change Categories</button>
+    </div>
+  </main>
+</section>
+
+<section id="screen-summary" class="screen">
+  <main class="sym-main">
+    <div class="sym-header">Selected Results</div>
+    <p id="sym-summary-intro" class="sym-results-intro"></p>
+
+    <div id="sym-summary"></div>
+
+    <div class="sym-sticky-actions sym-summary-back-actions">
+      <button id="sym-summary-back-btn" class="sym-btn sym-btn-secondary" type="button">Change Symptoms</button>
+    </div>
+  </main>
+</section>
+
+<script>
+const screens = document.querySelectorAll('.screen');
+
+let audioCtx = null;
+let metroTimer = null;
+let repeatTimer = null;
+let stopped = true;
+let guidanceRunning = false;
+let called119 = false;
+
+const interval = 60000 / 110;
+const badge = document.getElementById('badge');
+const status = document.getElementById('status');
+const stopBtn = document.getElementById('stopBtn');
+const cprBox = document.getElementById('cprBox');
+const call119 = document.getElementById('call119');
+const call110Emergency = document.getElementById('call110-emergency');
+
+const breathingCount = document.getElementById('breathing-count');
+const breathingResultActions = document.getElementById('breathing-result-actions');
+const breathingAbnormalBtn = document.getElementById('breathing-abnormal-btn');
+const breathingNormalBtn = document.getElementById('breathing-normal-btn');
+const breathingBackBtn = document.getElementById('breathing-back-btn');
+
+const trafficRoleInvolvedBtn =
+  document.getElementById('traffic-role-involved-btn');
+const trafficRoleWitnessBtn =
+  document.getElementById('traffic-role-witness-btn');
+const trafficRoleBackBtn =
+  document.getElementById('traffic-role-back-btn');
+const trafficConsciousnessQuestion =
+  document.getElementById('traffic-consciousness-question');
+
+const trafficConsciousBtn = document.getElementById('traffic-conscious-btn');
+const trafficMultipleEmergencyBtn =
+  document.getElementById('traffic-multiple-emergency-btn');
+const trafficConsciousnessGuide =
+  document.getElementById('traffic-consciousness-guide');
+
+const trafficVehicleChecks =
+  document.querySelectorAll('.traffic-vehicle-check');
+const trafficVehicleNextBtn =
+  document.getElementById('traffic-vehicle-next-btn');
+const trafficVehicleBackBtn =
+  document.getElementById('traffic-vehicle-back-btn');
+const trafficVehicleError =
+  document.getElementById('traffic-vehicle-error');
+const trafficDetailContainer =
+  document.getElementById('traffic-detail-container');
+const trafficDetailNextBtn =
+  document.getElementById('traffic-detail-next-btn');
+const trafficDetailBackBtn =
+  document.getElementById('traffic-detail-back-btn');
+const trafficDetailError =
+  document.getElementById('traffic-detail-error');
+const trafficOneInjuredBtn =
+  document.getElementById('traffic-one-injured-btn');
+const trafficMultipleInjuredBtn =
+  document.getElementById('traffic-multiple-injured-btn');
+const trafficUnconsciousBtn = document.getElementById('traffic-unconscious-btn');
+const trafficConsciousnessBackBtn =
+  document.getElementById('traffic-consciousness-back-btn');
+const trafficStateBackBtn = document.getElementById('traffic-state-back-btn');
+const trafficNoSymptomBtn = document.getElementById('traffic-no-symptom-btn');
+
+const directResultContent = document.getElementById('direct-result-content');
+const directResultHomeBtn = document.getElementById('direct-result-home-btn');
+
+let trafficUserRole = '';
+let trafficEmergencyReason = '';
+let trafficInjuredCount = '';
+let trafficVehicleDetails = {};
+let breathingCountdownTimer = null;
+let breathingCheckSession = 0;
+let breathingCheckResolved = false;
+let currentLatitude = null;
+let currentLongitude = null;
+let locationMap = null;
+let locationMarker = null;
+
+function showScreen(id){
+  screens.forEach(screen => screen.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function sleep(ms){
+  return new Promise(resolve => setTimeout(resolve,ms));
+}
+
+function getCtx(){
+  if(!audioCtx){
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if(!Ctx) return null;
+    audioCtx = new Ctx();
+  }
+  return audioCtx;
+}
+
+function speakText(text){
+  return new Promise(resolve => {
+    if(stopped || !('speechSynthesis' in window)){
+      resolve();
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+
+    let finished = false;
+    const finish = () => {
+      if(finished) return;
+      finished = true;
+      clearTimeout(timeoutId);
+      resolve();
+    };
+
+    utterance.onend = finish;
+    utterance.onerror = finish;
+
+    /* Some mobile browsers occasionally fail to fire onend/onerror. */
+    const timeoutId = setTimeout(finish,12000);
+
+    try{
+      speechSynthesis.speak(utterance);
+    }catch(error){
+      finish();
+    }
+  });
+}
+
+function beep(){
+  if(stopped) return;
+
+  const ctx = getCtx();
+  if(!ctx || ctx.state !== 'running') return;
+
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'sine';
+  osc.frequency.value = 880;
+  gain.gain.setValueAtTime(0.20,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime + 0.07);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.08);
+}
+
+function startMetronome(){
+  const ctx = getCtx();
+  if(!ctx) return;
+
+  if(metroTimer) clearInterval(metroTimer);
+
+  const begin = () => {
+    if(stopped) return;
+    beep();
+    metroTimer = setInterval(beep,interval);
+  };
+
+  if(ctx.state === 'running'){
+    begin();
+  }else{
+    ctx.resume().then(begin).catch(() => {});
+  }
+}
+
+function unlockMobileAudio(){
+  const ctx = getCtx();
+
+  if(ctx && ctx.state !== 'running'){
+    ctx.resume().catch(() => {});
+  }
+
+  if('speechSynthesis' in window){
+    try{
+      speechSynthesis.getVoices();
+      speechSynthesis.resume();
+    }catch(error){}
+  }
+}
+
+function scheduleRepeatGuidance(){
+  if(repeatTimer) clearInterval(repeatTimer);
+  repeatTimer = setInterval(repeatGuidance,18000);
+}
+
+async function repeatGuidance(){
+  if(stopped || guidanceRunning) return;
+
+  guidanceRunning = true;
+
+  if(!called119){
+    status.textContent = 'Call 119 now';
+    await speakText('119 has not been called. Ask someone to call 119 now.');
+  }else{
+    status.textContent = 'Voice guidance in progress';
+    await speakText(
+      'Continue chest compressions. Push hard and fast without stopping. Continue until the ambulance arrives.'
+    );
+  }
+
+  if(!stopped){
+    status.textContent = called119
+      ? 'Continue chest compressions'
+      : 'Call 119 now';
+  }
+
+  guidanceRunning = false;
+}
+
+async function startGuidance(){
+  stopAll(false);
+
+  stopped = false;
+  guidanceRunning = true;
+  badge.textContent = '🔊 Voice guidance on';
+  status.textContent = 'Starting voice guidance';
+  stopBtn.textContent = '■ Stop voice guidance and metronome';
+
+  /* Start the metronome immediately from the same tap. */
+  unlockMobileAudio();
+  startMetronome();
+
+  if('speechSynthesis' in window){
+    speechSynthesis.cancel();
+    speechSynthesis.getVoices();
+  }
+
+  /* The first speech request is issued before any await for iPhone/Android. */
+  await speakText('Put the phone on speaker and turn the volume all the way up.');
+  await sleep(600);
+  if(stopped) return;
+
+  await speakText('Call 119 now.');
+  await sleep(600);
+  if(stopped) return;
+
+  await speakText('Start chest compressions.');
+  await sleep(600);
+  if(stopped) return;
+
+  if(!called119){
+    await speakText('If 119 has not been called, ask someone to call 119 now.');
+    await sleep(600);
+    if(stopped) return;
+  }
+
+  await speakText('Ask someone to bring an A E D.');
+  await sleep(600);
+  if(stopped) return;
+
+  await speakText('Ask another person to help with chest compressions.');
+  await sleep(600);
+  if(stopped) return;
+
+  await speakText('Switch the person doing chest compressions every one to two minutes.');
+  if(stopped) return;
+
+  guidanceRunning = false;
+  status.textContent = 'Continue chest compressions';
+  scheduleRepeatGuidance();
+}
+
+function stopAll(updateDisplay = true){
+  stopped = true;
+  guidanceRunning = false;
+
+  if('speechSynthesis' in window){
+    speechSynthesis.cancel();
+  }
+
+  if(metroTimer){
+    clearInterval(metroTimer);
+    metroTimer = null;
+  }
+
+  if(repeatTimer){
+    clearInterval(repeatTimer);
+    repeatTimer = null;
+  }
+
+  if(updateDisplay){
+    badge.textContent = '🔇 Stopped';
+    status.textContent = 'Voice guidance and metronome stopped';
+    stopBtn.textContent = 'Stopped';
+  }
+}
+
+function activateEmergency(){
+  unlockMobileAudio();
+  showScreen('screen-emergency');
+  called119 = false;
+  startGuidance();
+}
+
+
+function clearBreathingCountdown(){
+  if(breathingCountdownTimer){
+    clearInterval(breathingCountdownTimer);
+    breathingCountdownTimer = null;
+  }
+
+  if('speechSynthesis' in window){
+    try{
+      speechSynthesis.cancel();
+    }catch(error){}
+  }
+}
+
+function waitBreathingDelay(milliseconds){
+  return new Promise(resolve => {
+    setTimeout(resolve,milliseconds);
+  });
+}
+
+function speakBreathingMessage(text, rate = 0.98){
+  return new Promise(resolve => {
+    if(!('speechSynthesis' in window)){
+      resolve();
+      return;
+    }
+
+    try{
+      speechSynthesis.cancel();
+      speechSynthesis.resume();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.rate = rate;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      let finished = false;
+      const finish = () => {
+        if(finished) return;
+        finished = true;
+        clearTimeout(timeoutId);
+        resolve();
+      };
+
+      utterance.onend = finish;
+      utterance.onerror = finish;
+      const timeoutId = setTimeout(finish,30000);
+
+      speechSynthesis.speak(utterance);
+    }catch(error){
+      resolve();
+    }
+  });
+}
+
+function playBreathingCheckBeep(isFinal = false){
+  try{
+    const ctx = getCtx();
+    if(!ctx) return;
+    if(ctx.state === 'suspended'){
+      ctx.resume();
+    }
+
+    const playTone = (delaySeconds = 0) => {
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const now = ctx.currentTime + delaySeconds;
+
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(740,now);
+
+      gain.gain.setValueAtTime(0.0001,now);
+      gain.gain.exponentialRampToValueAtTime(0.26,now + 0.015);
+      gain.gain.setValueAtTime(0.26,now + 0.10);
+      gain.gain.exponentialRampToValueAtTime(0.0001,now + 0.18);
+
+      oscillator.connect(gain);
+      gain.connect(ctx.destination);
+      oscillator.start(now);
+      oscillator.stop(now + 0.19);
+    };
+
+    playTone(0);
+    if(isFinal){
+      playTone(0.24);
+    }
+  }catch(error){}
+}
+
+function speakBreathingCount(count){
+  if(!('speechSynthesis' in window)) return;
+
+  const countWords = {
+    10:'Ten',
+    9:'Nine',
+    8:'Eight',
+    7:'Seven',
+    6:'Six',
+    5:'Five',
+    4:'Four',
+    3:'Three',
+    2:'Two',
+    1:'One'
+  };
+
+  try{
+    /* Speak only the number currently shown on screen. */
+    speechSynthesis.cancel();
+    speechSynthesis.resume();
+
+    const utterance =
+      new SpeechSynthesisUtterance(countWords[count] || String(count));
+    utterance.lang = 'en-US';
+    utterance.rate = 1.18;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+
+    speechSynthesis.speak(utterance);
+  }catch(error){}
+}
+
+async function finishBreathingCheckAutomatically(session){
+  if(
+    session !== breathingCheckSession ||
+    breathingCheckResolved
+  ){
+    return;
+  }
+
+  breathingCount.textContent = 'Chest Compressions';
+  breathingCount.setAttribute(
+    'aria-label',
+    'Starting chest-compression guidance'
+  );
+
+  await speakBreathingMessage(
+    'Normal breathing was not confirmed. Starting chest-compression guidance.',
+    1.02
+  );
+
+  if(
+    session !== breathingCheckSession ||
+    breathingCheckResolved
+  ){
+    return;
+  }
+
+  breathingCheckResolved = true;
+  activateEmergency();
+}
+
+async function startBreathingCheck(){
+  breathingCheckSession += 1;
+  const session = breathingCheckSession;
+  breathingCheckResolved = false;
+  clearBreathingCountdown();
+
+  breathingResultActions.hidden = false;
+  breathingCount.textContent = 'Get Ready';
+  breathingCount.setAttribute(
+    'aria-label',
+    'Breathing-check voice instructions will start in 1 second'
+  );
+
+  showScreen('screen-breathing-check');
+  unlockMobileAudio();
+
+  await waitBreathingDelay(1000);
+
+  if(session !== breathingCheckSession || breathingCheckResolved){
+    return;
+  }
+
+  breathingCount.textContent = 'Instructions';
+  breathingCount.setAttribute(
+    'aria-label',
+    'Breathing-check instructions'
+  );
+
+  await speakBreathingMessage(
+    'We will check for breathing for 10 seconds. Gently place the palm of your hand on the abdomen over the clothing, and also watch the chest and abdomen for movement.',
+    1.18
+  );
+
+  if(session !== breathingCheckSession || breathingCheckResolved){
+    return;
+  }
+
+  let count = 10;
+  breathingCount.textContent = String(count);
+  breathingCount.setAttribute(
+    'aria-label',
+    'Breathing check: 10 seconds remaining'
+  );
+  playBreathingCheckBeep(false);
+
+  speakBreathingMessage(
+    'If there is strong normal breathing, press the green button.',
+    1.18
+  );
+
+  breathingCountdownTimer = setInterval(() => {
+    if(session !== breathingCheckSession || breathingCheckResolved){
+      clearBreathingCountdown();
+      return;
+    }
+
+    count -= 1;
+
+    if(count > 0){
+      breathingCount.textContent = String(count);
+      breathingCount.setAttribute(
+        'aria-label',
+        `Breathing check: ${count} seconds remaining`
+      );
+      playBreathingCheckBeep(false);
+      return;
+    }
+
+    if(breathingCountdownTimer){
+      clearInterval(breathingCountdownTimer);
+      breathingCountdownTimer = null;
+    }
+
+    playBreathingCheckBeep(true);
+    setTimeout(() => {
+      finishBreathingCheckAutomatically(session);
+    },520);
+  },1000);
+}
+
+
+const trafficVehicleDefinitions = {
+  car:{
+    label:'Car',
+    questions:[
+      ['vehicles','How many cars are involved?',['1','2','3 or more','Not sure']],
+      ['drivers','How many drivers are there in total?',['1','2','3 or more','Not sure']],
+      ['passengers','How many passengers are there in total?',['None','1','2','3 or more','Not sure']],
+      ['children','How many of them are children?',['None','1','2 or more','Not sure']]
+    ]
+  },
+  large:{
+    label:'Bus, truck or large vehicle',
+    questions:[
+      ['vehicles','How many large vehicles are involved?',['1','2','3 or more','Not sure']],
+      ['people','Approximately how many people were in them?',['1','2–5','6 or more','Not sure']],
+      ['children','How many of them are children?',['None','1','2 or more','Not sure']]
+    ]
+  },
+  motorcycle:{
+    label:'Motorcycle or scooter',
+    questions:[
+      ['vehicles','How many motorcycles or scooters are involved?',['1','2','3 or more','Not sure']],
+      ['people','How many people were riding them in total?',['1','2','3 or more','Not sure']],
+      ['children','How many of them are children?',['None','1','2 or more','Not sure']]
+    ]
+  },
+  bicycle:{
+    label:'Bicycle',
+    questions:[
+      ['vehicles','How many bicycles are involved?',['1','2','3 or more','Not sure']],
+      ['people','How many people were riding them in total?',['1','2','3 or more','Not sure']],
+      ['children','How many of them are children?',['None','1','2 or more','Not sure']]
+    ]
+  },
+  kickboard:{
+    label:'Electric kick scooter',
+    questions:[
+      ['vehicles','How many electric kick scooters are involved?',['1','2','3 or more','Not sure']],
+      ['people','How many people were riding them in total?',['1','2 or more','Not sure']],
+      ['children','How many of them are children?',['None','1','2 or more','Not sure']]
+    ]
+  },
+  pedestrian:{
+    label:'Pedestrian',
+    questions:[
+      ['people','How many pedestrians are involved?',['1','2','3 or more','Not sure']],
+      ['children','How many of them are children?',['None','1','2 or more','Not sure']]
+    ]
+  },
+  other:{
+    label:'Other or not sure',
+    questions:[
+      ['people','How many people are involved?',['1','2','3 or more','Not sure']]
+    ]
+  }
+};
+
+function selectedTrafficVehicles(){
+  return [...trafficVehicleChecks]
+    .filter(input => input.checked)
+    .map(input => input.value);
+}
+
+function trafficRadioOptions(vehicleKey,questionKey,options){
+  return `<div class="traffic-count-options">
+    ${options.map((option,index) => {
+      const id = `traffic-${vehicleKey}-${questionKey}-${index}`;
+      return `<label for="${id}">
+        <input id="${id}"
+               type="radio"
+               name="traffic-${vehicleKey}-${questionKey}"
+               value="${escapeHtml(option)}">
+        ${escapeHtml(option)}
+      </label>`;
+    }).join('')}
+  </div>`;
+}
+
+function renderTrafficVehicleDetails(){
+  const selected = selectedTrafficVehicles();
+
+  trafficDetailContainer.innerHTML = selected.map(vehicleKey => {
+    const definition = trafficVehicleDefinitions[vehicleKey];
+
+    return `<section class="traffic-detail-card"
+                     data-vehicle="${vehicleKey}">
+      <h2 class="traffic-detail-title">${definition.label}</h2>
+      ${definition.questions.map(([questionKey,question,options]) => `
+        <div class="traffic-count-question">${question}</div>
+        ${trafficRadioOptions(vehicleKey,questionKey,options)}
+      `).join('')}
+    </section>`;
+  }).join('');
+
+  Object.entries(trafficVehicleDetails).forEach(([name,value]) => {
+    const input = trafficDetailContainer.querySelector(
+      `input[name="${CSS.escape(name)}"][value="${CSS.escape(value)}"]`
+    );
+    if(input) input.checked = true;
+  });
+}
+
+function saveTrafficVehicleDetails(){
+  const selected = selectedTrafficVehicles();
+  const details = {};
+
+  for(const vehicleKey of selected){
+    const definition = trafficVehicleDefinitions[vehicleKey];
+
+    for(const [questionKey] of definition.questions){
+      const name = `traffic-${vehicleKey}-${questionKey}`;
+      const checked = trafficDetailContainer.querySelector(
+        `input[name="${CSS.escape(name)}"]:checked`
+      );
+
+      if(!checked) return false;
+      details[name] = checked.value;
+    }
+  }
+
+  trafficVehicleDetails = details;
+  return true;
+}
+
+function resetTrafficIncidentData(){
+  trafficEmergencyReason = '';
+  trafficInjuredCount = '';
+  trafficVehicleDetails = {};
+  trafficVehicleChecks.forEach(input => {
+    input.checked = false;
+  });
+  trafficVehicleError.hidden = true;
+  trafficDetailError.hidden = true;
+}
+
+function trafficSituationSectionHtml(){
+  const role = trafficUserRole === 'involved'
+    ? 'Person involved in the accident'
+    : 'Witness or bystander';
+
+  const selected = selectedTrafficVehicles();
+  const vehicleRows = [];
+
+  selected.forEach(vehicleKey => {
+    const definition = trafficVehicleDefinitions[vehicleKey];
+    const answers = definition.questions.map(([questionKey,question]) => {
+      const name = `traffic-${vehicleKey}-${questionKey}`;
+      const answer = trafficVehicleDetails[name];
+      return answer ? `${question} ${answer}` : '';
+    }).filter(Boolean);
+
+    vehicleRows.push(
+      `<tr>
+        <th>${escapeHtml(definition.label)}</th>
+        <td>${answers.length
+          ? answers.map(answer => escapeHtml(answer)).join('<br>')
+          : 'Before the detailed check'}
+        </td>
+      </tr>`
+    );
+  });
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">🚗 Traffic Accident Details</h2>
+    <table class="traffic-situation-table">
+      <tbody>
+        <tr><th>Person entering information</th><td>${escapeHtml(role)}</td></tr>
+        ${trafficEmergencyReason
+          ? `<tr><th>Emergency</th><td>${escapeHtml(trafficEmergencyReason)}</td></tr>`
+          : ''}
+        ${trafficInjuredCount
+          ? `<tr><th>Injured people</th><td>${escapeHtml(trafficInjuredCount)}</td></tr>`
+          : ''}
+        ${vehicleRows.join('')}
+      </tbody>
+    </table>
+  </section>`;
+}
+
+
+function directCallButton(number,label,className){
+  const href = number === '#7119'
+    ? 'tel:%237119'
+    : `tel:${number}`;
+
+  return `<a class="direct-call-btn ${className}" href="${href}">
+    ☎ ${label}
+  </a>`;
+}
+
+function patientLocationSection(){
+  return `<section class="sym-section" id="current-location-section">
+    <h2 class="sym-section-title">📍 Current Location</h2>
+    <table class="location-table"><tbody>
+      <tr><th scope="row">Address</th><td id="current-address">Locating…</td></tr>
+      <tr><th scope="row">Building</th><td id="current-building">Locating…</td></tr>
+      <tr><th scope="row">Nearby landmarks</th><td id="current-landmarks">Locating…</td></tr>
+    </tbody></table>
+    <p class="location-note">
+      The location will be obtained automatically if the smartphone is online and location access is allowed.
+    </p>
+    <div class="location-map-wrap">
+      <div class="location-map-title">Current Location Map</div>
+      <div id="location-map" class="location-map" aria-label="Current location map"></div>
+      <div class="location-info">
+        <div class="location-info-row"><b>Latitude</b><span id="latitude-value">Locating…</span></div>
+        <div class="location-info-row"><b>Longitude</b><span id="longitude-value">Locating…</span></div>
+      </div>
+      <div class="location-buttons">
+        <button id="open-map-btn" class="location-btn" type="button" disabled>Open in Google Maps</button>
+        <button id="copy-location-btn" class="location-btn" type="button" disabled>Copy Coordinates</button>
+      </div>
+    </div>
+  </section>`;
+}
+
+function setLocationText(id,value){
+  const element = document.getElementById(id);
+  if(element) element.textContent = value;
+}
+
+function initLocationMap(latitude,longitude){
+  const element = document.getElementById('location-map');
+  if(!element || typeof L === 'undefined') return;
+
+  if(!locationMap){
+    locationMap = L.map(element).setView([latitude,longitude],16);
+    L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {maxZoom:19,attribution:'© OpenStreetMap'}
+    ).addTo(locationMap);
+    locationMarker = L.marker([latitude,longitude])
+      .addTo(locationMap)
+      .bindPopup('Current location');
+  }else{
+    locationMap.setView([latitude,longitude],16);
+    if(locationMarker) locationMarker.setLatLng([latitude,longitude]);
+  }
+
+  setTimeout(() => locationMap.invalidateSize(),100);
+}
+
+function setLocationButtons(enabled){
+  const openButton = document.getElementById('open-map-btn');
+  const copyButton = document.getElementById('copy-location-btn');
+
+  if(openButton){
+    openButton.disabled = !enabled;
+    openButton.onclick = () => {
+      if(currentLatitude === null) return;
+      window.open(
+        `https://www.google.com/maps?q=${currentLatitude},${currentLongitude}`,
+        '_blank'
+      );
+    };
+  }
+
+  if(copyButton){
+    copyButton.disabled = !enabled;
+    copyButton.onclick = async () => {
+      if(currentLatitude === null) return;
+
+      const coordinates =
+        `${currentLatitude.toFixed(6)}, ${currentLongitude.toFixed(6)}`;
+
+      try{
+        await navigator.clipboard.writeText(coordinates);
+        copyButton.textContent = 'Copied';
+        setTimeout(() => {
+          copyButton.textContent = 'Copy Coordinates';
+        },1500);
+      }catch(error){
+        copyButton.textContent = 'Unable to copy';
+        setTimeout(() => {
+          copyButton.textContent = 'Copy Coordinates';
+        },1800);
+      }
+    };
+  }
+}
+
+async function updateCurrentLocation(){
+  if(!document.getElementById('current-location-section')) return;
+
+  setLocationButtons(false);
+
+  if(!navigator.onLine){
+    setLocationText('current-address','Unable to obtain the location while offline');
+    setLocationText('current-building','Unable to obtain the location while offline');
+    setLocationText('current-landmarks','Unable to obtain the location while offline');
+    return;
+  }
+
+  if(!('geolocation' in navigator)){
+    setLocationText('current-address','Location services are not available');
+    setLocationText('current-building','Location services are not available');
+    setLocationText('current-landmarks','Location services are not available');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(async position => {
+    const {latitude,longitude} = position.coords;
+    currentLatitude = latitude;
+    currentLongitude = longitude;
+
+    setLocationText('latitude-value',latitude.toFixed(6));
+    setLocationText('longitude-value',longitude.toFixed(6));
+    setLocationButtons(true);
+    initLocationMap(latitude,longitude);
+
+    try{
+      const url =
+        'https://nominatim.openstreetmap.org/reverse' +
+        `?format=jsonv2&lat=${encodeURIComponent(latitude)}` +
+        `&lon=${encodeURIComponent(longitude)}` +
+        '&zoom=18&addressdetails=1&namedetails=1&accept-language=en';
+
+      const response = await fetch(url,{headers:{Accept:'application/json'}});
+      if(!response.ok) throw new Error('Reverse geocoding failed');
+
+      const place = await response.json();
+      const address = place.display_name || 'Address unavailable';
+      const building =
+        place.address?.building ||
+        place.namedetails?.name ||
+        place.name ||
+        'Building name unavailable';
+
+      setLocationText('current-address',address);
+      setLocationText('current-building',building);
+      setLocationText(
+        'current-landmarks',
+        place.address?.suburb ||
+        place.address?.neighbourhood ||
+        place.address?.road ||
+        'Nearby landmarks unavailable'
+      );
+    }catch(error){
+      setLocationText('current-address','Address unavailable');
+      setLocationText('current-building','Building name unavailable');
+      setLocationText('current-landmarks','Nearby landmarks unavailable');
+    }
+  }, error => {
+    const message = error.code === 1
+      ? 'Location access was not allowed'
+      : 'Unable to obtain the current location';
+
+    setLocationText('current-address',message);
+    setLocationText('current-building',message);
+    setLocationText('current-landmarks',message);
+  },{
+    enableHighAccuracy:true,
+    timeout:15000,
+    maximumAge:60000
+  });
+}
+
+function showDirectResult(type){
+  let html = '';
+
+  if(type === 'traffic-multiple-emergency'){
+    html = `<section class="direct-result-card emergency-result">
+      <p class="direct-result-label">
+        Multiple injured people, an unknown number of injured people, or another serious danger
+      </p>
+      <p class="direct-result-number">119 and 110</p>
+      <p class="direct-result-message">
+        Stop the detailed questions and call an ambulance and the police.
+      </p>
+      <div class="direct-call-grid">
+        ${directCallButton('119','Call 119','direct-call-119')}
+        ${directCallButton('110','Call 110','direct-call-110')}
+      </div>
+      <div class="result-warning">
+        Do not try to manage the situation alone. Ask people nearby to call 119 and 110 and to help keep the area safe.
+        Tell the dispatcher that two or more people may be injured, or that the number of injured people is unknown.
+      </div>
+    </section>`;
+  }
+
+  if(type === 'traffic-unconscious-breathing'){
+    html = `<section class="direct-result-card emergency-result">
+      <p class="direct-result-label">
+        Traffic accident — the person is unconscious
+      </p>
+      <p class="direct-result-number">119 and 110</p>
+      <p class="direct-result-message">
+        Call an ambulance and the police.
+      </p>
+      <div class="direct-call-grid">
+        ${directCallButton('119','Call 119','direct-call-119')}
+        ${directCallButton('110','Call 110','direct-call-110')}
+      </div>
+      <div class="result-warning">
+        Keep checking the person’s breathing while you wait for the ambulance.
+      </div>
+    </section>`;
+  }
+
+  if(type === 'traffic-police'){
+    html = `<section class="direct-result-card police-result">
+      <p class="direct-result-label">
+        No injuries, pain, or other symptoms
+      </p>
+      <p class="direct-result-number">110</p>
+      <p class="direct-result-message">
+        Report the traffic accident to the police.
+      </p>
+      <div class="direct-call-grid single">
+        ${directCallButton('110','Call 110','direct-call-110')}
+      </div>
+      <div class="result-warning">
+        If pain or other symptoms develop later, seek medical care or call #7119.
+        Call 119 if the condition worsens suddenly.
+      </div>
+    </section>`;
+  }
+
+  html += trafficSituationSectionHtml();
+  html += patientLocationSection();
+  html += patientInfoSection();
+
+  directResultContent.innerHTML = html;
+  showScreen('screen-direct-result');
+  updateCurrentLocation();
+}
+
+function openTrafficConsciousness(role){
+  trafficUserRole = role;
+  resetTrafficIncidentData();
+
+  trafficConsciousnessQuestion.textContent = '';
+
+  if(role === 'involved'){
+    trafficConsciousnessGuide.textContent =
+      'Check yourself, your passengers, people in the other vehicle, pedestrians and anyone else involved.';
+  }else{
+    trafficConsciousnessGuide.textContent =
+      'Check drivers, passengers, pedestrians and everyone else involved in the accident.';
+  }
+
+  showScreen('screen-traffic-consciousness');
+}
+
+trafficRoleInvolvedBtn.addEventListener('click',() => {
+  openTrafficConsciousness('involved');
+});
+
+trafficRoleWitnessBtn.addEventListener('click',() => {
+  openTrafficConsciousness('witness');
+});
+
+trafficRoleBackBtn.addEventListener('click',() => {
+  location.href = 'index.html';
+});
+
+trafficConsciousBtn.addEventListener('click',() => {
+  showScreen('screen-traffic-vehicles');
+});
+
+trafficMultipleEmergencyBtn.addEventListener('click',() => {
+  trafficEmergencyReason =
+    'Multiple injuries, an unknown number of injured people, heavy bleeding, entrapment, fire, or another serious danger';
+  showDirectResult('traffic-multiple-emergency');
+});
+
+trafficUnconsciousBtn.addEventListener('click',() => {
+  startBreathingCheck();
+});
+
+trafficVehicleChecks.forEach(input => {
+  input.addEventListener('change',() => {
+    if(input.value === 'other' && input.checked){
+      trafficVehicleChecks.forEach(other => {
+        if(other !== input) other.checked = false;
+      });
+    }else if(input.checked){
+      const other = [...trafficVehicleChecks]
+        .find(item => item.value === 'other');
+      if(other) other.checked = false;
+    }
+
+    trafficVehicleError.hidden = true;
+  });
+});
+
+trafficVehicleNextBtn.addEventListener('click',() => {
+  if(!selectedTrafficVehicles().length){
+    trafficVehicleError.hidden = false;
+    return;
+  }
+
+  renderTrafficVehicleDetails();
+  trafficDetailError.hidden = true;
+  showScreen('screen-traffic-details');
+});
+
+trafficVehicleBackBtn.addEventListener('click',() => {
+  showScreen('screen-traffic-consciousness');
+});
+
+trafficDetailNextBtn.addEventListener('click',() => {
+  if(!saveTrafficVehicleDetails()){
+    trafficDetailError.hidden = false;
+    return;
+  }
+
+  trafficDetailError.hidden = true;
+  showScreen('screen-traffic-state');
+});
+
+trafficDetailBackBtn.addEventListener('click',() => {
+  showScreen('screen-traffic-vehicles');
+});
+
+document.querySelectorAll('.traffic-direct-emergency-btn')
+  .forEach(button => {
+    button.addEventListener('click',() => {
+      trafficEmergencyReason = 'The situation became urgent';
+      showDirectResult('traffic-multiple-emergency');
+    });
+  });
+
+trafficOneInjuredBtn.addEventListener('click',() => {
+  trafficInjuredCount = 'One person';
+  showScreen('screen-symptoms');
+});
+
+trafficMultipleInjuredBtn.addEventListener('click',() => {
+  trafficInjuredCount = 'Two or more people, or not sure';
+  trafficEmergencyReason =
+    'Two or more people are injured, or the number of injured people is unknown';
+  showDirectResult('traffic-multiple-emergency');
+});
+
+trafficNoSymptomBtn.addEventListener('click',() => {
+  trafficInjuredCount = 'No one';
+  showDirectResult('traffic-police');
+});
+
+breathingAbnormalBtn.addEventListener('click',() => {
+  breathingCheckResolved = true;
+  breathingCheckSession += 1;
+  clearBreathingCountdown();
+  activateEmergency();
+});
+
+breathingNormalBtn.addEventListener('click',() => {
+  breathingCheckResolved = true;
+  breathingCheckSession += 1;
+  clearBreathingCountdown();
+  showDirectResult('traffic-unconscious-breathing');
+});
+
+breathingBackBtn.addEventListener('click',() => {
+  breathingCheckResolved = true;
+  breathingCheckSession += 1;
+  clearBreathingCountdown();
+  showScreen('screen-traffic-consciousness');
+});
+
+trafficStateBackBtn.addEventListener('click',() => {
+  showScreen('screen-traffic-details');
+});
+
+trafficConsciousnessBackBtn.addEventListener('click',() => {
+  showScreen('screen-traffic-role');
+});
+
+directResultHomeBtn.addEventListener('click',() => {
+  location.href = 'index.html';
+});
+
+document.querySelectorAll('.emergency-check').forEach(box => {
+  box.addEventListener('change', () => {
+    if(box.checked){
+      activateEmergency();
+    }
+  });
+});
+
+document.getElementById('not-emergency').addEventListener('change', event => {
+  if(event.target.checked){
+    stopAll(false);
+    showScreen('screen-symptoms');
+  }
+});
+
+call119.addEventListener('click', () => {
+  called119 = true;
+  status.textContent = 'Calling 119. Continue chest compressions.';
+});
+
+stopBtn.addEventListener('click', () => {
+  stopAll(true);
+});
+
+cprBox.addEventListener('click', () => {
+  if(stopped || (!metroTimer && !guidanceRunning)){
+    startGuidance();
+  }else{
+    stopAll(true);
+  }
+});
+
+/* Symptom data */
+const symptomData = {
+  eye:{
+    title:'👁️ Eyes',
+    rows:[
+      {person:['I cannot see'],observer:['Unable to move','Moving by feeling around','Reaching for something to hold on to','Asking for help','Bumping into objects','Bumping into people']},
+      {person:['My vision is blurred'],observer:['Holding things close to the face','Squinting']},
+      {person:['My field of vision is narrower than usual'],observer:['Bumping into people or objects approaching from the side']},
+      {person:['My eye hurts'],observer:['Holding the eye','Grimacing']},
+      {person:['My eyes will not stop watering'],observer:['Tears continue to flow']},
+      {person:['I cannot open my eyes'],observer:['Keeping the eyes closed']},
+      {person:['Light is too bright'],observer:['Covering the eyes with a hand','Turning the face away','Trying to move to a darker place']}
+    ]
+  },
+  limbs:{
+    title:'🦵 Arms and Legs',
+    rows:[
+      {person:['I cannot feel the left side of my body'],observer:['Does not notice being touched on the left side','Does not notice bumping the left side']},
+      {person:['My left hand is difficult to move'],observer:['The left hand hangs loosely','Dropping objects']},
+      {person:['I have difficulty walking'],observer:['Unable to stand for long']},
+      {person:['I cannot stand'],observer:['Unable to stand even with support']},
+      {person:['My left arm and leg feel numb'],observer:['Appears unable to put strength into the left arm or leg']}
+    ]
+  },
+  face:{
+    title:'🙂 Face',
+    rows:[
+      {person:['The left side of my face feels numb'],observer:['One side of the mouth is difficult to move','The two sides of the face look different']}
+    ]
+  },
+  head:{
+    title:'😵 Head',
+    rows:[
+      {person:['I have a headache','I have a sudden, severe headache'],observer:['Holding the head']},
+      {person:[{label:'First aid',group:true}],observer:['Pain medicine taken']},
+      {person:['I feel dizzy'],observer:['Unsteady on the feet']},
+      {person:['I cannot concentrate'],observer:['Slow to respond']},
+      {person:['No response'],observer:['No response when spoken to','No response when the shoulder is tapped']}
+    ]
+  },
+  breath:{
+    title:'😮‍💨 Breathing',
+    rows:[
+      {person:['I am coughing'],observer:['Coughing repeatedly']},
+      {person:['I am short of breath'],observer:['Breathing appears difficult']}
+    ]
+  },
+  body:{
+    title:'🤢 Chest, Abdomen, and Body',
+    rows:[
+      {person:['I feel nauseated','Severe nausea'],observer:['Looks unwell']},
+      {person:[{label:'First aid',group:true}],observer:['Provided a vomit bag and water']},
+      {person:['Sudden severe chest or abdominal pain'],observer:['Holding the chest','Holding the abdomen']},
+      {person:['I feel very weak'],observer:['Unable to move','Resting','Cold sweat']}
+    ]
+  },
+  skin:{
+    title:'🩹 Skin',
+    rows:[
+      {person:['My skin is itchy'],observer:['Scratching the skin','Redness']}
+    ]
+  },
+  other:{
+    title:'❓ Other',
+    rows:[
+      {person:['I am in severe pain'],observer:['Holding the arm or hand','Holding the leg','Holding the lower back or back']},
+      {person:[{label:'First aid',group:true}],observer:['Reported taking pain medicine']},
+      {person:['I am having a seizure'],observer:['Conscious','Unconscious','The whole body is convulsing','Only the arms or legs are convulsing','The seizure will not stop','Does not regain consciousness after the seizure']},
+      {person:['I am bleeding'],observer:['A small amount that can be controlled with a tissue','A towel is becoming soaked with blood','The bleeding has stopped','The bleeding does not stop with pressure']},
+      {person:[{label:'First aid',group:true}],observer:['Applying pressure to stop the bleeding','The bleeding stopped after pressure was applied']},
+      {person:['I have a burn'],observer:['The skin is red','Blisters have formed','The skin has turned white or black','A large area is burned']},
+      {person:[{label:'First aid',group:true}],observer:['Cooled the burn']},
+      {person:['I may have a broken bone'],observer:['An arm or leg is bent unnaturally','Swelling','Unable to move the injured area']},
+      {person:[{label:'First aid',group:true}],observer:['Keeping the injured area still','Lying down','Seated']}
+    ]
+  }
+};
+
+const symNextBtn = document.getElementById('sym-next-btn');
+const symDetailNextBtn = document.getElementById('sym-detail-next-btn');
+const symBackBtn = document.getElementById('sym-back-btn');
+const symSummaryBackBtn = document.getElementById('sym-summary-back-btn');
+const symResults = document.getElementById('sym-results');
+const symSummary = document.getElementById('sym-summary');
+const symSummaryIntro = document.getElementById('sym-summary-intro');
+const symptomCategoryBoxes = [...document.querySelectorAll('.sym-category input')];
+const onsetChoices = [...document.querySelectorAll('.onset-choice')];
+
+function selectedSymptomCategories(){
+  return symptomCategoryBoxes
+    .filter(box => box.checked)
+    .map(box => box.value);
+}
+
+function updateSymptomNextButton(){
+  const hasCategory = selectedSymptomCategories().length > 0;
+  const hasOnset = onsetChoices.some(box => box.checked);
+  symNextBtn.disabled = !(hasCategory || hasOnset);
+}
+
+function escapeHtml(value){
+  return String(value)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
+}
+
+function symptomOptionHtml(item,key,side,prefix=''){
+  if(typeof item === 'object' && item.group){
+    return `<span class="sym-group-label">${escapeHtml(item.label)}</span>`;
+  }
+
+  const text = escapeHtml(item);
+  const safePrefix = escapeHtml(prefix);
+
+  return `<label class="sym-option">
+    <input
+      type="checkbox"
+      name="${key}-${side}"
+      value="${text}"
+      data-category="${key}"
+      data-side="${side}"
+      data-prefix="${safePrefix}">
+    <span>${text}</span>
+  </label>`;
+}
+
+function calculateAge(birthYear,birthMonth,birthDay){
+  const today = new Date();
+  let age = today.getFullYear() - birthYear;
+
+  const birthdayThisYear = new Date(
+    today.getFullYear(),
+    birthMonth - 1,
+    birthDay
+  );
+
+  if(today < birthdayThisYear){
+    age -= 1;
+  }
+
+  return age;
+}
+
+function patientInfoSection(){
+  const age = calculateAge(1974,1,26);
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">👤 Basic Information</h2>
+    <div class="patient-info-grid">
+      <div class="patient-info-item">
+        <span class="patient-info-label">Age</span>
+        ${age}
+      </div>
+      <div class="patient-info-item">
+        <span class="patient-info-label">Blood Type</span>
+        AB
+      </div>
+    </div>
+  </section>`;
+}
+
+function selectedOnsetValues(){
+  return onsetChoices
+    .filter(box => box.checked)
+    .map(box => box.value);
+}
+
+function onsetResultSection(){
+  const selectedOnset = selectedOnsetValues();
+
+  if(selectedOnset.length === 0) return '';
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">⌚ Onset</h2>
+    <div class="sym-onset-result">
+      ${selectedOnset.map(text =>
+        `<div class="sym-onset-bullet">• ${escapeHtml(text)}</div>`
+      ).join('')}
+    </div>
+  </section>`;
+}
+
+function symptomResultSection(key,item){
+  const rowsHtml = item.rows.map(row => {
+    const isGroupRow = row.person.some(
+      value => typeof value === 'object' && value.group
+    );
+
+    const groupItem = row.person.find(
+      value => typeof value === 'object' && value.group
+    );
+    const groupLabel = groupItem ? groupItem.label : '';
+
+    return `<div class="sym-row${isGroupRow ? ' sym-group-row' : ''}">
+      <div class="sym-cell">
+        ${row.person.map(value => symptomOptionHtml(value,key,'person')).join('')}
+      </div>
+      <div class="sym-cell">
+        ${row.observer.map(value =>
+          symptomOptionHtml(value,key,'observer',groupLabel)
+        ).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  return `<section class="sym-section">
+    <h2 class="sym-section-title">${item.title}</h2>
+    <div class="sym-column-heads">
+      <div class="sym-column-head">Reported by the Person</div>
+      <div class="sym-column-head">Observed by Others</div>
+    </div>
+    ${rowsHtml}
+  </section>`;
+}
+
+function updateDetailNextButton(){
+  const symptomChecks = [
+    ...symResults.querySelectorAll('input[type="checkbox"]')
+  ];
+  const hasCheckedSymptom = symptomChecks.some(box => box.checked);
+  const hasNoSymptomChecks = symptomChecks.length === 0;
+  const hasOnset = selectedOnsetValues().length > 0;
+
+  symDetailNextBtn.disabled =
+    !(hasCheckedSymptom || (hasNoSymptomChecks && hasOnset));
+}
+
+function showSymptomResults(){
+  const keys = selectedSymptomCategories();
+  const onsetHtml = onsetResultSection();
+
+  if(keys.length === 0 && onsetHtml === '') return;
+
+  symResults.innerHTML =
+    onsetHtml +
+    keys.map(key =>
+      symptomResultSection(key,symptomData[key])
+    ).join('');
+
+  symResults
+    .querySelectorAll('input[type="checkbox"]')
+    .forEach(box => box.addEventListener('change',updateDetailNextButton));
+
+  updateDetailNextButton();
+  showScreen('screen-results');
+}
+
+symptomCategoryBoxes.forEach(box => {
+  box.addEventListener('change',updateSymptomNextButton);
+});
+
+onsetChoices.forEach(box => {
+  box.addEventListener('change',updateSymptomNextButton);
+});
+
+function summaryListHtml(items){
+  if(items.length === 0){
+    return '<div class="sym-summary-empty"></div>';
+  }
+
+  return `<ul class="sym-summary-list">
+    ${items.map(text => `<li>${escapeHtml(text)}</li>`).join('')}
+  </ul>`;
+}
+
+const emergencySymptoms = new Set([
+  'No response',
+  'No response when spoken to',
+  'No response when the shoulder is tapped',
+  'I have a sudden, severe headache',
+  'I am short of breath',
+  'Breathing appears difficult',
+  'Sudden severe chest or abdominal pain',
+  'Unconscious',
+  'The seizure will not stop',
+  'Does not regain consciousness after the seizure',
+  'A towel is becoming soaked with blood',
+  'The bleeding does not stop with pressure',
+  'The skin has turned white or black',
+  'A large area is burned'
+]);
+
+function determineTriage(selectedValues){
+  const values = new Set(selectedValues);
+  const reasons = [];
+
+  emergencySymptoms.forEach(symptom => {
+    if(values.has(symptom)){
+      reasons.push(symptom);
+    }
+  });
+
+  if(
+    values.has('Severe nausea') &&
+    values.has('Cold sweat')
+  ){
+    reasons.push('Severe nausea and cold sweat');
+  }
+
+  if(
+    values.has('Cold sweat') &&
+    (
+      values.has('Holding the chest') ||
+      values.has('Holding the abdomen')
+    )
+  ){
+    reasons.push('Holding the chest or abdomen with a cold sweat');
+  }
+
+  return {
+    emergency:reasons.length > 0,
+    reasons:[...new Set(reasons)]
+  };
+}
+
+function triageCardHtml(triage){
+  const worseningNote = `<div class="result-warning">
+    If symptoms get worse, seek medical care immediately.
+    Call 119 if the condition worsens suddenly or any serious symptoms develop.
+  </div>`;
+
+  if(triage.emergency){
+    return `<section class="triage-card emergency">
+      <p class="triage-label">Based on the selected symptoms</p>
+      <p class="triage-number">119 and 110</p>
+      <p class="triage-message">Call an ambulance and the police</p>
+      <div class="traffic-call-grid">
+        <a class="traffic-call-btn direct-call-119" href="tel:119">☎ Call 119</a>
+        <a class="traffic-call-btn direct-call-110" href="tel:110">☎ Call 110</a>
+      </div>
+      <div class="triage-reasons">
+        ${triage.reasons.map(reason =>
+          `<div>${escapeHtml(reason)}</div>`
+        ).join('')}
+      </div>
+    </section>
+    <section class="triage-operator-guide">
+      <h2 class="triage-operator-guide-title">Please Tell the Dispatcher</h2>
+      The person has medical information stored in their Help Mark.
+      <span class="triage-operator-guide-quote">“Please tell the responding crew to hold a smartphone over the heart section of the Help Mark to check the medical information.”</span>
+    </section>`;
+  }
+
+  return `<section class="triage-card consult">
+    <p class="triage-label">Based on the selected symptoms</p>
+    <p class="triage-number">#7119 and 110</p>
+    <p class="triage-message">Call for emergency medical advice and notify the police</p>
+    <div class="traffic-call-grid">
+      <a class="traffic-call-btn direct-call-7119" href="tel:%237119">☎ Call #7119</a>
+      <a class="traffic-call-btn direct-call-110" href="tel:110">☎ Call 110</a>
+    </div>
+    ${worseningNote}
+  </section>`;
+}
+
+
+function closePrivatePage(){
+  try{
+    stopAll(false);
+  }catch(error){}
+  location.href = 'close.html';
+}
+
+function showFinalSummary(){
+  const onsetValues = selectedOnsetValues();
+  const checkedSymptoms = [
+    ...symResults.querySelectorAll('input[type="checkbox"]:checked')
+  ];
+  const selectedValues = checkedSymptoms.map(box => box.value);
+  const triage = determineTriage(selectedValues);
+
+  const grouped = {};
+
+  checkedSymptoms.forEach(box => {
+    const key = box.dataset.category;
+    const side = box.dataset.side;
+    const prefix = box.dataset.prefix;
+    const value = prefix ? `${prefix}: ${box.value}` : box.value;
+
+    if(!grouped[key]){
+      grouped[key] = {
+        person:[],
+        observer:[]
+      };
+    }
+
+    grouped[key][side].push(value);
+  });
+
+  const onsetHtml = onsetValues.length
+    ? `<section class="sym-section">
+        <h2 class="sym-section-title">⌚ Onset</h2>
+        <div class="sym-onset-result">
+          ${onsetValues.map(text =>
+            `<div class="sym-onset-bullet">• ${escapeHtml(text)}</div>`
+          ).join('')}
+        </div>
+      </section>`
+    : '';
+
+  const categoryHtml = selectedSymptomCategories()
+    .filter(key => grouped[key])
+    .map(key => `
+      <section class="sym-section">
+        <h2 class="sym-section-title">${symptomData[key].title}</h2>
+        <div class="sym-column-heads">
+          <div class="sym-column-head">Reported by the Person</div>
+          <div class="sym-column-head">Observed by Others</div>
+        </div>
+        <div class="sym-row">
+          <div class="sym-cell">
+            ${summaryListHtml(grouped[key].person)}
+          </div>
+          <div class="sym-cell">
+            ${summaryListHtml(grouped[key].observer)}
+          </div>
+        </div>
+      </section>
+    `).join('');
+
+  symSummaryIntro.innerHTML = triage.emergency
+    ? 'Thank you for your help.'
+    : 'Thank you for your help.<br>The selected symptoms are shown below.<br>Please tell the operator about the symptoms and ask which nearby hospital you should visit.';
+
+  symSummary.innerHTML =
+    triageCardHtml(triage) +
+    trafficSituationSectionHtml() +
+    onsetHtml +
+    categoryHtml +
+    patientLocationSection() +
+    patientInfoSection();
+
+  showScreen('screen-summary');
+  updateCurrentLocation();
+}
+
+symNextBtn.addEventListener('click',showSymptomResults);
+symDetailNextBtn.addEventListener('click',showFinalSummary);
+
+symBackBtn.addEventListener('click',() => {
+  showScreen('screen-symptoms');
+});
+
+symSummaryBackBtn.addEventListener('click',() => {
+  showScreen('screen-results');
+});
+</script>
+</body>
+</html>

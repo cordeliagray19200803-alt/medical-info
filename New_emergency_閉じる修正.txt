@@ -1,0 +1,13 @@
+New_emergency.html の修正
+
+現在の closePage() 関数全体を、次の内容に置き換えてください。
+
+function closePage(){
+  window.location.href = "close.html";
+}
+
+これにより、ページ上部・下部の
+<button type="button" onclick="closePage()">閉じる</button>
+が、マスター close.html へ移動します。
+
+それ以外は変更しません。
