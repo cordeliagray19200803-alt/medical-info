@@ -6,99 +6,112 @@
   <meta name="theme-color" content="#ffffff">
   <title>症状・医療情報案内</title>
   <style>
-    * { box-sizing: border-box; }
-
-    html, body { min-height: 100%; }
-
-    body {
-      margin: 0;
-      background: #f5f5f5;
-      color: #111;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-        "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif;
-      -webkit-text-size-adjust: 100%;
+    *{box-sizing:border-box}
+    html,body{min-height:100%}
+    body{
+      margin:0;
+      background:#f5f5f5;
+      color:#111;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",
+        "Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+      -webkit-text-size-adjust:100%;
     }
-
-    main {
-      width: min(100%, 680px);
-      min-height: 100vh;
-      margin: 0 auto;
-      padding: max(24px, env(safe-area-inset-top)) 16px max(28px, env(safe-area-inset-bottom));
-      display: flex;
-      align-items: center;
+    main{
+      width:min(100%,720px);
+      min-height:100vh;
+      margin:0 auto;
+      padding:max(20px,env(safe-area-inset-top)) 12px max(24px,env(safe-area-inset-bottom));
+      display:flex;
+      align-items:center;
     }
-
-    .panel {
-      width: 100%;
-      padding: 28px 18px;
-      background: #fff;
-      border-radius: 22px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, .10);
+    .panel{
+      width:100%;
+      padding:24px 13px;
+      background:#fff;
+      border-radius:20px;
+      box-shadow:0 5px 20px rgba(0,0,0,.10);
     }
-
-    h1 {
-      margin: 0 0 30px;
-      text-align: center;
-      font-size: clamp(28px, 7vw, 40px);
-      line-height: 1.35;
-      font-weight: 900;
-      letter-spacing: .02em;
+    h1{
+      margin:0 0 24px;
+      text-align:center;
+      font-size:clamp(27px,7vw,39px);
+      line-height:1.35;
+      font-weight:950;
     }
-
-    .buttons {
-      display: grid;
-      gap: 18px;
+    .button-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+      gap:13px;
     }
-
-    .button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      min-height: 82px;
-      padding: 18px 14px;
-      border: 3px solid #111;
-      border-radius: 16px;
-      background: #fff;
-      color: #111;
-      text-align: center;
-      text-decoration: none;
-      font-size: clamp(21px, 5.5vw, 29px);
-      line-height: 1.35;
-      font-weight: 900;
-      box-shadow: 0 4px 0 #111;
-      transition: transform .08s ease, box-shadow .08s ease;
+    .guide-button{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      min-width:0;
+      min-height:104px;
+      padding:14px 8px;
+      border:3px solid #111;
+      border-radius:17px;
+      background:#fff;
+      color:#111;
+      text-align:center;
+      text-decoration:none;
+      overflow-wrap:anywhere;
+      font-size:clamp(18px,4.65vw,25px);
+      line-height:1.35;
+      font-weight:950;
+      box-shadow:0 4px 0 currentColor;
     }
-
-    .button:active {
-      transform: translateY(3px);
-      box-shadow: 0 1px 0 #111;
+    .guide-button:active{
+      transform:translateY(3px);
+      box-shadow:0 1px 0 currentColor;
     }
-
-    .button-jp {
-      border-color: #c91f1f;
-      color: #a91313;
-      box-shadow: 0 4px 0 #c91f1f;
+    .button-jp{
+      border-color:#c91f1f;
+      color:#a91313;
     }
-
-    .button-en {
-      border-color: #1769aa;
-      color: #12558b;
-      box-shadow: 0 4px 0 #1769aa;
+    .button-traffic{
+      border-color:#163a63;
+      background:#f1f6fb;
+      color:#163a63;
     }
-
-    .button-medical {
-      border-color: #13713c;
-      color: #0b5d2f;
-      box-shadow: 0 4px 0 #13713c;
+    .button-en{
+      border-color:#1769aa;
+      color:#12558b;
     }
-
-    @media (max-width: 420px) {
-      main { padding-left: 12px; padding-right: 12px; }
-      .panel { padding: 24px 13px; border-radius: 18px; }
-      h1 { margin-bottom: 25px; }
-      .buttons { gap: 15px; }
-      .button { min-height: 76px; padding-left: 9px; padding-right: 9px; }
+    .button-medical{
+      grid-column:1 / -1;
+      min-height:82px;
+      border-color:#13713c;
+      color:#0b5d2f;
+    }
+    .close-button{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      min-height:58px;
+      margin-top:17px;
+      border:2px solid #555;
+      border-radius:14px;
+      background:#fff;
+      color:#222;
+      text-align:center;
+      text-decoration:none;
+      font-size:clamp(18px,4.5vw,22px);
+      font-weight:900;
+    }
+    @media(max-width:360px){
+      .panel{padding-left:9px;padding-right:9px}
+      .button-grid{gap:9px}
+      .guide-button{
+        min-height:98px;
+        padding-left:5px;
+        padding-right:5px;
+        font-size:clamp(16px,4.45vw,20px);
+      }
     }
   </style>
 </head>
@@ -107,16 +120,33 @@
     <section class="panel" aria-labelledby="page-title">
       <h1 id="page-title">症状・医療情報案内</h1>
 
-      <nav class="buttons" aria-label="案内を選択">
-        <!-- 公開中の日本語版症状チェックページへ移動 -->
-        <a class="button button-jp" href="symptoms.html" target="_self">ご本人・周囲の方</a>
+      <nav class="button-grid" aria-label="案内を選択">
+        <a class="guide-button button-jp" href="symptoms.html">
+          <span>急な体調不良・けが</span>
+          <span>ご本人・周囲の方</span>
+        </a>
 
-        <!-- 英語版ページを english.html として配置 -->
-        <a class="button button-en" href="english.html" target="_self" lang="en">English Guide</a>
+        <a class="guide-button button-traffic" href="traffic.html">
+          <span>交通事故</span>
+          <span>事故の当事者・目撃者</span>
+        </a>
 
-        <!-- 医療従事者向けページを medical.html として配置 -->
-        <a class="button button-medical" href="New_emergency.html" target="_self">医療従事者・救急隊の方</a>
+        <a class="guide-button button-en" href="english.html" lang="en">
+          <span>English</span>
+          <span>Guide</span>
+        </a>
+
+        <a class="guide-button button-traffic" href="traffic_english.html" lang="en">
+          <span>Traffic</span>
+          <span>Accident Guide</span>
+        </a>
+
+        <a class="guide-button button-medical" href="New_emergency.html">
+          医療従事者・救急隊員の方
+        </a>
       </nav>
+
+      <a class="close-button" href="close.html">閉じる</a>
     </section>
   </main>
 </body>

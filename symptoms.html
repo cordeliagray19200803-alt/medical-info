@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>発生状況・緊急対応</title>
+<title>症状・緊急対応</title>
 <style>
 :root{
   --red:#d90000;
@@ -178,6 +178,26 @@ body{
   line-height:1;
   font-weight:950;
 }
+
+.breathing-count.status-label{
+  width:auto;
+  min-width:max-content;
+  max-width:92%;
+  height:auto;
+  min-height:0;
+  padding:12px 20px;
+  border-radius:16px;
+  font-size:clamp(1.3rem, 4.8vw, 1.9rem);
+  line-height:1.2;
+  white-space:nowrap;
+  word-break:keep-all;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  box-sizing:border-box;
+}
+
 .flow-actions{
   display:grid;
   gap:14px;
@@ -1347,12 +1367,6 @@ body{
       </span>
     </button>
 
-    <button id="start-traffic-btn"
-            class="start-flow-btn start-flow-traffic"
-            type="button">
-      <span class="start-flow-title">🚗 交通事故に遭った・目撃した</span>
-    </button>
-
     <button id="start-other-btn"
             class="start-flow-btn start-flow-other"
             type="button">
@@ -1369,22 +1383,28 @@ body{
     <div class="flow-header flow-header-emergency">呼吸を確認してください</div>
 
     <section class="flow-card">
-      <h1>10数える間、<br>胸やお腹の動きを確認</h1>
+      <h1>呼吸を10秒間確認します</h1>
+
       <p class="flow-explanation">
-        胸やお腹が、普段どおり動いているか確認してください。
+        服の上から、おなかに軽く手を当て、<br>
+        胸やおなかの動きを目でも確認してください。
+      </p>
+
+      <p class="flow-explanation" style="font-weight:850">
+        普段どおり動いていれば、緑のボタンを押してください。
       </p>
 
       <div id="breathing-count"
            class="breathing-count"
            aria-live="assertive"
-           aria-label="呼吸確認のカウント">10</div>
+           aria-label="0.5秒後に呼吸確認の音声案内を開始します">準備中</div>
 
       <div id="breathing-result-actions"
-           class="flow-actions"
-           hidden>
+           class="flow-actions">
         <button id="breathing-abnormal-btn"
                 class="flow-btn flow-btn-emergency"
-                type="button">
+                type="button"
+                hidden>
           普段どおりの呼吸がない<br>
           弱い・分からない
         </button>
@@ -1395,6 +1415,13 @@ body{
           普段どおりの呼吸がある
         </button>
       </div>
+
+      <p class="flow-explanation" style="margin-top:16px;font-weight:850">
+        動きがない、途切れ途切れ、弱い、または分からない場合は、
+        押さないでください。<br>
+        ボタンが押されなければ、カウント後に自動的に
+        心臓マッサージの案内へ進みます。
+      </p>
     </section>
 
     <button id="breathing-back-btn"
@@ -1450,9 +1477,9 @@ body{
 
         <button id="traffic-no-symptom-branch-btn"
                 class="flow-btn flow-btn-police"
-                type="button">
+                type="button"
+                hidden>
           ない
-          <span class="flow-btn-note">110番へ</span>
         </button>
       </div>
     </section>
@@ -1513,14 +1540,6 @@ body{
     <div id="emergency-call-row" class="call-row">
       <a id="call119" class="call" href="tel:119" aria-label="119番へ電話">
         ☎ 119番へ電話
-      </a>
-
-      <a id="call110-emergency"
-         class="call call-police"
-         href="tel:110"
-         aria-label="110番へ電話"
-         hidden>
-        ☎ 110番へ電話
       </a>
 
       <div class="aed-panel">
@@ -1704,12 +1723,10 @@ const status = document.getElementById('status');
 const stopBtn = document.getElementById('stopBtn');
 const cprBox = document.getElementById('cprBox');
 const call119 = document.getElementById('call119');
-const call110Emergency = document.getElementById('call110-emergency');
 const emergencyCallRow = document.getElementById('emergency-call-row');
 const emergencyHero = document.getElementById('emergencyHero');
 
 const startEmergencyBtn = document.getElementById('start-emergency-btn');
-const startTrafficBtn = document.getElementById('start-traffic-btn');
 const startOtherBtn = document.getElementById('start-other-btn');
 
 const breathingCount = document.getElementById('breathing-count');
@@ -1763,6 +1780,8 @@ const medicineAlcoholCheck =
 
 let breathingCheckContext = 'general';
 let breathingCountdownTimer = null;
+let breathingCheckSession = 0;
+let breathingCheckResolved = false;
 let symptomFlowContext = 'general';
 
 function showScreen(id){
@@ -2296,12 +2315,6 @@ function activateEmergency(isTrafficAccident = false){
   unlockMobileAudio();
   primeMobileSpeech();
 
-  emergencyCallRow.classList.toggle(
-    'traffic-mode',
-    isTrafficAccident
-  );
-  call110Emergency.hidden = !isTrafficAccident;
-
   showScreen('screen-emergency');
   called119 = false;
   call119.textContent = '☎ 119番へ電話';
@@ -2313,24 +2326,183 @@ function clearBreathingCountdown(){
     clearInterval(breathingCountdownTimer);
     breathingCountdownTimer = null;
   }
+
+  if('speechSynthesis' in window){
+    try{
+      speechSynthesis.cancel();
+    }catch(error){}
+  }
 }
 
-function startBreathingCheck(context){
-  breathingCheckContext = context;
-  clearBreathingCountdown();
+function waitBreathingDelay(milliseconds){
+  return new Promise(resolve => {
+    setTimeout(resolve,milliseconds);
+  });
+}
 
-  breathingResultActions.hidden = true;
-  breathingCount.textContent = '10';
+function speakBreathingMessage(text, rate = 0.98){
+  return new Promise(resolve => {
+    if(!('speechSynthesis' in window)){
+      resolve();
+      return;
+    }
+
+    try{
+      speechSynthesis.cancel();
+      speechSynthesis.resume();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ja-JP';
+      utterance.rate = rate;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      let finished = false;
+      const finish = () => {
+        if(finished) return;
+        finished = true;
+        clearTimeout(timeoutId);
+        resolve();
+      };
+
+      utterance.onend = finish;
+      utterance.onerror = finish;
+      const timeoutId = setTimeout(finish,30000);
+
+      speechSynthesis.speak(utterance);
+    }catch(error){
+      resolve();
+    }
+  });
+}
+
+function playBreathingCheckBeep(isFinal = false){
+  try{
+    const ctx = getCtx();
+    if(!ctx) return;
+    if(ctx.state === 'suspended'){
+      ctx.resume();
+    }
+
+    const playTone = (delaySeconds = 0) => {
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const now = ctx.currentTime + delaySeconds;
+
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(740,now);
+
+      gain.gain.setValueAtTime(0.0001,now);
+      gain.gain.exponentialRampToValueAtTime(0.26,now + 0.015);
+      gain.gain.setValueAtTime(0.26,now + 0.10);
+      gain.gain.exponentialRampToValueAtTime(0.0001,now + 0.18);
+
+      oscillator.connect(gain);
+      gain.connect(ctx.destination);
+      oscillator.start(now);
+      oscillator.stop(now + 0.19);
+    };
+
+    playTone(0);
+    if(isFinal){
+      playTone(0.24);
+    }
+  }catch(error){}
+}
+
+async function finishBreathingCheckAutomatically(session){
+  if(
+    session !== breathingCheckSession ||
+    breathingCheckResolved
+  ){
+    return;
+  }
+
+  breathingCount.textContent = '心臓マッサージへ';
+  breathingCount.classList.add('status-label');
   breathingCount.setAttribute(
     'aria-label',
-    '呼吸確認、10秒'
+    '心臓マッサージの案内へ進みます'
+  );
+
+  await speakBreathingMessage(
+    '普段どおりの呼吸を確認できません。心臓マッサージの案内へ進みます。',
+    1.04
+  );
+
+  if(
+    session !== breathingCheckSession ||
+    breathingCheckResolved
+  ){
+    return;
+  }
+
+  breathingCheckResolved = true;
+  activateEmergency(false);
+}
+
+async function startBreathingCheck(context = 'general'){
+  breathingCheckContext = 'general';
+  breathingCheckSession += 1;
+  const session = breathingCheckSession;
+  breathingCheckResolved = false;
+  clearBreathingCountdown();
+
+  breathingResultActions.hidden = false;
+  breathingCount.classList.remove('status-label');
+  breathingCount.classList.add('status-label');
+  breathingCount.textContent = '準備中';
+  breathingCount.setAttribute(
+    'aria-label',
+    '1秒後に呼吸確認の音声案内を開始します'
   );
 
   showScreen('screen-breathing-check');
+  unlockMobileAudio();
+  primeMobileSpeech();
+
+  await waitBreathingDelay(1000);
+
+  if(session !== breathingCheckSession || breathingCheckResolved){
+    return;
+  }
+
+  breathingCount.classList.add('status-label');
+  breathingCount.textContent = '案内中';
+  breathingCount.setAttribute(
+    'aria-label',
+    '呼吸確認の方法を案内しています'
+  );
+
+  await speakBreathingMessage(
+    '呼吸を10秒間確認します。服の上から、おなかに軽く手を当て、胸やおなかの動きを目でも確認してください。',
+    1.18
+  );
+
+  if(session !== breathingCheckSession || breathingCheckResolved){
+    return;
+  }
 
   let count = 10;
+  breathingCount.classList.remove('status-label');
+  breathingCount.textContent = String(count);
+  breathingCount.setAttribute(
+    'aria-label',
+    '呼吸確認、残り10秒'
+  );
+  playBreathingCheckBeep(false);
+
+  speakBreathingMessage(
+    'しっかりとした呼吸が確認できたら、緑のボタンを押してください。',
+    1.18
+  );
 
   breathingCountdownTimer = setInterval(() => {
+    if(session !== breathingCheckSession || breathingCheckResolved){
+      clearBreathingCountdown();
+      return;
+    }
+
     count -= 1;
 
     if(count > 0){
@@ -2339,16 +2511,19 @@ function startBreathingCheck(context){
         'aria-label',
         `呼吸確認、残り${count}秒`
       );
+      playBreathingCheckBeep(false);
       return;
     }
 
-    clearBreathingCountdown();
-    breathingCount.textContent = '確認';
-    breathingCount.setAttribute(
-      'aria-label',
-      '呼吸確認が終わりました'
-    );
-    breathingResultActions.hidden = false;
+    if(breathingCountdownTimer){
+      clearInterval(breathingCountdownTimer);
+      breathingCountdownTimer = null;
+    }
+
+    playBreathingCheckBeep(true);
+    setTimeout(() => {
+      finishBreathingCheckAutomatically(session);
+    },520);
   },1000);
 }
 
@@ -2534,11 +2709,6 @@ startEmergencyBtn.addEventListener('click',() => {
   startBreathingCheck('general');
 });
 
-startTrafficBtn.addEventListener('click',() => {
-  stopAll(false);
-  showScreen('screen-traffic-consciousness');
-});
-
 startOtherBtn.addEventListener('click',() => {
   stopAll(false);
   configureSymptomFlow('general');
@@ -2555,27 +2725,21 @@ trafficUnconsciousBtn.addEventListener('click',() => {
 
 breathingAbnormalBtn.addEventListener('click',() => {
   clearBreathingCountdown();
-  activateEmergency(breathingCheckContext === 'traffic');
+  activateEmergency(false);
 });
 
 breathingNormalBtn.addEventListener('click',() => {
+  breathingCheckResolved = true;
+  breathingCheckSession += 1;
   clearBreathingCountdown();
-
-  if(breathingCheckContext === 'traffic'){
-    showDirectResult('traffic-unconscious-breathing');
-    return;
-  }
 
   showDirectResult('unconscious-breathing');
 });
 
 breathingBackBtn.addEventListener('click',() => {
+  breathingCheckResolved = true;
+  breathingCheckSession += 1;
   clearBreathingCountdown();
-
-  if(breathingCheckContext === 'traffic'){
-    showScreen('screen-traffic-consciousness');
-    return;
-  }
 
   showScreen('screen-start');
 });
